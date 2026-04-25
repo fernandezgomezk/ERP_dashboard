@@ -1,6 +1,8 @@
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import geopandas as gpd
+import yaml
 
 import plotly.express as px
 import streamlit as st
@@ -8,60 +10,168 @@ import streamlit as st
 ##########################################
 #######Het definieren van de functies####
 #########################################
-# Dictionaries
-legend_labels = {
-    "d_energiequote": "Afname in procentpunt",
-    "d_%": "Afname in procentpunt"
-}
 
-title_labels = {
-    "d_energiequote": "Afname energiequote van huishoudens met energiearmoede",
-    "d_%": "Afname aandeel huishoudens met energiearmoede met een energiequote van meer dan acht procent"
-}
+# Functie om juiste versie gemeente-indeling gpkg op te zoeken
+def find_gpkg_for_version(version):
+    matches = list(
+        Path("data/wijkenbuurten").glob(f"*{version}.gpkg")
+    )
 
-def get_gemeentegrenzen(): #Deze functie laad de grenzen van de gemeentes in voor onze ruimtelijke kaart
- 
-    gdf = gpd.read_file("data/wijkenbuurten_2023_v3.gpkg", layer="gemeenten") #Het inladen van de 2023 gemeentegrenzenkaart van het CBS
-    gdf = gdf.to_crs(epsg=4326) # Converteren naar WGS84 voor de kaart
+    if not matches:
+        raise FileNotFoundError(f"Geen GPKG gevonden voor versie {version}")
 
-    # Filter columns
-    gdf = gdf.filter(['gemeentenaam','geometry']) #Het bestand bevat alle CBS data van elke gemeente, dat is niet nodig
+    if len(matches) > 1:
+        print(f"⚠️ Meerdere GPKGs gevonden voor {version}, gebruik eerste")
 
-    return gdf
+    return matches[0]
 
 
-def get_output(): #Deze functie laad de indicatoren per gemeente
+# Functie om metadata in te lezen en bijbehorende gpkg zoeken
+def load_indicator_datasets():
+    datasets = {}
+    indicators = {}
 
-    output = pd.read_csv('data/data_kaarten_dashboard_red.csv', index_col = 0) #Het inladen van jouw data
-    output = output.rename(columns={
-        "GM_NAAM.x": "gemeentenaam",
-        "Gemiddelde.verandering.energiequote..absoluut.": "d_energiequote",
-        "Verandering.percentage.boven.8...tov.lihelek.": "d_%"
-    }) #Simpele kolomnamen om de code overzichtelijk te houden
+    indicator_dir = Path("data/indicatoren")
+
+    for meta_file in indicator_dir.glob("*.meta.yaml"):
+        # 1. Metadata lezen
+        with open(meta_file, "r", encoding="utf-8") as f:
+            meta = yaml.safe_load(f)
+
+        dataset_id = meta["dataset_id"]
+        csv_path = indicator_dir / f"{meta['dataset_id']}.csv"
+
+        # 2. Bijbehorende GPKG bepalen
+        gpkg_path = find_gpkg_for_version(meta["gwb_version"])
+
+        # 3. Dataset registreren
+        datasets[dataset_id] = {
+            "csv_path": csv_path,
+            "layer": meta["layer_naam"],
+            "version": meta["gwb_version"],
+            "key": meta["key"],
+            "gpkg_path": gpkg_path,
+        }
+
+        # 4. Indicatoren registreren
+        for indicator, cfg in meta["indicators"].items():
+            indicators[indicator] = {
+                "dataset": dataset_id,
+                "title": cfg["title"],
+                "legend": cfg["legend"],
+                "theme": cfg["theme"],
+                "precision": cfg.get("precision", 1),
+                "link": cfg["link"]
+            }
+
+    return datasets, indicators
+
+# DATASETS is een lijst met bestanden, de bijbehorende gpkg versie en andere metadata
+# INDICATORS is een lijst met alle indicatoren hun kenmerken
+
+DATASETS, INDICATORS = load_indicator_datasets()
+themes = {cfg["theme"] for cfg in INDICATORS.values()}
+
+# Functie om databestanden in te laden, de bijbehorende gpkg in te laden en beiden te mergen 
+
+@st.cache_data(show_spinner=False)
+def load_dataset(dataset_id):
+    cfg = DATASETS[dataset_id]
+
+    # CSV
+    df = pd.read_csv(cfg["csv_path"])
+
+    # GPKG
+    gdf = gpd.read_file(cfg["gpkg_path"], layer=cfg["layer"])
+
+    gdf = (
+        gdf.dissolve(by=cfg["key"], as_index=False)
+    )
+    gdf = gdf.to_crs(epsg=4326)
+    gdf = gdf.filter(['gemeentenaam','geometry'])
     
-    return output
+    # Merge één keer
+    plot_gdf = gdf.merge(
+        df,
+        on=cfg["key"],
+        how="left"
+    )
+    
+
+    return plot_gdf
+
+# def get_gemeentegrenzen(): #Deze functie laad de grenzen van de gemeentes in voor onze ruimtelijke kaart
+ 
+#     gdf = gpd.read_file("data/wijkenbuurten/wijkenbuurten_2023_v3.gpkg", layer="gemeenten") #Het inladen van de 2023 gemeentegrenzenkaart van het CBS
+#     gdf = gdf.to_crs(epsg=4326) # Converteren naar WGS84 voor de kaart
+
+#     # Filter columns
+#     gdf = gdf.filter(['gemeentenaam','geometry']) #Het bestand bevat alle CBS data van elke gemeente, dat is niet nodig
+
+#     return gdf
+
+
+# def get_output(): #Deze functie laad de indicatoren per gemeente
+
+#     output = pd.read_csv('data/indicatoren/data_kaarten_dashboard_red.csv', index_col = 0) #Het inladen van jouw data
+#     output = output.rename(columns={
+#         "GM_NAAM.x": "gemeentenaam",
+#         "Gemiddelde.verandering.energiequote..absoluut.": "d_energiequote",
+#         "Verandering.percentage.boven.8...tov.lihelek.": "d_%"
+#     }) #Simpele kolomnamen om de code overzichtelijk te houden
+    
+#     return output
 
  
-def get_fig(gdf, output): #Deze functie maakt de daadwerkelijke kaart
+def get_fig(plot_gdf): #Deze functie maakt de daadwerkelijke kaart
 
-    plot_gdf = gdf.merge(output, on="gemeentenaam") #Combineren grenzen per gemeente met waarde indicator per gemeente
-    plot_gdf = plot_gdf.dropna(subset=[plotted_column]) #Alleen plotten wat mensen willen plotten (aangegeven in de selectbox onder)
-
+    #plot_gdf = plot_gdf.dropna(subset=[indicator]) #Alleen plotten wat mensen willen plotten (aangegeven in de selectbox onder)
+    plot_gdf["_color_value"] = plot_gdf[indicator].astype(float).fillna(-999)
+   
     fig = px.choropleth_map(
         plot_gdf,
         geojson = plot_gdf.geometry.__geo_interface__,
         locations = plot_gdf.index,
-        color=plotted_column,
-        labels={plotted_column: legend_labels[plotted_column]},
+        color="_color_value",
+        labels={"_color_value": INDICATORS[indicator]["legend"]},
+        custom_data=["gemeentenaam"],
+        range_color=(plot_gdf.loc[plot_gdf[indicator].notna(), indicator].min(), plot_gdf.loc[plot_gdf[indicator].notna(), indicator].max()),
         center={"lat": 52.15, "lon": 5.15}, #Zodat de kaart in Nederland begint en niet in de Atlantische Oceaan
-        zoom=7.2 #Zodat je meteen overzicht hebt
+        zoom=6.5, #Zodat je meteen overzicht hebt
+        map_style="white-bg"
     )
 
     fig.update_layout(
-        height=1200, #Zodat de kaart niet superklein is
-        title_text=title_labels[plotted_column],
-        title_x=0 # align title to the left 
-    ) 
+        height=800, #Zodat de kaart niet superklein is
+        title_text=INDICATORS[indicator]["title"], #titel/beschrijving figuur
+        title_x=0, # align title to the left
+        title_font=dict(size=24)
+     ) 
+    
+    #Linkje naar publicatie
+    link = INDICATORS[indicator]["link"]
+    fig.add_annotation(
+        text=f'<a href="{link}" target="_blank">Link naar publicatie &#8599;</a>',
+        x=0,
+        y=1.03,
+        xref="paper",
+        yref="paper",
+        showarrow=False,
+        align="left",
+        font=dict(size=14, color="#000000"),
+    )
+
+
+    precision = INDICATORS[indicator]["precision"]
+    
+    fig.update_traces(
+        hovertemplate=(
+            "%{customdata[0]}: "
+            f"%{{z:.{precision}f}}" # afronden naar decimalen gegeven in metadata
+            "<extra></extra>"
+        )
+    )
+
 
     return fig
 
@@ -72,13 +182,63 @@ def get_fig(gdf, output): #Deze functie maakt de daadwerkelijke kaart
 st.set_page_config(layout="wide") #Kaart even breed als scherm
 # st.markdown("<style>.stApp { background-color: white; }</style>", unsafe_allow_html=True) #App krijgt witte achtergrond voor TNO
 
-gdf = get_gemeentegrenzen() #De gemeentegrenzen inladen
+#gdf = get_gemeentegrenzen() #De gemeentegrenzen inladen
 
-output = get_output() #De csv met data inladen
+#output = get_output() #De csv met data inladen
 
-plotted_column = st.selectbox("Indicator", ["d_energiequote", "d_%"], # De gebruiker kan kiezen welke indicator hij/zij wil zien
-                              format_func=lambda x:title_labels[x]) # Omzetten naar titel tekst
+with st.sidebar:
+    st.subheader("Onderwerp")
 
-if st.button('render'): #Als je op render klikt, wordt de figuur geladen
-    fig = get_fig(gdf, output)
-    st.plotly_chart(fig, use_container_width=True)
+    selected_theme = st.selectbox(
+        "Kies een onderwerp",  
+        options=themes
+        )
+
+indicators_in_theme = [
+    indicator
+    for indicator, cfg in INDICATORS.items()
+    if cfg["theme"] == selected_theme
+]
+   
+
+if "indicator" not in st.session_state:
+    st.session_state.indicator = None
+
+with st.sidebar:
+    st.subheader("Indicatoren")
+
+    for indicator in indicators_in_theme:
+        if indicator == st.session_state.indicator:
+            st.button(
+                INDICATORS[indicator]["title"],
+                use_container_width=True,
+                key=f"indicator_btn_{indicator}",
+                disabled=True   # ziet eruit als “ingedrukt”
+            )
+        else:
+            if st.button(
+                INDICATORS[indicator]["title"],
+                use_container_width=True,
+                key=f"indicator_btn_{indicator}",
+            ):
+                st.session_state.indicator = indicator
+
+
+
+indicator = st.session_state.indicator
+
+if indicator is not None:
+    dataset_id = INDICATORS[indicator]["dataset"]
+
+    plot_gdf = load_dataset(dataset_id)
+    fig = get_fig(plot_gdf)
+
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
+else:
+    st.info("Selecteer een indicator om de kaart te tonen.")
+
+
+
