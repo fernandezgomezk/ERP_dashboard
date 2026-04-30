@@ -1,0 +1,45 @@
+# [Name of the data file without extension]
+dataset_id: data_kaarten_dashboard 
+
+# [Name of the column that identifies each row]
+key: gemeentenaam 
+
+# [Version of the CBS gemeente/wijk/buurt layout]
+gwb_version: 2019_v3 
+
+# [Name of the layer in the CBS gwb file containing the geometry]
+layer_naam: cbs_wijken_2019 
+
+indicators:
+
+  # [Name of the column of indicator no. 1]:
+  Gemiddelde.verandering.energiequote.(absoluut):
+
+    # [Title / description of indicator no. 1]
+    title: Gemiddelde afname energiequote van huishoudens met energiearmoede 
+    
+    # [Title of the legend of indicator no. 1]
+    legend: Afname in procentpunt 
+    
+    # [High-level topic of indicator no. 1]
+    theme: Woningverduurzaming
+
+    # [Sub-category within the theme of indicator no. 1]
+    subject: Isolatie naar de standaard bij energiearmoede 
+    
+    # [Number of decimals to display for indicator no. 1]
+    precision: 1 
+    
+    # [Link to publication]
+    link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
+
+  # [Name of the column of indicator no. 2]:
+  Gemiddelde.investeringskosten.(EUR):
+    title: Gemiddelde investeringskosten voor huishoudens met energiearmoede
+    legend: euro
+    theme: Woningverduurzaming
+    subject: Isolatie naar de standaard bij energiearmoede
+    precision: 0
+    link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
+
+  # etc.

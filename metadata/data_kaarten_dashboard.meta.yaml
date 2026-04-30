@@ -1,0 +1,37 @@
+dataset_id: data_kaarten_dashboard
+key: gemeentenaam
+gwb_version: 2019_v3
+layer_naam: cbs_wijken_2019
+
+indicators:
+  Gemiddelde.verandering.energiequote.(absoluut):
+    title: Gemiddelde afname energiequote van huishoudens met energiearmoede
+    legend: Afname in procentpunt
+    theme: Woningverduurzaming
+    subject: Isolatie naar de standaard bij energiearmoede
+    precision: 1
+    link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
+
+  Verandering.percentage.boven.8%.(tov.lihelek):
+    title: Afname aandeel huishoudens met energiearmoede met een energiequote van meer dan acht procent
+    legend: Afname in procentpunt
+    theme: Woningverduurzaming
+    subject: Isolatie naar de standaard bij energiearmoede
+    precision: 1
+    link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
+
+  Gemiddelde.investeringskosten.(EUR):
+    title: Gemiddelde investeringskosten voor huishoudens met energiearmoede
+    legend: euro
+    theme: Woningverduurzaming
+    subject: Isolatie naar de standaard bij energiearmoede
+    precision: 0
+    link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
+  
+  Gemiddeld.gas.bespaard.per.euro.(m3/EUR):
+    title: Gemiddelde gasbesparing per geïnvesteerde euro van huishoudens met energiearmoede
+    legend: kubieke meter per euro
+    theme: Woningverduurzaming
+    subject: Isolatie naar de standaard bij energiearmoede
+    precision: 0
+    link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/

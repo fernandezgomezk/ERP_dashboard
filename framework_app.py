@@ -31,15 +31,16 @@ def load_indicator_datasets():
     datasets = {}
     indicators = {}
 
-    indicator_dir = Path("data/indicatoren")
+    metadata_dir = Path("metadata")
+    data_dir = Path("data/indicatoren")
 
-    for meta_file in indicator_dir.glob("*.meta.yaml"):
+    for meta_file in metadata_dir.glob("*.meta.yaml"):
         # 1. Metadata lezen
         with open(meta_file, "r", encoding="utf-8") as f:
             meta = yaml.safe_load(f)
 
         dataset_id = meta["dataset_id"]
-        csv_path = indicator_dir / f"{meta['dataset_id']}.csv"
+        csv_path = data_dir / f"{dataset_id}.csv"
 
         # 2. Bijbehorende GPKG bepalen
         gpkg_path = find_gpkg_for_version(meta["gwb_version"])
