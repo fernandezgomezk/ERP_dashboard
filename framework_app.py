@@ -60,6 +60,7 @@ def load_indicator_datasets():
                 "title": cfg["title"],
                 "legend": cfg["legend"],
                 "theme": cfg["theme"],
+                "subject": cfg["subject"],
                 "precision": cfg.get("precision", 1),
                 "link": cfg["link"]
             }
@@ -80,6 +81,7 @@ def load_dataset(dataset_id):
 
     # CSV
     df = pd.read_csv(cfg["csv_path"])
+    df = df.drop(columns=["geometry"], errors="ignore") # Verwijder eventuele bestaande kolom "geometry"
 
     # GPKG
     gdf = gpd.read_file(cfg["gpkg_path"], layer=cfg["layer"])
@@ -133,6 +135,7 @@ def get_fig(plot_gdf): #Deze functie maakt de daadwerkelijke kaart
         geojson = plot_gdf.geometry.__geo_interface__,
         locations = plot_gdf.index,
         color="_color_value",
+        color_continuous_scale=[[0.0, "#f0f3fa"],[1.0, "#123eb7"]],
         labels={"_color_value": INDICATORS[indicator]["legend"]},
         custom_data=["gemeentenaam"],
         range_color=(plot_gdf.loc[plot_gdf[indicator].notna(), indicator].min(), plot_gdf.loc[plot_gdf[indicator].notna(), indicator].max()),
@@ -186,44 +189,58 @@ st.set_page_config(layout="wide") #Kaart even breed als scherm
 
 #output = get_output() #De csv met data inladen
 
-with st.sidebar:
-    st.subheader("Onderwerp")
+# with st.sidebar:
+#     st.subheader("Onderwerp")
 
-    selected_theme = st.selectbox(
-        "Kies een onderwerp",  
-        options=themes
-        )
+#     selected_theme = st.selectbox(
+#         "Kies een onderwerp",  
+#         options=themes
+#         )
 
-indicators_in_theme = [
-    indicator
-    for indicator, cfg in INDICATORS.items()
-    if cfg["theme"] == selected_theme
-]
+# indicators_in_theme = [
+#     indicator
+#     for indicator, cfg in INDICATORS.items()
+#     if cfg["theme"] == selected_theme
+# ]
    
+from collections import defaultdict
+
+# theme -> subject -> list of indicators
+indicators_by_theme_subject = defaultdict(lambda: defaultdict(list))
+
+for indicator, cfg in INDICATORS.items():
+    theme = cfg["theme"]
+    subject = cfg.get("subject", "Overig")
+    indicators_by_theme_subject[theme][subject].append(indicator)
 
 if "indicator" not in st.session_state:
     st.session_state.indicator = None
 
 with st.sidebar:
-    st.subheader("Indicatoren")
+    st.subheader("Onderwerpen")
 
-    for indicator in indicators_in_theme:
-        if indicator == st.session_state.indicator:
-            st.button(
-                INDICATORS[indicator]["title"],
-                use_container_width=True,
-                key=f"indicator_btn_{indicator}",
-                disabled=True   # ziet eruit als “ingedrukt”
-            )
-        else:
-            if st.button(
-                INDICATORS[indicator]["title"],
-                use_container_width=True,
-                key=f"indicator_btn_{indicator}",
-            ):
-                st.session_state.indicator = indicator
+    for theme, subjects in sorted(indicators_by_theme_subject.items()):
+        with st.expander(theme, expanded=False):
 
+            for subject, indicators in sorted(subjects.items()):
+                # Subject header (niet uitklapbaar)
+                st.markdown(f"**{subject}**")
 
+                for indicator in indicators:
+                    if indicator == st.session_state.indicator:
+                        st.button(
+                            INDICATORS[indicator]["title"],
+                            key=f"indicator_btn_{indicator}",
+                            use_container_width=True,
+                            disabled=True
+                        )
+                    else:
+                        if st.button(
+                            INDICATORS[indicator]["title"],
+                            key=f"indicator_btn_{indicator}",
+                            use_container_width=True
+                        ):
+                            st.session_state.indicator = indicator
 
 indicator = st.session_state.indicator
 
