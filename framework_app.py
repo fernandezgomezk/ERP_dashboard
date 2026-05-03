@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 import yaml
+from collections import defaultdict
 
 import plotly.express as px
 import streamlit as st
@@ -64,7 +65,7 @@ def load_indicator_datasets():
                 "theme": cfg["theme"],
                 "subject": cfg["subject"],
                 "precision": cfg.get("precision", 1),
-                "unit": cfg.get("unit", ""),
+                "unit": cfg.get("unit", ""), # Unit (3.4 -> 3.4%)
                 "link": cfg["link"],
                 "test_values": cfg.get("test_values", {})
             }
@@ -113,19 +114,19 @@ def get_fig(plot_gdf): #Deze functie maakt de daadwerkelijke kaart
     dataset_id = INDICATORS[indicator]["dataset"]
     cfg = DATASETS[dataset_id]
     for gemeente, expected in INDICATORS[indicator]["test_values"].items():
-        actual = round(plot_gdf.loc[plot_gdf[cfg["key"]] == gemeente, indicator].iloc[0], 2)
+        actual = round(plot_gdf.loc[plot_gdf[cfg["key"]] == gemeente, indicator].iloc[0], 2) # Kijk of match
         if actual != expected: # Discrete waarschuwing als testwaardes niet matchen
-            unit = INDICATORS[indicator]["unit"]
+            unit = INDICATORS[indicator]["unit"] # Inclusief unit uiteraard
             st.warning(f"Let op: de testwaarden in de metadata komen niet overeen met de waarden in de kaart ({gemeente}: verwacht {expected}{unit}, gevonden {actual}{unit})")
 
     #plot_gdf = plot_gdf.dropna(subset=[indicator]) #Alleen plotten wat mensen willen plotten (aangegeven in de selectbox onder)
     precision = INDICATORS[indicator]["precision"]
     unit = INDICATORS[indicator]["unit"]
 
-    plot_gdf["_color_value"] = plot_gdf[indicator].astype(float).fillna(-999)
+    plot_gdf["_color_value"] = plot_gdf[indicator].astype(float).fillna(-999) # Waarde van -999 om juiste kleur te krijgen (namelijk spierwit)
     plot_gdf["_hover_label"] = plot_gdf[indicator].apply(
         lambda x: f"{x:.{precision}f}{unit}" if pd.notna(x) else "data niet beschikbaar"
-    )
+    ) # Als NaN: expliciet aangeven dat data niet beschikbaar is
 
     fig = px.choropleth_map(
         plot_gdf,
@@ -160,7 +161,6 @@ def get_fig(plot_gdf): #Deze functie maakt de daadwerkelijke kaart
         align="left",
         font=dict(size=14, color="#000000"),
     )
-
 
     fig.update_traces(
         hovertemplate=(
@@ -197,8 +197,6 @@ st.set_page_config(layout="wide") #Kaart even breed als scherm
 #     if cfg["theme"] == selected_theme
 # ]
    
-from collections import defaultdict
-
 # theme -> subject -> list of indicators
 indicators_by_theme_subject = defaultdict(lambda: defaultdict(list))
 
@@ -209,6 +207,9 @@ for indicator, cfg in INDICATORS.items():
 
 if "indicator" not in st.session_state:
     st.session_state.indicator = None
+
+if "clicked_gemeente" not in st.session_state: # Klik op gemeentes om grafiek te laten zien
+    st.session_state.clicked_gemeente = None
 
 with st.sidebar:
     st.subheader("Onderwerpen")
@@ -244,10 +245,34 @@ if indicator is not None:
     plot_gdf = load_dataset(dataset_id)
     fig = get_fig(plot_gdf)
 
-    st.plotly_chart(
-        fig,
-        width='stretch'
-    )
+    #Het toevoegen van de grafiek als gebruiker op een gemeente klikt
+    col_map, col_trend = st.columns([2, 1])    # Claude comment: Verdeel het scherm in twee kolommen: kaart (breed) en trendgrafiek (smal)
+
+    with col_map: # Claude comment: on_select="rerun" zorgt dat Streamlit herlaadt zodra de gebruiker op de kaart klikt
+        event = st.plotly_chart(fig, width='stretch', on_select="rerun")
+
+    if event.selection.points: # Als de gebruiker op een gemeente heeft geklikt, sla de naam op in session_state
+        st.session_state.clicked_gemeente = event.selection.points[0]["customdata"][0]
+
+    with col_trend:
+        if st.session_state.clicked_gemeente is not None:
+            gemeente = st.session_state.clicked_gemeente
+
+            df_trend = plot_gdf.loc[plot_gdf.gemeentenaam == gemeente, ["JAAR", indicator]] #  Claude comment: Filter de data op de aangeklikte gemeente en sorteer op jaar
+            df_trend = df_trend.sort_values("JAAR")
+
+            # Claude comment: Trendgrafiek — zodra er meerdere jaren in de data zitten verschijnen die hier automatisch
+            fig_trend = px.line(
+                df_trend,
+                x="JAAR",
+                y=indicator,
+                title=f"{INDICATORS[indicator]['title']} — {gemeente}",
+                markers=True,
+                labels={indicator: INDICATORS[indicator]["legend"]}
+            )
+            st.plotly_chart(fig_trend, width='stretch')
+        else:
+            st.info("Klik op een gemeente om de trend te zien.")
 else:
     st.info("Selecteer een indicator om de kaart te tonen.")
 
