@@ -36,13 +36,26 @@ indicators:
     # [Link to publication]
     link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
 
+    # [Expected values for 4 reference municipalities, rounded to 2 decimals]
+    test_values:
+      Amsterdam: -3.89
+      Wassenaar: -4.07
+      Amersfoort: -3.69
+      Oldambt: -6.48
+
   # [Name of the column of indicator no. 2]:
   Gemiddelde.investeringskosten.(EUR):
     title: Gemiddelde investeringskosten voor huishoudens met energiearmoede
     legend: euro
     theme: Woningverduurzaming
     subject: Isolatie naar de standaard bij energiearmoede
+    unit: " euro"
     precision: 0
     link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
+    test_values:
+      Amsterdam: 8954.00
+      Wassenaar: 12957.05
+      Amersfoort: 10093.42
+      Oldambt: 13831.42
 
   # etc.

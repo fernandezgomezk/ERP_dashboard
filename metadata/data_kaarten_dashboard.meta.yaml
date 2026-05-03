@@ -12,6 +12,11 @@ indicators:
     unit: "%"
     precision: 1
     link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
+    test_values:
+      Amsterdam: -3.89
+      Wassenaar: -4.07
+      Amersfoort: -3.69
+      Oldambt: -6.48
 
   Verandering.percentage.boven.8%.(tov.lihelek):
     title: Afname aandeel huishoudens met energiearmoede met een energiequote van meer dan acht procent
@@ -21,6 +26,11 @@ indicators:
     unit: "%"
     precision: 1
     link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
+    test_values:
+      Amsterdam: 49.04
+      Wassenaar: 34.74
+      Amersfoort: 39.03
+      Oldambt: 32.87
 
   Gemiddelde.investeringskosten.(EUR):
     title: Gemiddelde investeringskosten voor huishoudens met energiearmoede
@@ -30,6 +40,11 @@ indicators:
     unit: " euro"
     precision: 0
     link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
+    test_values:
+      Amsterdam: 8954.00
+      Wassenaar: 12957.05
+      Amersfoort: 10093.42
+      Oldambt: 13831.42
   
   Gemiddeld.gas.bespaard.per.euro.(m3/EUR):
     title: Gemiddelde gasbesparing per geïnvesteerde euro van huishoudens met energiearmoede
@@ -39,3 +54,8 @@ indicators:
     unit: " m3/euro"
     precision: 0
     link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
+    test_values:
+      Amsterdam: 0.06
+      Wassenaar: 0.05
+      Amersfoort: 0.05
+      Oldambt: 0.07

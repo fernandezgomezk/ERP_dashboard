@@ -65,7 +65,8 @@ def load_indicator_datasets():
                 "subject": cfg["subject"],
                 "precision": cfg.get("precision", 1),
                 "unit": cfg.get("unit", ""),
-                "link": cfg["link"]
+                "link": cfg["link"],
+                "test_values": cfg.get("test_values", {})
             }
 
     return datasets, indicators
@@ -107,6 +108,15 @@ def load_dataset(dataset_id):
 
  
 def get_fig(plot_gdf): #Deze functie maakt de daadwerkelijke kaart
+
+    # Testwaarden controleren
+    dataset_id = INDICATORS[indicator]["dataset"]
+    cfg = DATASETS[dataset_id]
+    for gemeente, expected in INDICATORS[indicator]["test_values"].items():
+        actual = round(plot_gdf.loc[plot_gdf[cfg["key"]] == gemeente, indicator].iloc[0], 2)
+        if actual != expected: # Discrete waarschuwing als testwaardes niet matchen
+            unit = INDICATORS[indicator]["unit"]
+            st.warning(f"Let op: de testwaarden in de metadata komen niet overeen met de waarden in de kaart ({gemeente}: verwacht {expected}{unit}, gevonden {actual}{unit})")
 
     #plot_gdf = plot_gdf.dropna(subset=[indicator]) #Alleen plotten wat mensen willen plotten (aangegeven in de selectbox onder)
     plot_gdf["_color_value"] = plot_gdf[indicator].astype(float).fillna(-999)
