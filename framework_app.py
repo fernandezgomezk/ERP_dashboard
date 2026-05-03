@@ -119,8 +119,14 @@ def get_fig(plot_gdf): #Deze functie maakt de daadwerkelijke kaart
             st.warning(f"Let op: de testwaarden in de metadata komen niet overeen met de waarden in de kaart ({gemeente}: verwacht {expected}{unit}, gevonden {actual}{unit})")
 
     #plot_gdf = plot_gdf.dropna(subset=[indicator]) #Alleen plotten wat mensen willen plotten (aangegeven in de selectbox onder)
+    precision = INDICATORS[indicator]["precision"]
+    unit = INDICATORS[indicator]["unit"]
+
     plot_gdf["_color_value"] = plot_gdf[indicator].astype(float).fillna(-999)
-   
+    plot_gdf["_hover_label"] = plot_gdf[indicator].apply(
+        lambda x: f"{x:.{precision}f}{unit}" if pd.notna(x) else "data niet beschikbaar"
+    )
+
     fig = px.choropleth_map(
         plot_gdf,
         geojson = plot_gdf.geometry.__geo_interface__,
@@ -128,7 +134,7 @@ def get_fig(plot_gdf): #Deze functie maakt de daadwerkelijke kaart
         color="_color_value",
         color_continuous_scale=[[0.0, "#f0f3fa"],[1.0, "#123eb7"]],
         labels={"_color_value": INDICATORS[indicator]["legend"]},
-        custom_data=["gemeentenaam"],
+        custom_data=["gemeentenaam", "_hover_label"],
         range_color=(plot_gdf.loc[plot_gdf[indicator].notna(), indicator].min(), plot_gdf.loc[plot_gdf[indicator].notna(), indicator].max()),
         center={"lat": 52.15, "lon": 5.15}, #Zodat de kaart in Nederland begint en niet in de Atlantische Oceaan
         zoom=6.5, #Zodat je meteen overzicht hebt
@@ -156,13 +162,9 @@ def get_fig(plot_gdf): #Deze functie maakt de daadwerkelijke kaart
     )
 
 
-    precision = INDICATORS[indicator]["precision"]
-    unit = INDICATORS[indicator]["unit"]
-
     fig.update_traces(
         hovertemplate=(
-            "%{customdata[0]}: "
-            f"%{{z:.{precision}f}}{unit}"
+            "%{customdata[0]}: %{customdata[1]}"
             "<extra></extra>"
         )
     )
