@@ -223,14 +223,14 @@ with st.sidebar:
                         st.button(
                             INDICATORS[indicator]["title"],
                             key=f"indicator_btn_{indicator}",
-                            use_container_width=True,
+                            width='stretch',
                             disabled=True
                         )
                     else:
                         if st.button(
                             INDICATORS[indicator]["title"],
                             key=f"indicator_btn_{indicator}",
-                            use_container_width=True
+                            width='stretch'
                         ):
                             st.session_state.indicator = indicator
 
@@ -244,7 +244,7 @@ if indicator is not None:
 
     st.plotly_chart(
         fig,
-        use_container_width=True
+        width='stretch'
     )
 else:
     st.info("Selecteer een indicator om de kaart te tonen.")
