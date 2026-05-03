@@ -26,6 +26,9 @@ indicators:
 
     # [Sub-category within the theme of indicator no. 1]
     subject: Isolatie naar de standaard bij energiearmoede 
+
+    #De unit die achter de waarde komt te staan in de kaart (bijvoorbeeld: 100 -> 100 euro)
+    unit: " euro"
     
     # [Number of decimals to display for indicator no. 1]
     precision: 1 

@@ -35,6 +35,7 @@ def load_indicator_datasets():
     data_dir = Path("data/indicatoren")
 
     for meta_file in metadata_dir.glob("*.meta.yaml"):
+        
         # 1. Metadata lezen
         with open(meta_file, "r", encoding="utf-8") as f:
             meta = yaml.safe_load(f)
@@ -63,6 +64,7 @@ def load_indicator_datasets():
                 "theme": cfg["theme"],
                 "subject": cfg["subject"],
                 "precision": cfg.get("precision", 1),
+                "unit": cfg.get("unit", ""),
                 "link": cfg["link"]
             }
 
@@ -102,28 +104,6 @@ def load_dataset(dataset_id):
     
 
     return plot_gdf
-
-# def get_gemeentegrenzen(): #Deze functie laad de grenzen van de gemeentes in voor onze ruimtelijke kaart
- 
-#     gdf = gpd.read_file("data/wijkenbuurten/wijkenbuurten_2023_v3.gpkg", layer="gemeenten") #Het inladen van de 2023 gemeentegrenzenkaart van het CBS
-#     gdf = gdf.to_crs(epsg=4326) # Converteren naar WGS84 voor de kaart
-
-#     # Filter columns
-#     gdf = gdf.filter(['gemeentenaam','geometry']) #Het bestand bevat alle CBS data van elke gemeente, dat is niet nodig
-
-#     return gdf
-
-
-# def get_output(): #Deze functie laad de indicatoren per gemeente
-
-#     output = pd.read_csv('data/indicatoren/data_kaarten_dashboard_red.csv', index_col = 0) #Het inladen van jouw data
-#     output = output.rename(columns={
-#         "GM_NAAM.x": "gemeentenaam",
-#         "Gemiddelde.verandering.energiequote..absoluut.": "d_energiequote",
-#         "Verandering.percentage.boven.8...tov.lihelek.": "d_%"
-#     }) #Simpele kolomnamen om de code overzichtelijk te houden
-    
-#     return output
 
  
 def get_fig(plot_gdf): #Deze functie maakt de daadwerkelijke kaart
@@ -167,11 +147,12 @@ def get_fig(plot_gdf): #Deze functie maakt de daadwerkelijke kaart
 
 
     precision = INDICATORS[indicator]["precision"]
-    
+    unit = INDICATORS[indicator]["unit"]
+
     fig.update_traces(
         hovertemplate=(
             "%{customdata[0]}: "
-            f"%{{z:.{precision}f}}" # afronden naar decimalen gegeven in metadata
+            f"%{{z:.{precision}f}}{unit}"
             "<extra></extra>"
         )
     )
