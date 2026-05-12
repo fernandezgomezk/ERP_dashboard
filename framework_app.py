@@ -23,6 +23,8 @@ def load_dataset(dataset_id, datasets_meta):
     # GPKG
     gdf = gpd.read_file(dataset_meta["gpkg_path"], layer=dataset_meta["layer"])
 
+    gdf = gdf[gdf["water"] == "NEE"] # Water wegfilteren uit geometrie
+
     gdf = (
         gdf.dissolve(by=dataset_meta["key"], as_index=False)
     )
