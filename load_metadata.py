@@ -1,7 +1,7 @@
 import yaml
 from pathlib import Path
 
-
+# Functie om metadata in te lezen en bijbehorende gpkg zoeken
 def load_metadata():
     datasets_meta = {}
     indicators_meta = {}

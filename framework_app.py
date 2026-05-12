@@ -10,20 +10,11 @@ from load_metadata import load_metadata #Loading the metadata, which only has to
 from get_fig_with_graph import get_fig_with_graph
 from get_fig_no_graph import get_fig_no_graph
 
-##########################################
-#######Het definieren van de functies####
-#########################################
-
-
-# Functie om metadata in te lezen en bijbehorende gpkg zoeken
-
-
 
 # Functie om databestanden in te laden, de bijbehorende gpkg in te laden en beiden te mergen 
-
 @st.cache_data(show_spinner=False)
-def load_dataset(dataset_id):
-    dataset_meta = DATASETS_META[dataset_id]
+def load_dataset(dataset_id, datasets_meta):
+    dataset_meta = datasets_meta[dataset_id]
 
     # CSV
     df = pd.read_csv(dataset_meta["csv_path"])
@@ -48,18 +39,12 @@ def load_dataset(dataset_id):
 
     return plot_gdf
 
- 
-##########################################
-############The actual app###############
-#########################################
 
 st.set_page_config(layout="wide") #Kaart even breed als scherm
 
 # DATASETS_META is een lijst met bestanden, de bijbehorende gpkg versie en andere metadata
 # INDICATORS_META is een lijst met alle indicatoren hun kenmerken
 DATASETS_META, INDICATORS_META = load_metadata()
-
-themes = {indicator_meta["theme"] for indicator_meta in INDICATORS_META.values()}
 
 # theme -> subject -> list of indicators
 indicators_by_theme_subject = defaultdict(lambda: defaultdict(list))
@@ -104,7 +89,7 @@ if indicator is not None:
     dataset_id = INDICATORS_META[indicator]["dataset"]
     visualization_type = INDICATORS_META[indicator]["visualization_type"]
 
-    plot_gdf = load_dataset(dataset_id)
+    plot_gdf = load_dataset(dataset_id, DATASETS_META)
 
     if visualization_type == "map_with_timegraph_per_area":
         get_fig_with_graph(plot_gdf, indicator, DATASETS_META, INDICATORS_META)
