@@ -2,7 +2,7 @@ import yaml
 from pathlib import Path
 
 
-def load_indicators():
+def load_metadata():
     datasets = {}
     indicators = {}
 

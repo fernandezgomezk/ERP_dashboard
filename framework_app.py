@@ -7,7 +7,7 @@ from collections import defaultdict
 import plotly.express as px
 import streamlit as st
 
-from load_indicators import load_indicators #The load_datasets is in a separate function to clean up the code
+from load_metadata import load_metadata #The load_datasets is in a separate function to clean up the code
 
 ##########################################
 #######Het definieren van de functies####
@@ -18,9 +18,6 @@ from load_indicators import load_indicators #The load_datasets is in a separate 
 
 # DATASETS is een lijst met bestanden, de bijbehorende gpkg versie en andere metadata
 # INDICATORS is een lijst met alle indicatoren hun kenmerken
-
-DATASETS, INDICATORS = load_indicators()
-themes = {cfg["theme"] for cfg in INDICATORS.values()}
 
 # Functie om databestanden in te laden, de bijbehorende gpkg in te laden en beiden te mergen 
 
@@ -140,7 +137,11 @@ st.set_page_config(layout="wide") #Kaart even breed als scherm
 #     for indicator, cfg in INDICATORS.items()
 #     if cfg["theme"] == selected_theme
 # ]
-   
+
+
+DATASETS, INDICATORS = load_metadata()
+themes = {cfg["theme"] for cfg in INDICATORS.values()}
+
 # theme -> subject -> list of indicators
 indicators_by_theme_subject = defaultdict(lambda: defaultdict(list))
 
