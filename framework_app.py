@@ -16,32 +16,32 @@ from load_metadata import load_metadata #The load_datasets is in a separate func
 
 # Functie om metadata in te lezen en bijbehorende gpkg zoeken
 
-# DATASETS is een lijst met bestanden, de bijbehorende gpkg versie en andere metadata
-# INDICATORS is een lijst met alle indicatoren hun kenmerken
+# DATASETS_META is een lijst met bestanden, de bijbehorende gpkg versie en andere metadata
+# INDICATORS_META is een lijst met alle indicatoren hun kenmerken
 
 # Functie om databestanden in te laden, de bijbehorende gpkg in te laden en beiden te mergen 
 
 @st.cache_data(show_spinner=False)
 def load_dataset(dataset_id):
-    cfg = DATASETS[dataset_id]
+    dataset_meta = DATASETS_META[dataset_id]
 
     # CSV
-    df = pd.read_csv(cfg["csv_path"])
+    df = pd.read_csv(dataset_meta["csv_path"])
     df = df.drop(columns=["geometry"], errors="ignore") # Verwijder eventuele bestaande kolom "geometry"
 
     # GPKG
-    gdf = gpd.read_file(cfg["gpkg_path"], layer=cfg["layer"])
+    gdf = gpd.read_file(dataset_meta["gpkg_path"], layer=dataset_meta["layer"])
 
     gdf = (
-        gdf.dissolve(by=cfg["key"], as_index=False)
+        gdf.dissolve(by=dataset_meta["key"], as_index=False)
     )
     gdf = gdf.to_crs(epsg=4326)
     gdf = gdf.filter(['gemeentenaam','geometry'])
-    
+
     # Merge één keer
     plot_gdf = gdf.merge(
         df,
-        on=cfg["key"],
+        on=dataset_meta["key"],
         how="left"
     )
     
@@ -52,17 +52,17 @@ def load_dataset(dataset_id):
 def get_fig(plot_gdf, indicator): #Deze functie maakt de daadwerkelijke kaart
 
     # Testwaarden controleren
-    dataset_id = INDICATORS[indicator]["dataset"]
-    cfg = DATASETS[dataset_id]
-    for gemeente, expected in INDICATORS[indicator]["test_values"].items():
-        actual = round(plot_gdf.loc[plot_gdf[cfg["key"]] == gemeente, indicator].iloc[0], 2) # Kijk of match
+    dataset_id = INDICATORS_META[indicator]["dataset"]
+    dataset_meta = DATASETS_META[dataset_id]
+    for gemeente, expected in INDICATORS_META[indicator]["test_values"].items():
+        actual = round(plot_gdf.loc[plot_gdf[dataset_meta["key"]] == gemeente, indicator].iloc[0], 2) # Kijk of match
         if actual != expected: # Discrete waarschuwing als testwaardes niet matchen
-            unit = INDICATORS[indicator]["unit"] # Inclusief unit uiteraard
+            unit = INDICATORS_META[indicator]["unit"] # Inclusief unit uiteraard
             st.warning(f"Let op: de testwaarden in de metadata komen niet overeen met de waarden in de kaart ({gemeente}: verwacht {expected}{unit}, gevonden {actual}{unit})")
 
     #plot_gdf = plot_gdf.dropna(subset=[indicator]) #Alleen plotten wat mensen willen plotten (aangegeven in de selectbox onder)
-    precision = INDICATORS[indicator]["precision"]
-    unit = INDICATORS[indicator]["unit"]
+    precision = INDICATORS_META[indicator]["precision"]
+    unit = INDICATORS_META[indicator]["unit"]
 
     plot_gdf["_color_value"] = plot_gdf[indicator].astype(float).fillna(-999) # Waarde van -999 om juiste kleur te krijgen (namelijk spierwit)
     plot_gdf["_hover_label"] = plot_gdf[indicator].apply(
@@ -75,7 +75,7 @@ def get_fig(plot_gdf, indicator): #Deze functie maakt de daadwerkelijke kaart
         locations = plot_gdf.index,
         color="_color_value",
         color_continuous_scale=[[0.0, "#f0f3fa"],[1.0, "#123eb7"]],
-        labels={"_color_value": INDICATORS[indicator]["legend"]},
+        labels={"_color_value": INDICATORS_META[indicator]["legend"]},
         custom_data=["gemeentenaam", "_hover_label"],
         range_color=(plot_gdf.loc[plot_gdf[indicator].notna(), indicator].min(), plot_gdf.loc[plot_gdf[indicator].notna(), indicator].max()),
         center={"lat": 52.15, "lon": 5.15}, #Zodat de kaart in Nederland begint en niet in de Atlantische Oceaan
@@ -85,13 +85,13 @@ def get_fig(plot_gdf, indicator): #Deze functie maakt de daadwerkelijke kaart
 
     fig.update_layout(
         height=800, #Zodat de kaart niet superklein is
-        title_text=INDICATORS[indicator]["title"], #titel/beschrijving figuur
+        title_text=INDICATORS_META[indicator]["title"], #titel/beschrijving figuur
         title_x=0, # align title to the left
         title_font=dict(size=24)
      ) 
     
     #Linkje naar publicatie
-    link = INDICATORS[indicator]["link"]
+    link = INDICATORS_META[indicator]["link"]
     fig.add_annotation(
         text=f'<a href="{link}" target="_blank">Link naar publicatie &#8599;</a>',
         x=0,
@@ -134,20 +134,20 @@ st.set_page_config(layout="wide") #Kaart even breed als scherm
 
 # indicators_in_theme = [
 #     indicator
-#     for indicator, cfg in INDICATORS.items()
+#     for indicator, cfg in INDICATORS_META.items()
 #     if cfg["theme"] == selected_theme
 # ]
 
 
-DATASETS, INDICATORS = load_metadata()
-themes = {cfg["theme"] for cfg in INDICATORS.values()}
+DATASETS_META, INDICATORS_META = load_metadata()
+themes = {indicator_meta["theme"] for indicator_meta in INDICATORS_META.values()}
 
 # theme -> subject -> list of indicators
 indicators_by_theme_subject = defaultdict(lambda: defaultdict(list))
 
-for indicator, cfg in INDICATORS.items():
-    theme = cfg["theme"]
-    subject = cfg.get("subject", "Overig")
+for indicator, indicator_meta in INDICATORS_META.items():
+    theme = indicator_meta["theme"]
+    subject = indicator_meta.get("subject", "Overig")
     indicators_by_theme_subject[theme][subject].append(indicator)
 
 if "indicator" not in st.session_state:
@@ -169,14 +169,14 @@ with st.sidebar:
                 for indicator in indicators:
                     if indicator == st.session_state.indicator:
                         st.button(
-                            INDICATORS[indicator]["title"],
+                            INDICATORS_META[indicator]["title"],
                             key=f"indicator_btn_{indicator}",
                             width='stretch',
                             disabled=True
                         )
                     else:
                         if st.button(
-                            INDICATORS[indicator]["title"],
+                            INDICATORS_META[indicator]["title"],
                             key=f"indicator_btn_{indicator}",
                             width='stretch'
                         ):
@@ -185,7 +185,7 @@ with st.sidebar:
 indicator = st.session_state.indicator
 
 if indicator is not None:
-    dataset_id = INDICATORS[indicator]["dataset"]
+    dataset_id = INDICATORS_META[indicator]["dataset"]
 
     plot_gdf = load_dataset(dataset_id)
     fig = get_fig(plot_gdf, indicator)
@@ -211,9 +211,9 @@ if indicator is not None:
                 df_trend,
                 x="JAAR",
                 y=indicator,
-                title=f"{INDICATORS[indicator]['title']} — {gemeente}",
+                title=f"{INDICATORS_META[indicator]['title']} — {gemeente}",
                 markers=True,
-                labels={indicator: INDICATORS[indicator]["legend"]}
+                labels={indicator: INDICATORS_META[indicator]["legend"]}
             )
             st.plotly_chart(fig_trend, width='stretch')
         else:
