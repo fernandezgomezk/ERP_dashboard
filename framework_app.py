@@ -7,7 +7,8 @@ from collections import defaultdict
 import plotly.express as px
 import streamlit as st
 
-from load_metadata import load_metadata #The load_datasets is in a separate function to clean up the code
+from load_metadata import load_metadata #Loading the metadata, which only has to be done once
+from get_fig_with_graph import get_fig_with_graph
 
 ##########################################
 #######Het definieren van de functies####
@@ -16,8 +17,7 @@ from load_metadata import load_metadata #The load_datasets is in a separate func
 
 # Functie om metadata in te lezen en bijbehorende gpkg zoeken
 
-# DATASETS_META is een lijst met bestanden, de bijbehorende gpkg versie en andere metadata
-# INDICATORS_META is een lijst met alle indicatoren hun kenmerken
+
 
 # Functie om databestanden in te laden, de bijbehorende gpkg in te laden en beiden te mergen 
 
@@ -49,97 +49,16 @@ def load_dataset(dataset_id):
     return plot_gdf
 
  
-def get_fig(plot_gdf, indicator): #Deze functie maakt de daadwerkelijke kaart
-
-    # Testwaarden controleren
-    dataset_id = INDICATORS_META[indicator]["dataset"]
-    dataset_meta = DATASETS_META[dataset_id]
-    for gemeente, expected in INDICATORS_META[indicator]["test_values"].items():
-        actual = round(plot_gdf.loc[plot_gdf[dataset_meta["key"]] == gemeente, indicator].iloc[0], 2) # Kijk of match
-        if actual != expected: # Discrete waarschuwing als testwaardes niet matchen
-            unit = INDICATORS_META[indicator]["unit"] # Inclusief unit uiteraard
-            st.warning(f"Let op: de testwaarden in de metadata komen niet overeen met de waarden in de kaart ({gemeente}: verwacht {expected}{unit}, gevonden {actual}{unit})")
-
-    #plot_gdf = plot_gdf.dropna(subset=[indicator]) #Alleen plotten wat mensen willen plotten (aangegeven in de selectbox onder)
-    precision = INDICATORS_META[indicator]["precision"]
-    unit = INDICATORS_META[indicator]["unit"]
-
-    plot_gdf["_color_value"] = plot_gdf[indicator].astype(float).fillna(-999) # Waarde van -999 om juiste kleur te krijgen (namelijk spierwit)
-    plot_gdf["_hover_label"] = plot_gdf[indicator].apply(
-        lambda x: f"{x:.{precision}f}{unit}" if pd.notna(x) else "data niet beschikbaar"
-    ) # Als NaN: expliciet aangeven dat data niet beschikbaar is
-
-    fig = px.choropleth_map(
-        plot_gdf,
-        geojson = plot_gdf.geometry.__geo_interface__,
-        locations = plot_gdf.index,
-        color="_color_value",
-        color_continuous_scale=[[0.0, "#f0f3fa"],[1.0, "#123eb7"]],
-        labels={"_color_value": INDICATORS_META[indicator]["legend"]},
-        custom_data=["gemeentenaam", "_hover_label"],
-        range_color=(plot_gdf.loc[plot_gdf[indicator].notna(), indicator].min(), plot_gdf.loc[plot_gdf[indicator].notna(), indicator].max()),
-        center={"lat": 52.15, "lon": 5.15}, #Zodat de kaart in Nederland begint en niet in de Atlantische Oceaan
-        zoom=6.5, #Zodat je meteen overzicht hebt
-        map_style="white-bg"
-    )
-
-    fig.update_layout(
-        height=800, #Zodat de kaart niet superklein is
-        title_text=INDICATORS_META[indicator]["title"], #titel/beschrijving figuur
-        title_x=0, # align title to the left
-        title_font=dict(size=24)
-     ) 
-    
-    #Linkje naar publicatie
-    link = INDICATORS_META[indicator]["link"]
-    fig.add_annotation(
-        text=f'<a href="{link}" target="_blank">Link naar publicatie &#8599;</a>',
-        x=0,
-        y=1.03,
-        xref="paper",
-        yref="paper",
-        showarrow=False,
-        align="left",
-        font=dict(size=14, color="#000000"),
-    )
-
-    fig.update_traces(
-        hovertemplate=(
-            "%{customdata[0]}: %{customdata[1]}"
-            "<extra></extra>"
-        )
-    )
-
-
-    return fig
-
 ##########################################
 ############The actual app###############
 #########################################
 
 st.set_page_config(layout="wide") #Kaart even breed als scherm
-# st.markdown("<style>.stApp { background-color: white; }</style>", unsafe_allow_html=True) #App krijgt witte achtergrond voor TNO
 
-#gdf = get_gemeentegrenzen() #De gemeentegrenzen inladen
-
-#output = get_output() #De csv met data inladen
-
-# with st.sidebar:
-#     st.subheader("Onderwerp")
-
-#     selected_theme = st.selectbox(
-#         "Kies een onderwerp",  
-#         options=themes
-#         )
-
-# indicators_in_theme = [
-#     indicator
-#     for indicator, cfg in INDICATORS_META.items()
-#     if cfg["theme"] == selected_theme
-# ]
-
-
+# DATASETS_META is een lijst met bestanden, de bijbehorende gpkg versie en andere metadata
+# INDICATORS_META is een lijst met alle indicatoren hun kenmerken
 DATASETS_META, INDICATORS_META = load_metadata()
+
 themes = {indicator_meta["theme"] for indicator_meta in INDICATORS_META.values()}
 
 # theme -> subject -> list of indicators
@@ -188,12 +107,12 @@ if indicator is not None:
     dataset_id = INDICATORS_META[indicator]["dataset"]
 
     plot_gdf = load_dataset(dataset_id)
-    fig = get_fig(plot_gdf, indicator)
+    fig = get_fig_with_graph(plot_gdf, indicator, DATASETS_META, INDICATORS_META)
 
     #Het toevoegen van de grafiek als gebruiker op een gemeente klikt
-    col_map, col_trend = st.columns([2, 1])    # Claude comment: Verdeel het scherm in twee kolommen: kaart (breed) en trendgrafiek (smal)
+    col_map, col_trend = st.columns([2, 1])
 
-    with col_map: # Claude comment: on_select="rerun" zorgt dat Streamlit herlaadt zodra de gebruiker op de kaart klikt
+    with col_map: # on_select="rerun" zorgt dat Streamlit herlaadt zodra de gebruiker op de kaart klikt
         event = st.plotly_chart(fig, width='stretch', on_select="rerun")
 
     if event.selection.points: # Als de gebruiker op een gemeente heeft geklikt, sla de naam op in session_state
@@ -203,10 +122,9 @@ if indicator is not None:
         if st.session_state.clicked_gemeente is not None:
             gemeente = st.session_state.clicked_gemeente
 
-            df_trend = plot_gdf.loc[plot_gdf.gemeentenaam == gemeente, ["JAAR", indicator]] #  Claude comment: Filter de data op de aangeklikte gemeente en sorteer op jaar
+            df_trend = plot_gdf.loc[plot_gdf.gemeentenaam == gemeente, ["JAAR", indicator]]
             df_trend = df_trend.sort_values("JAAR")
 
-            # Claude comment: Trendgrafiek — zodra er meerdere jaren in de data zitten verschijnen die hier automatisch
             fig_trend = px.line(
                 df_trend,
                 x="JAAR",
