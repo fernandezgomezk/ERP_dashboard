@@ -48,6 +48,7 @@ def load_metadata():
                 "subject": indicator_meta["subject"],
                 "precision": indicator_meta.get("precision", 1),
                 "unit": indicator_meta.get("unit", ""),
+                "visualization_type": indicator_meta["visualization_type"],
                 "link": indicator_meta["link"],
                 "test_values": indicator_meta.get("test_values", {})
             }

@@ -4,7 +4,6 @@ import geopandas as gpd
 
 from collections import defaultdict
 
-import plotly.express as px
 import streamlit as st
 
 from load_metadata import load_metadata #Loading the metadata, which only has to be done once
@@ -72,9 +71,6 @@ for indicator, indicator_meta in INDICATORS_META.items():
 if "indicator" not in st.session_state:
     st.session_state.indicator = None
 
-if "clicked_gemeente" not in st.session_state: # Klik op gemeentes om grafiek te laten zien
-    st.session_state.clicked_gemeente = None
-
 with st.sidebar:
     st.subheader("Onderwerpen")
 
@@ -105,37 +101,13 @@ indicator = st.session_state.indicator
 
 if indicator is not None:
     dataset_id = INDICATORS_META[indicator]["dataset"]
+    visualization_type = INDICATORS_META[indicator]["visualization_type"]
 
     plot_gdf = load_dataset(dataset_id)
-    fig = get_fig_with_graph(plot_gdf, indicator, DATASETS_META, INDICATORS_META)
 
-    #Het toevoegen van de grafiek als gebruiker op een gemeente klikt
-    col_map, col_trend = st.columns([2, 1])
+    if visualization_type == "map_with_timegraph_per_area":
+        get_fig_with_graph(plot_gdf, indicator, DATASETS_META, INDICATORS_META)
 
-    with col_map: # on_select="rerun" zorgt dat Streamlit herlaadt zodra de gebruiker op de kaart klikt
-        event = st.plotly_chart(fig, width='stretch', on_select="rerun")
-
-    if event.selection.points: # Als de gebruiker op een gemeente heeft geklikt, sla de naam op in session_state
-        st.session_state.clicked_gemeente = event.selection.points[0]["customdata"][0]
-
-    with col_trend:
-        if st.session_state.clicked_gemeente is not None:
-            gemeente = st.session_state.clicked_gemeente
-
-            df_trend = plot_gdf.loc[plot_gdf.gemeentenaam == gemeente, ["JAAR", indicator]]
-            df_trend = df_trend.sort_values("JAAR")
-
-            fig_trend = px.line(
-                df_trend,
-                x="JAAR",
-                y=indicator,
-                title=f"{INDICATORS_META[indicator]['title']} — {gemeente}",
-                markers=True,
-                labels={indicator: INDICATORS_META[indicator]["legend"]}
-            )
-            st.plotly_chart(fig_trend, width='stretch')
-        else:
-            st.info("Klik op een gemeente om de trend te zien.")
 else:
     st.info("Selecteer een indicator om de kaart te tonen.")
 

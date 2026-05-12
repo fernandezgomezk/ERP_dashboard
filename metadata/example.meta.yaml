@@ -33,6 +33,9 @@ indicators:
     # [Number of decimals to display for indicator no. 1]
     precision: 1 
     
+    # [Type of visualization: map_with_timegraph_per_area / map]
+    visualization_type: map_with_timegraph_per_area
+
     # [Link to publication]
     link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
 
@@ -51,6 +54,7 @@ indicators:
     subject: Isolatie naar de standaard bij energiearmoede
     unit: " euro"
     precision: 0
+    visualization_type: map_with_timegraph_per_area
     link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
     test_values:
       Amsterdam: 8954.00

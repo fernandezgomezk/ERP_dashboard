@@ -3,7 +3,7 @@ import plotly.express as px
 import streamlit as st
 
 
-def get_fig_with_graph(plot_gdf, indicator, datasets_meta, indicators_meta): #Deze functie maakt de daadwerkelijke kaart
+def get_fig_with_graph(plot_gdf, indicator, datasets_meta, indicators_meta):
 
     # Testwaarden controleren
     dataset_id = indicators_meta[indicator]["dataset"]
@@ -64,5 +64,33 @@ def get_fig_with_graph(plot_gdf, indicator, datasets_meta, indicators_meta): #De
         )
     )
 
+    # Kaart en trendgrafiek naast elkaar
+    if "clicked_gemeente" not in st.session_state:
+        st.session_state.clicked_gemeente = None
 
-    return fig
+    col_map, col_trend = st.columns([2, 1])
+
+    with col_map: # on_select="rerun" zorgt dat Streamlit herlaadt zodra de gebruiker op de kaart klikt
+        event = st.plotly_chart(fig, width='stretch', on_select="rerun")
+
+    if event.selection.points: # Als de gebruiker op een gemeente heeft geklikt, sla de naam op in session_state
+        st.session_state.clicked_gemeente = event.selection.points[0]["customdata"][0]
+
+    with col_trend:
+        if st.session_state.clicked_gemeente is not None:
+            gemeente = st.session_state.clicked_gemeente
+
+            df_trend = plot_gdf.loc[plot_gdf.gemeentenaam == gemeente, ["JAAR", indicator]]
+            df_trend = df_trend.sort_values("JAAR")
+
+            fig_trend = px.line(
+                df_trend,
+                x="JAAR",
+                y=indicator,
+                title=f"{indicators_meta[indicator]['title']} — {gemeente}",
+                markers=True,
+                labels={indicator: indicators_meta[indicator]["legend"]}
+            )
+            st.plotly_chart(fig_trend, width='stretch')
+        else:
+            st.info("Klik op een gemeente om de trend te zien.")
