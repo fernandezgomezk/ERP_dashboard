@@ -33,7 +33,9 @@ indicators:
     # [Number of decimals to display for indicator no. 1]
     precision: 1 
     
-    # [Type of visualization: map_with_timegraph_per_area / map]
+    # [Type of visualization:]
+    #   Map: a map that the user can hover over to see the value in each municipality
+    #   Map_with_timegraph_per_area: the map, but the user can click on a municipality to see how values evolved over time
     visualization_type: map_with_timegraph_per_area
 
     # [Link to publication]

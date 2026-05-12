@@ -26,7 +26,7 @@ indicators:
     subject: Isolatie naar de standaard bij energiearmoede
     unit: "%"
     precision: 1
-    visualization_type: map_with_timegraph_per_area
+    visualization_type: map
     link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
     test_values:
       Amsterdam: 49.04
@@ -41,7 +41,7 @@ indicators:
     subject: Isolatie naar de standaard bij energiearmoede
     unit: " euro"
     precision: 0
-    visualization_type: map_with_timegraph_per_area
+    visualization_type: map
     link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
     test_values:
       Amsterdam: 8954.00
@@ -56,7 +56,7 @@ indicators:
     subject: Isolatie naar de standaard bij energiearmoede
     unit: " m3/euro"
     precision: 2
-    visualization_type: map_with_timegraph_per_area
+    visualization_type: map
     link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
     test_values:
       Amsterdam: 0.06

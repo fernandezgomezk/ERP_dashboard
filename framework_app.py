@@ -8,6 +8,7 @@ import streamlit as st
 
 from load_metadata import load_metadata #Loading the metadata, which only has to be done once
 from get_fig_with_graph import get_fig_with_graph
+from get_fig_no_graph import get_fig_no_graph
 
 ##########################################
 #######Het definieren van de functies####
@@ -107,6 +108,9 @@ if indicator is not None:
 
     if visualization_type == "map_with_timegraph_per_area":
         get_fig_with_graph(plot_gdf, indicator, DATASETS_META, INDICATORS_META)
+
+    elif visualization_type == "map":
+        get_fig_no_graph(plot_gdf, indicator, DATASETS_META, INDICATORS_META)
 
 else:
     st.info("Selecteer een indicator om de kaart te tonen.")
