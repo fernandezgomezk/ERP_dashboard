@@ -9,6 +9,7 @@ import streamlit as st
 from load_metadata import load_metadata #Loading the metadata, which only has to be done once
 from get_fig_with_graph import get_fig_with_graph
 from get_fig_no_graph import get_fig_no_graph
+from get_boxplot import get_boxplot
 
 
 # Functie om databestanden in te laden, de bijbehorende gpkg in te laden en beiden te mergen 
@@ -17,7 +18,11 @@ def load_dataset(dataset_id, datasets_meta):
     dataset_meta = datasets_meta[dataset_id]
 
     # CSV
-    df = pd.read_csv(dataset_meta["csv_path"])
+    df = pd.read_csv(dataset_meta["csv_path"], sep=None, engine="python")
+    
+    if "gpkg_path" not in dataset_meta or dataset_meta["gpkg_path"] is None:
+            return df  
+
     df = df.drop(columns=["geometry"], errors="ignore") # Verwijder eventuele bestaande kolom "geometry"
 
     # GPKG
@@ -91,7 +96,21 @@ if indicator is not None:
     dataset_id = INDICATORS_META[indicator]["dataset"]
     visualization_type = INDICATORS_META[indicator]["visualization_type"]
 
-    plot_gdf = load_dataset(dataset_id, DATASETS_META)
+    dataset_meta = DATASETS_META[dataset_id]
+
+    plot_df = load_dataset(dataset_id, DATASETS_META)
+
+    # ✅ NEW: filter UI (only if categories exist)
+    if "categories" in dataset_meta:
+        df_filtered = plot_df.copy()
+
+        for col in dataset_meta["categories"]:
+            options = plot_df[col].dropna().unique()
+            selected = st.selectbox(col, options)
+
+            df_filtered = df_filtered[df_filtered[col] == selected]
+    else:
+        df_filtered = plot_df
 
     if visualization_type == "map_with_timegraph_per_area":
         get_fig_with_graph(plot_gdf, indicator, DATASETS_META, INDICATORS_META)
@@ -99,8 +118,8 @@ if indicator is not None:
     elif visualization_type == "map":
         get_fig_no_graph(plot_gdf, indicator, DATASETS_META, INDICATORS_META)
 
+    elif visualization_type == "boxplot":
+        get_boxplot(df_filtered, indicator, dataset_meta, INDICATORS_META)
+
 else:
     st.info("Selecteer een indicator om de kaart te tonen.")
-
-
-

@@ -1,0 +1,29 @@
+dataset_id: Fig_GasbesparingEuro
+key: Statistic
+categories:
+    - Eigendom
+    - Energiearmoede
+gwb_version: 
+layer_naam: 
+mapping:
+    median: "Mediaan"
+    q1: "25% quantile"
+    q3: "75% quantile"
+    min: "10% percentile"
+    max: "90% percentile"
+
+indicators:
+  gas bespaard per euro (m3/EUR):
+    title: Gasbesparing per euro
+    legend: 
+    theme: Woningverduurzaming
+    subject: Isolatie naar de standaard bij energiearmoede
+    unit: "m3 per euro"
+    precision: 1
+    visualization_type: boxplot
+    link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
+    test_values:
+      Amsterdam:
+      Wassenaar:
+      Amersfoort:
+      Oldambt:

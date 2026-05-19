@@ -19,23 +19,28 @@ def load_metadata():
         csv_path = data_dir / f"{dataset_id}.csv"
 
         # 2. Bijbehorende GPKG bepalen
-        version = meta["gwb_version"]
+        version = meta.get("gwb_version")
+        
+        if version:
+            matches = list(Path("data/wijkenbuurten").glob(f"*{version}.gpkg"))
+            if not matches:
+                raise FileNotFoundError(f"Geen GPKG gevonden voor versie {version}")
+            if len(matches) > 1:
+                print(f"⚠️ Meerdere GPKGs gevonden voor {version}, gebruik eerste")
 
-        matches = list(Path("data/wijkenbuurten").glob(f"*{version}.gpkg"))
-        if not matches:
-            raise FileNotFoundError(f"Geen GPKG gevonden voor versie {version}")
-        if len(matches) > 1:
-            print(f"⚠️ Meerdere GPKGs gevonden voor {version}, gebruik eerste")
-            
-        gpkg_path = matches[0]
+            gpkg_path = matches[0]
+        else:
+            gpkg_path = None
 
         # 3. Dataset registreren
         datasets_meta[dataset_id] = {
             "csv_path": csv_path,
-            "layer": meta["layer_naam"],
-            "version": meta["gwb_version"],
+            "layer": meta.get("layer_naam"),
+            "version": version,
             "key": meta["key"],
             "gpkg_path": gpkg_path,
+            "categories": meta.get("categories", []),
+            "mapping": meta.get("mapping", {})
         }
 
         # 4. Indicatoren registreren
