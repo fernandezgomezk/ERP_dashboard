@@ -1,6 +1,8 @@
 from pathlib import Path
 import pandas as pd
 import geopandas as gpd
+import csv
+import sys
 
 from collections import defaultdict
 
@@ -18,10 +20,11 @@ def load_dataset(dataset_id, datasets_meta):
     dataset_meta = datasets_meta[dataset_id]
 
     # CSV
+    csv.field_size_limit(sys.maxsize)
     df = pd.read_csv(dataset_meta["csv_path"], sep=None, engine="python")
-    
-    if "gpkg_path" not in dataset_meta or dataset_meta["gpkg_path"] is None:
-            return df  
+
+    if dataset_meta.get("gpkg_path") is None:
+        return df
 
     df = df.drop(columns=["geometry"], errors="ignore") # Verwijder eventuele bestaande kolom "geometry"
 
@@ -30,21 +33,13 @@ def load_dataset(dataset_id, datasets_meta):
 
     gdf = gdf[gdf["water"] == "NEE"] # Water wegfilteren uit geometrie
 
-    gdf = (
-        gdf.dissolve(by=dataset_meta["key"], as_index=False)
-    )
+    gdf = gdf.dissolve(by=dataset_meta["key"], as_index=False)
     gdf = gdf.to_crs(epsg=4326)
-    gdf = gdf.filter(['gemeentenaam','geometry'])
+    gdf = gdf[["gemeentenaam", "geometry"]]
 
-    # Merge één keer
-    plot_gdf = gdf.merge(
-        df,
-        on=dataset_meta["key"],
-        how="left"
-    )
-    
+    plot_df = gdf.merge(df, on=dataset_meta["key"], how="left")
 
-    return plot_gdf
+    return plot_df
 
 
 st.set_page_config(layout="wide") #Kaart even breed als scherm
@@ -64,6 +59,18 @@ for indicator, indicator_meta in INDICATORS_META.items():
 if "indicator" not in st.session_state:
     st.session_state.indicator = None
 
+selected_filters = {}
+plot_df = None
+dataset_meta = None
+
+indicator = st.session_state.indicator
+
+if indicator is not None:
+    dataset_id = INDICATORS_META[indicator]["dataset"]
+    dataset_meta = DATASETS_META[dataset_id]
+    plot_df = load_dataset(dataset_id, DATASETS_META)
+
+
 with st.sidebar:
     st.subheader("Onderwerpen")
 
@@ -74,52 +81,82 @@ with st.sidebar:
                 # Subject header (niet uitklapbaar)
                 st.markdown(f"**{subject}**")
 
-                for indicator in indicators:
-                    if indicator == st.session_state.indicator:
+                for indicator_name in indicators:
+
+                    if indicator_name == st.session_state.indicator:
                         st.button(
-                            INDICATORS_META[indicator]["title"],
-                            key=f"indicator_btn_{indicator}",
-                            width='stretch',
+                            INDICATORS_META[indicator_name]["title"],
+                            key=f"indicator_btn_{indicator_name}",
+                            width="stretch",
                             disabled=True
                         )
+
+                        dataset_id = INDICATORS_META[indicator_name]["dataset"]
+                        dataset_meta = DATASETS_META[dataset_id]
+
+                        if (
+                            plot_df is not None
+                            and dataset_meta.get("categories")
+                        ):
+
+                            selected_filters.clear()
+
+                            for col in dataset_meta["categories"]:
+                                options = sorted(plot_df[col].dropna().unique())
+
+                                st.markdown(f"&nbsp;&nbsp;**{col}**", unsafe_allow_html=True)
+                                
+                                if f"filter_{col}" not in st.session_state:
+                                    st.session_state[f"filter_{col}"] = list(options)
+
+                                current_selection = st.session_state[f"filter_{col}"]
+                                new_selection = []
+
+                                for opt in options:
+                                    
+                                    if st.checkbox(
+                                        str(opt),
+                                        value=(opt in current_selection),
+                                        key=f"filter_{col}_{opt}"
+                                    ):
+                                        new_selection.append(opt)
+
+                                if len(new_selection) == 0:
+                                    new_selection = list(options)
+
+                                st.session_state[f"filter_{col}"] = new_selection
+                                selected_filters[col] = new_selection
+
                     else:
                         if st.button(
-                            INDICATORS_META[indicator]["title"],
-                            key=f"indicator_btn_{indicator}",
-                            width='stretch'
+                            INDICATORS_META[indicator_name]["title"],
+                            key=f"indicator_btn_{indicator_name}",
+                            width="stretch"
                         ):
-                            st.session_state.indicator = indicator
+                            st.session_state.indicator = indicator_name
+                            st.rerun()
 
 indicator = st.session_state.indicator
 
 if indicator is not None:
     dataset_id = INDICATORS_META[indicator]["dataset"]
-    visualization_type = INDICATORS_META[indicator]["visualization_type"]
-
     dataset_meta = DATASETS_META[dataset_id]
-
     plot_df = load_dataset(dataset_id, DATASETS_META)
 
-    # ✅ NEW: filter UI (only if categories exist)
-    if "categories" in dataset_meta:
-        df_filtered = plot_df.copy()
-
-        for col in dataset_meta["categories"]:
-            options = plot_df[col].dropna().unique()
-            selected = st.selectbox(col, options)
-
-            df_filtered = df_filtered[df_filtered[col] == selected]
-    else:
-        df_filtered = plot_df
+    visualization_type = INDICATORS_META[indicator]["visualization_type"]
 
     if visualization_type == "map_with_timegraph_per_area":
-        get_fig_with_graph(plot_gdf, indicator, DATASETS_META, INDICATORS_META)
+        get_fig_with_graph(plot_df, indicator, DATASETS_META, INDICATORS_META)
 
     elif visualization_type == "map":
-        get_fig_no_graph(plot_gdf, indicator, DATASETS_META, INDICATORS_META)
+        get_fig_no_graph(plot_df, indicator, DATASETS_META, INDICATORS_META)
 
     elif visualization_type == "boxplot":
-        get_boxplot(df_filtered, indicator, dataset_meta, INDICATORS_META)
+
+        if not selected_filters:
+            st.warning("Selecteer filters om boxplot te tonen.")
+        else:
+            get_boxplot(plot_df, indicator, dataset_meta, INDICATORS_META, selected_filters)
 
 else:
     st.info("Selecteer een indicator om de kaart te tonen.")

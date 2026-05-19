@@ -1,8 +1,9 @@
 import plotly.graph_objects as go
 import streamlit as st
+import itertools
 
 
-def get_boxplot(plot_df, indicator, datasets_meta, indicators_meta):
+def get_boxplot(plot_df, indicator, datasets_meta, indicators_meta, selected_filters):
 
     meta = indicators_meta[indicator]
     dataset_meta = datasets_meta
@@ -13,58 +14,82 @@ def get_boxplot(plot_df, indicator, datasets_meta, indicators_meta):
 
     unit = meta["unit"]
     precision = meta["precision"]
+    unit = meta["unit"]
 
-    # --- Extract statistics ---
-    try:
+
+    categories = dataset_meta.get("categories", [])
+
+
+
+    # Check columns exist
+    for col in categories:
+        if col not in plot_df.columns:
+            st.error(f"Kolom '{col}' niet gevonden. Beschikbaar: {plot_df.columns.tolist()}")
+            return
+
+    if value_col not in plot_df.columns:
+        st.error(f"Kolom '{value_col}' niet gevonden. Beschikbaar: {plot_df.columns.tolist()}")
+        return
+
+    
+    # Generate combinations
+    combinations = list(itertools.product(*selected_filters.values()))
+
+    if len(combinations) == 0:
+        st.warning("Geen selectie gemaakt.")
+        return
+
+    if len(combinations) > 12:
+        st.warning("Te veel combinaties geselecteerd — beperk filters.")
+        return
+
+    fig = go.Figure()
+
+    # LOOP OVER COMBINATIONS
+    for combo in combinations:
+
+        subset = plot_df.copy()
+        label_parts = []
+
+        for col, val in zip(categories, combo):
+            subset = subset[subset[col] == val]
+            label_parts.append(str(val))
+
+        label = " - ".join(label_parts)
+
         values = {}
 
         for key, stat_name in mapping.items():
-            match = plot_df[plot_df[stat_col] == stat_name]
+            match = subset[subset[stat_col] == stat_name]
 
             if match.empty:
-                raise KeyError(stat_name)
+                st.warning(f"Statistiek '{stat_name}' ontbreekt voor {label}")
+                values[key] = None
+            else:
+                values[key] = float(match[value_col].iloc[0])        
+        
+        fig.add_trace(go.Box(
+            x=[label],   
+            name=label,
+            median=[values.get("median")],
+            q1=[values.get("q1")],
+            q3=[values.get("q3")],
+            lowerfence=[values.get("min")],
+            upperfence=[values.get("max")],
+            boxpoints=False,
+            marker_color= st.get_option("theme.primaryColor")
+            
+        ))
 
-            values[key] = float(match[value_col].iloc[0])
 
-    except KeyError as e:
-        st.error(f"Ontbrekende statistiek: {e}")
-        return
-
-    # --- Label (based on filters) ---
-    label_parts = []
-    for col in dataset_meta.get("categories", []):
-        if col in plot_df.columns:
-            val = plot_df[col].iloc[0]
-            label_parts.append(f"{col}: {val}")
-
-    label = " | ".join(label_parts)
-
-
-    for col in dataset_meta["categories"]:
-        if col not in plot_df.columns:
-            st.error(f"Kolom '{col}' niet gevonden. Beschikbaar: {plot_df.columns.tolist()}")
-            st.stop()
-
-    # --- Plot ---
-    fig = go.Figure()
-
-    fig.add_trace(go.Box(
-        name=label,
-        median=[values["median"]],
-        q1=[values["q1"]],
-        q3=[values["q3"]],
-        lowerfence=[values.get("min")],
-        upperfence=[values.get("max")],
-        boxpoints=False
-    ))
-
-    # --- Layout (map-style consistency) ---
+    # --- Layout ---
     fig.update_layout(
         height=600,
         title_text=meta["title"],
         title_x=0,
         title_font=dict(size=24),
-        yaxis_title=meta["unit"]
+        yaxis_title=unit,
+        showlegend=False
     )
 
     # --- Link ---

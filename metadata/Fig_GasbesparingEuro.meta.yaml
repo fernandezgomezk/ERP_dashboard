@@ -19,7 +19,7 @@ indicators:
     theme: Woningverduurzaming
     subject: Isolatie naar de standaard bij energiearmoede
     unit: "m3 per euro"
-    precision: 1
+    precision: 3
     visualization_type: boxplot
     link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
     test_values:
