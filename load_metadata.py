@@ -48,6 +48,7 @@ def load_metadata():
             indicators_meta[indicator] = {
                 "dataset": dataset_id,
                 "title": indicator_meta["title"],
+                "description": indicator_meta["description"],
                 "legend": indicator_meta["legend"],
                 "theme": indicator_meta["theme"],
                 "subject": indicator_meta["subject"],

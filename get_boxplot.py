@@ -85,23 +85,8 @@ def get_boxplot(plot_df, indicator, datasets_meta, indicators_meta, selected_fil
     # --- Layout ---
     fig.update_layout(
         height=600,
-        title_text=meta["title"],
-        title_x=0,
-        title_font=dict(size=24),
         yaxis_title=unit,
         showlegend=False
     )
 
-    # --- Link ---
-    fig.add_annotation(
-        text=f'<a href="{meta["link"]}" target="_blank">Link naar publicatie &#8599;</a>',
-        x=0,
-        y=1.1,
-        xref="paper",
-        yref="paper",
-        showarrow=False,
-        align="left",
-        font=dict(size=14)
-    )
-
-    st.plotly_chart(fig, width='stretch')
+    return fig

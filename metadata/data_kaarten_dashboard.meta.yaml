@@ -6,6 +6,7 @@ layer_naam: cbs_wijken_2019
 indicators:
   Gemiddelde.verandering.energiequote.(absoluut):
     title: Gemiddelde afname energiequote van huishoudens met energiearmoede
+    description: Deze indicator laat zien hoeveel de energiequote van huishoudens in energiearmoede gemiddeld afneemt in een gemodelleerde what-if-situatie waarin de woning wordt geïsoleerd tot de isolatiestandaard. De grootte van de afname verschilt per gemeente, voornamelijk vanwege de verschillen in woninggrootte, woningtype, inkomens en warmtevraag. 
     legend: Afname in procentpunt
     theme: Woningverduurzaming
     subject: Isolatie naar de standaard bij energiearmoede
@@ -21,6 +22,7 @@ indicators:
 
   Verandering.percentage.boven.8%.(tov.lihelek):
     title: Afname aandeel huishoudens met energiearmoede met een energiequote van meer dan acht procent
+    description: Deze indicator toont  de afname in de frequentie van huishoudens met energiearmoede in een gemodelleerde what-if-situatie waarin de woningen worden geïsoleerd tot de isolatiestandaard. De grootste dalingen in het lokale aandeel huishoudens met energiearmoede zijn met name te vinden gemeentes in de Randstad. In gemeenten als Den Haag en Amsterdam leven veel huishoudens rond de energiearmoedegrens; woningisolatie brengt hun energiequote naar onder de acht procent. 
     legend: Afname in procentpunt
     theme: Woningverduurzaming
     subject: Isolatie naar de standaard bij energiearmoede
@@ -36,6 +38,7 @@ indicators:
 
   Gemiddelde.investeringskosten.(EUR):
     title: Gemiddelde investeringskosten voor huishoudens met energiearmoede
+    description: Deze kaart toont de gemiddelde investeringskosten per woning voor het isoleren naar de isolatiestandaard van woningen met huishoudens met een laag inkomen en met een hoge energierekening óf een woning van lage energetische kwaliteit. 
     legend: euro
     theme: Woningverduurzaming
     subject: Isolatie naar de standaard bij energiearmoede
@@ -51,6 +54,7 @@ indicators:
   
   Gemiddeld.gas.bespaard.per.euro.(m3/EUR):
     title: Gemiddelde gasbesparing per geïnvesteerde euro van huishoudens met energiearmoede
+    description: Deze kaart toont de gemiddelde gasbesparing per geïnvesteerde euro in isoleren naar de isolatiestandaard van woningen met huishoudens met een laag inkomen en met een hoge energierekening óf een woning van lage energetische kwaliteit.
     legend: kubieke meter per euro
     theme: Woningverduurzaming
     subject: Isolatie naar de standaard bij energiearmoede

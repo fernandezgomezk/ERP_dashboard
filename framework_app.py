@@ -59,6 +59,9 @@ for indicator, indicator_meta in INDICATORS_META.items():
 if "indicator" not in st.session_state:
     st.session_state.indicator = None
 
+if "clicked_gemeente" not in st.session_state:
+    st.session_state.clicked_gemeente = None
+
 selected_filters = {}
 plot_df = None
 dataset_meta = None
@@ -134,11 +137,42 @@ with st.sidebar:
                             width="stretch"
                         ):
                             st.session_state.indicator = indicator_name
+                            
+                            st.session_state.clicked_gemeente = None
+
                             st.rerun()
 
 indicator = st.session_state.indicator
 
 if indicator is not None:
+
+    meta = INDICATORS_META[indicator]
+
+    # --- Title ---
+    st.title(meta["title"])
+
+    # --- Description ---
+    st.markdown(
+        f"""
+        <div style="font-size:18px; color:#444; line-height:1.5;">
+            {meta["description"]}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # --- Link ---
+    st.markdown(
+        f"""
+        <div style="margin-top:6px;">
+            <a href="{meta["link"]}" target="_blank">
+                Link naar publicatie &#8599;
+            </a>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
     dataset_id = INDICATORS_META[indicator]["dataset"]
     dataset_meta = DATASETS_META[dataset_id]
     plot_df = load_dataset(dataset_id, DATASETS_META)
@@ -146,17 +180,66 @@ if indicator is not None:
     visualization_type = INDICATORS_META[indicator]["visualization_type"]
 
     if visualization_type == "map_with_timegraph_per_area":
-        get_fig_with_graph(plot_df, indicator, DATASETS_META, INDICATORS_META)
+
+        col_map, col_trend = st.columns([2, 1])
+
+        # --- FIRST: build map ---
+        fig, _ = get_fig_with_graph(
+            plot_df,
+            indicator,
+            DATASETS_META,
+            INDICATORS_META,
+            st.session_state.clicked_gemeente
+        )
+
+        with col_map:
+            event = st.plotly_chart(fig, use_container_width=True, on_select="rerun")
+
+        # --- SECOND: update state from click ---
+        if event is not None and event.selection is not None and event.selection.points:
+            st.session_state.clicked_gemeente = event.selection.points[0]["customdata"][0]
+
+        # --- THIRD: NOW compute trend with UPDATED state ---
+        _, fig_trend = get_fig_with_graph(
+            plot_df,
+            indicator,
+            DATASETS_META,
+            INDICATORS_META,
+            st.session_state.clicked_gemeente
+        )
+
+        # --- FOURTH: display ---
+        with col_trend:
+            if st.session_state.clicked_gemeente is None:
+                st.info("Klik op een gemeente om de trend te zien.")
+            elif fig_trend is not None:
+                st.plotly_chart(fig_trend, use_container_width=True)
 
     elif visualization_type == "map":
-        get_fig_no_graph(plot_df, indicator, DATASETS_META, INDICATORS_META)
+
+        fig = get_fig_no_graph(
+            plot_df,
+            indicator,
+            DATASETS_META,
+            INDICATORS_META
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
 
     elif visualization_type == "boxplot":
 
         if not selected_filters:
             st.warning("Selecteer filters om boxplot te tonen.")
         else:
-            get_boxplot(plot_df, indicator, dataset_meta, INDICATORS_META, selected_filters)
+            fig = get_boxplot(
+                plot_df,
+                indicator,
+                dataset_meta,
+                INDICATORS_META,
+                selected_filters
+            )
+
+            st.plotly_chart(fig, use_container_width=True)
 
 else:
-    st.info("Selecteer een indicator om de kaart te tonen.")
+    st.info("Selecteer een indicator.")

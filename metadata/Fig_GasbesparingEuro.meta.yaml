@@ -14,7 +14,8 @@ mapping:
 
 indicators:
   gas bespaard per euro (m3/EUR):
-    title: Gasbesparing per euro
+    title: Verdeling gasbesparing per geïnvesteerde euro
+    description: Deze figuur toont de verdeling en spreiding van de jaarlijkse gasbesparing per geïnvesteerde euro in het isoleren naar de isolatiestandaard, naar eigendomstype en energiearmoede-indicator. Voor huishoudens met energiearmoede is de mediane gasbesparing per geïnvesteerde euro ongeveer een derde hoger dan voor het totaal. Binnen de groep met energiearmoede ligt de besparing per euro bij de slechtste woningen iets lager—behalve bij sociale huurwoningen—maar nog steeds boven het niveau van alle woningen samen. Dit betekent dat investeren in woningen van huishoudens met energiearmoede niet alleen bijdraagt aan het verminderen van armoede, maar ook relatief meer energiebesparing en CO₂-reductie oplevert.
     legend: 
     theme: Woningverduurzaming
     subject: Isolatie naar de standaard bij energiearmoede

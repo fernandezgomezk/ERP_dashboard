@@ -15,9 +15,12 @@ indicators:
   # [Name of the column of indicator no. 1]:
   Gemiddelde.verandering.energiequote.(absoluut):
 
-    # [Title / description of indicator no. 1]
+    # [Title of indicator no. 1]
     title: Gemiddelde afname energiequote van huishoudens met energiearmoede 
     
+    # [Description / explanation of indicator no. 1]
+    description: Deze indicator laat zien hoeveel de energiequote van huishoudens in energiearmoede gemiddeld afneemt in een gemodelleerde what-if-situatie waarin de woning wordt geïsoleerd tot de isolatiestandaard. De grootte van de afname verschilt per gemeente, voornamelijk vanwege de verschillen in woninggrootte, woningtype, inkomens en warmtevraag.
+
     # [Title of the legend of indicator no. 1]
     legend: Afname in procentpunt 
     
@@ -51,6 +54,7 @@ indicators:
   # [Name of the column of indicator no. 2]:
   Gemiddelde.investeringskosten.(EUR):
     title: Gemiddelde investeringskosten voor huishoudens met energiearmoede
+    description: Deze kaart toont de gemiddelde investeringskosten per woning voor het isoleren naar de isolatiestandaard van woningen met huishoudens met een laag inkomen en met een hoge energierekening óf een woning van lage energetische kwaliteit. 
     legend: euro
     theme: Woningverduurzaming
     subject: Isolatie naar de standaard bij energiearmoede

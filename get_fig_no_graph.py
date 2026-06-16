@@ -1,20 +1,9 @@
 import pandas as pd
 import plotly.express as px
-import streamlit as st
 
 
 def get_fig_no_graph(plot_gdf, indicator, datasets_meta, indicators_meta):
 
-    # Testwaarden controleren
-    dataset_id = indicators_meta[indicator]["dataset"]
-    dataset_meta = datasets_meta[dataset_id]
-    for gemeente, expected in indicators_meta[indicator]["test_values"].items():
-        actual = round(plot_gdf.loc[plot_gdf[dataset_meta["key"]] == gemeente, indicator].iloc[0], 2) # Kijk of match
-        if actual != expected: # Discrete waarschuwing als testwaardes niet matchen
-            unit = indicators_meta[indicator]["unit"] # Inclusief unit uiteraard
-            st.warning(f"Let op: de testwaarden in de metadata komen niet overeen met de waarden in de kaart ({gemeente}: verwacht {expected}{unit}, gevonden {actual}{unit})")
-
-    #plot_gdf = plot_gdf.dropna(subset=[indicator]) #Alleen plotten wat mensen willen plotten (aangegeven in de selectbox onder)
     precision = indicators_meta[indicator]["precision"]
     unit = indicators_meta[indicator]["unit"]
 
@@ -39,22 +28,6 @@ def get_fig_no_graph(plot_gdf, indicator, datasets_meta, indicators_meta):
 
     fig.update_layout(
         height=800, #Zodat de kaart niet superklein is
-        title_text=indicators_meta[indicator]["title"],
-        title_x=0,
-        title_font=dict(size=24)
-    )
-
-    #Linkje naar publicatie
-    link = indicators_meta[indicator]["link"]
-    fig.add_annotation(
-        text=f'<a href="{link}" target="_blank">Link naar publicatie &#8599;</a>',
-        x=0,
-        y=1.03,
-        xref="paper",
-        yref="paper",
-        showarrow=False,
-        align="left",
-        font=dict(size=14, color="#000000"),
     )
 
     fig.update_traces(
@@ -64,4 +37,4 @@ def get_fig_no_graph(plot_gdf, indicator, datasets_meta, indicators_meta):
         )
     )
 
-    st.plotly_chart(fig, width='stretch')
+    return fig
