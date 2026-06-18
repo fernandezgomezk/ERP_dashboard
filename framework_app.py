@@ -200,7 +200,7 @@ if indicator is not None:
         )
 
         with col_map:
-            event = st.plotly_chart(fig, use_container_width=True, on_select="rerun")
+            event = st.plotly_chart(fig, width="stretch", on_select="rerun")
 
         # --- SECOND: update state from click ---
         if event is not None and event.selection is not None and event.selection.points:
@@ -220,7 +220,7 @@ if indicator is not None:
             if st.session_state.clicked_gemeente is None:
                 st.info("Klik op een gemeente om de trend te zien.")
             elif fig_trend is not None:
-                st.plotly_chart(fig_trend, use_container_width=True)
+                st.plotly_chart(fig_trend, width="stretch")
 
     elif visualization_type == "map":
 
@@ -231,7 +231,7 @@ if indicator is not None:
             INDICATORS_META
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     elif visualization_type == "boxplot":
 
@@ -246,9 +246,10 @@ if indicator is not None:
                 selected_filters
             )
 
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
     logger.info("After showing indicator")
 
 else:
     st.info("Selecteer een indicator.")
+
 logger.info("App script finished")
