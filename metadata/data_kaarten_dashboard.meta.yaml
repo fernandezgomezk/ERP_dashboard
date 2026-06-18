@@ -1,7 +1,8 @@
-dataset_id: data_kaarten_dashboard
+dataset_id: data_kaarten_dashboard_v2
 key: gemeentenaam
-gwb_version: 2019_v3
-layer_naam: cbs_wijken_2019
+gwb_version: gemeente_gegeneraliseerd_2019_simplified_100m
+layer_naam: gemeente_gegeneraliseerd_2019_simplified_100m
+key_gwb: statnaam
 
 indicators:
   Gemiddelde.verandering.energiequote.(absoluut):
