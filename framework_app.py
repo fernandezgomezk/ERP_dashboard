@@ -37,13 +37,11 @@ def load_dataset(dataset_id, datasets_meta):
     gdf = gpd.read_file(dataset_meta["gpkg_path"], layer=dataset_meta["layer"])
     logger.info(f"after reading of gpkg. {dataset_meta['gpkg_path']=}; {dataset_meta['layer']=}; {len(gdf)=}")
 
-    gdf = gdf[gdf["water"] == "NEE"] # Water wegfilteren uit geometrie
+    key_gwb = dataset_meta["key_gwb"]
+    gdf = gdf[[key_gwb, "geometry"]]
 
-    gdf = gdf.dissolve(by=dataset_meta["key"], as_index=False)
     gdf = gdf.to_crs(epsg=4326)
-    gdf = gdf[["gemeentenaam", "geometry"]]
-
-    plot_df = gdf.merge(df, on=dataset_meta["key"], how="left")
+    plot_df = gdf.merge(df, left_on=key_gwb, right_on=dataset_meta["key"], how="left")
     logger.info(f"after merge. ({len(plot_df)=})")
 
     return plot_df
