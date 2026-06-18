@@ -26,7 +26,7 @@ def load_metadata():
         version = meta.get("gwb_version")
         
         if version:
-            matches = list(Path("data/wijkenbuurten").glob(f"*{version}.gpkg"))
+            matches = list(Path("data/gemeentenwijkenbuurten").glob(f"*{version}.gpkg"))
             if not matches:
                 raise FileNotFoundError(f"Geen GPKG gevonden voor versie {version}")
             if len(matches) > 1:
