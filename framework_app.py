@@ -7,21 +7,26 @@ import sys
 from collections import defaultdict
 
 import streamlit as st
+from streamlit.logger import get_logger
 
 from load_metadata import load_metadata #Loading the metadata, which only has to be done once
 from get_fig_with_graph import get_fig_with_graph
 from get_fig_no_graph import get_fig_no_graph
 from get_boxplot import get_boxplot
 
+logger = get_logger("app.log")
+logger.info("App script started")
 
 # Functie om databestanden in te laden, de bijbehorende gpkg in te laden en beiden te mergen 
 @st.cache_data(show_spinner=False)
 def load_dataset(dataset_id, datasets_meta):
+    logger.info(f"load_dataset: {dataset_id}")
     dataset_meta = datasets_meta[dataset_id]
 
     # CSV
     csv.field_size_limit(sys.maxsize)
     df = pd.read_csv(dataset_meta["csv_path"], sep=None, engine="python")
+    logger.info(f"after read_csv. {dataset_meta['csv_path']=}; {len(df)=}")
 
     if dataset_meta.get("gpkg_path") is None:
         return df
@@ -30,6 +35,7 @@ def load_dataset(dataset_id, datasets_meta):
 
     # GPKG
     gdf = gpd.read_file(dataset_meta["gpkg_path"], layer=dataset_meta["layer"])
+    logger.info(f"after reading of gpkg. {dataset_meta['gpkg_path']=}; {dataset_meta['layer']=}; {len(gdf)=}")
 
     gdf = gdf[gdf["water"] == "NEE"] # Water wegfilteren uit geometrie
 
@@ -38,6 +44,7 @@ def load_dataset(dataset_id, datasets_meta):
     gdf = gdf[["gemeentenaam", "geometry"]]
 
     plot_df = gdf.merge(df, on=dataset_meta["key"], how="left")
+    logger.info(f"after merge. ({len(plot_df)=})")
 
     return plot_df
 
@@ -175,7 +182,9 @@ if indicator is not None:
 
     dataset_id = INDICATORS_META[indicator]["dataset"]
     dataset_meta = DATASETS_META[dataset_id]
+    logger.info(f"Show indicator. {indicator=}; {dataset_id=}")
     plot_df = load_dataset(dataset_id, DATASETS_META)
+    logger.info(f"After loading dataset. {dataset_id=}")
 
     visualization_type = INDICATORS_META[indicator]["visualization_type"]
 
@@ -240,6 +249,8 @@ if indicator is not None:
             )
 
             st.plotly_chart(fig, use_container_width=True)
+    logger.info("After showing indicator")
 
 else:
     st.info("Selecteer een indicator.")
+logger.info("App script finished")

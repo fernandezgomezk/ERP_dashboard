@@ -1,6 +1,10 @@
 import yaml
 from pathlib import Path
 
+from streamlit.logger import get_logger
+
+logger = get_logger("app.log")
+
 # Functie om metadata in te lezen en bijbehorende gpkg zoeken
 def load_metadata():
     datasets_meta = {}
@@ -10,7 +14,7 @@ def load_metadata():
     data_dir = Path("data/indicatoren")
 
     for meta_file in metadata_dir.glob("*.meta.yaml"):
-
+        logger.info(f"Loading metadata from {meta_file}")
         # 1. Metadata lezen
         with open(meta_file, "r", encoding="utf-8") as f:
             meta = yaml.safe_load(f)
