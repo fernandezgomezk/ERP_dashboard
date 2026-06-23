@@ -7,21 +7,26 @@ import sys
 from collections import defaultdict
 
 import streamlit as st
+from streamlit.logger import get_logger
 
 from load_metadata import load_metadata #Loading the metadata, which only has to be done once
 from get_fig_with_graph import get_fig_with_graph
 from get_fig_no_graph import get_fig_no_graph
 from get_boxplot import get_boxplot
 
+logger = get_logger("app.log")
+logger.info("App script started")
 
 # Functie om databestanden in te laden, de bijbehorende gpkg in te laden en beiden te mergen 
 @st.cache_data(show_spinner=False)
 def load_dataset(dataset_id, datasets_meta):
+    logger.info(f"load_dataset: {dataset_id}")
     dataset_meta = datasets_meta[dataset_id]
 
     # CSV
     csv.field_size_limit(sys.maxsize)
     df = pd.read_csv(dataset_meta["csv_path"], sep=None, engine="python")
+    logger.info(f"after read_csv. {dataset_meta['csv_path']=}; {len(df)=}")
 
     if dataset_meta.get("gpkg_path") is None:
         return df
@@ -30,14 +35,14 @@ def load_dataset(dataset_id, datasets_meta):
 
     # GPKG
     gdf = gpd.read_file(dataset_meta["gpkg_path"], layer=dataset_meta["layer"])
+    logger.info(f"after reading of gpkg. {dataset_meta['gpkg_path']=}; {dataset_meta['layer']=}; {len(gdf)=}")
 
-    gdf = gdf[gdf["water"] == "NEE"] # Water wegfilteren uit geometrie
+    key_gwb = dataset_meta["key_gwb"]
+    gdf = gdf[[key_gwb, "geometry"]]
 
-    gdf = gdf.dissolve(by=dataset_meta["key"], as_index=False)
     gdf = gdf.to_crs(epsg=4326)
-    gdf = gdf[["gemeentenaam", "geometry"]]
-
-    plot_df = gdf.merge(df, on=dataset_meta["key"], how="left")
+    plot_df = gdf.merge(df, left_on=key_gwb, right_on=dataset_meta["key"], how="left")
+    logger.info(f"after merge. ({len(plot_df)=})")
 
     return plot_df
 
@@ -175,7 +180,9 @@ if indicator is not None:
 
     dataset_id = INDICATORS_META[indicator]["dataset"]
     dataset_meta = DATASETS_META[dataset_id]
+    logger.info(f"Show indicator. {indicator=}; {dataset_id=}")
     plot_df = load_dataset(dataset_id, DATASETS_META)
+    logger.info(f"After loading dataset. {dataset_id=}")
 
     visualization_type = INDICATORS_META[indicator]["visualization_type"]
 
@@ -193,7 +200,7 @@ if indicator is not None:
         )
 
         with col_map:
-            event = st.plotly_chart(fig, use_container_width=True, on_select="rerun")
+            event = st.plotly_chart(fig, width="stretch", on_select="rerun")
 
         # --- SECOND: update state from click ---
         if event is not None and event.selection is not None and event.selection.points:
@@ -213,7 +220,7 @@ if indicator is not None:
             if st.session_state.clicked_gemeente is None:
                 st.info("Klik op een gemeente om de trend te zien.")
             elif fig_trend is not None:
-                st.plotly_chart(fig_trend, use_container_width=True)
+                st.plotly_chart(fig_trend, width="stretch")
 
     elif visualization_type == "map":
 
@@ -224,7 +231,7 @@ if indicator is not None:
             INDICATORS_META
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     elif visualization_type == "boxplot":
 
@@ -239,7 +246,10 @@ if indicator is not None:
                 selected_filters
             )
 
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
+    logger.info("After showing indicator")
 
 else:
     st.info("Selecteer een indicator.")
+
+logger.info("App script finished")

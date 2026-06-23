@@ -1,8 +1,12 @@
 import pandas as pd
 import plotly.express as px
 
+from streamlit.logger import get_logger
+
+logger = get_logger("app.log")
 
 def get_fig_no_graph(plot_gdf, indicator, datasets_meta, indicators_meta):
+    logger.info(f"Generating figure for indicator: {indicator}")
 
     precision = indicators_meta[indicator]["precision"]
     unit = indicators_meta[indicator]["unit"]
@@ -25,10 +29,12 @@ def get_fig_no_graph(plot_gdf, indicator, datasets_meta, indicators_meta):
         zoom=6.5, #Zodat je meteen overzicht hebt
         map_style="white-bg"
     )
+    logger.info(f"After generating chloropleth")
 
     fig.update_layout(
         height=800, #Zodat de kaart niet superklein is
     )
+    logger.info(f"After updating layout")
 
     fig.update_traces(
         hovertemplate=(
@@ -36,5 +42,6 @@ def get_fig_no_graph(plot_gdf, indicator, datasets_meta, indicators_meta):
             "<extra></extra>"
         )
     )
+    logger.info(f"After updating traces")
 
     return fig
