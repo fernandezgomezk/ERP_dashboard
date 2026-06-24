@@ -14,6 +14,10 @@ def load_metadata():
     data_dir = Path("data/indicatoren")
 
     for meta_file in metadata_dir.glob("*.meta.yaml"):
+
+        if meta_file.name.startswith("example"):
+            continue
+
         logger.info(f"Loading metadata from {meta_file}")
         # 1. Metadata lezen
         with open(meta_file, "r", encoding="utf-8") as f:
