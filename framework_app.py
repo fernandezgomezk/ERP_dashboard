@@ -224,11 +224,58 @@ if indicator is not None:
 
     elif visualization_type == "map":
 
+        dataset_id = INDICATORS_META[indicator]["dataset"]
+        option_columns = DATASETS_META[dataset_id].get("options", [])
+
+        selected_option = None
+
+        # CASE 1: no options → do nothing
+        if not option_columns:
+            selected_option = None
+
+        # CASE 2: single column → one dropdown
+        elif len(option_columns) == 1:
+            col = option_columns[0]
+
+            options = sorted(plot_df[col].dropna().unique())
+
+            selected_option = st.selectbox(
+                f"Select {col}",
+                options
+            )
+
+        # CASE 3: multiple columns → dependent dropdowns (grouped)
+        else:
+            selected_option = {}
+            filtered_df = plot_df.copy()
+
+            st.markdown("### Selectie")
+
+            cols = st.columns(len(option_columns))  # nicer layout
+
+            for i, col in enumerate(option_columns):
+                with cols[i]:
+                    options = sorted(filtered_df[col].dropna().unique())
+
+                    value = st.selectbox(
+                        f"{col}",
+                        options,
+                        key=f"option_{col}"
+                    )
+
+                selected_option[col] = value
+
+                # Filter for next dropdown (grouping)
+                filtered_df = filtered_df[filtered_df[col] == value]
+
+                
+        # Build figure WITH selected_option
         fig = get_fig_no_graph(
             plot_df,
             indicator,
             DATASETS_META,
-            INDICATORS_META
+            INDICATORS_META,
+            selected_option=selected_option
         )
 
         st.plotly_chart(fig, width="stretch")

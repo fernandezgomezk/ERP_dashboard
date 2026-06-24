@@ -5,8 +5,34 @@ from streamlit.logger import get_logger
 
 logger = get_logger("app.log")
 
-def get_fig_no_graph(plot_gdf, indicator, datasets_meta, indicators_meta):
+def get_fig_no_graph(
+    plot_gdf,
+    indicator,
+    datasets_meta,
+    indicators_meta,
+    selected_option=None
+):
     logger.info(f"Generating figure for indicator: {indicator}")
+
+    # Get option columns (always a list)
+    dataset_id = indicators_meta[indicator]["dataset"]
+    option_columns = datasets_meta[dataset_id].get("options", [])
+
+    # Apply filtering if options exist
+    if option_columns and selected_option is not None:
+        logger.info(f"Filtering on option columns: {option_columns}")
+
+        # Multi-column case: expect dict
+        if isinstance(selected_option, dict):
+            for col in option_columns:
+                if col in plot_gdf.columns and col in selected_option:
+                    plot_gdf = plot_gdf[plot_gdf[col] == selected_option[col]]
+
+        # Single-column case
+        elif len(option_columns) == 1:
+            col = option_columns[0]
+            if col in plot_gdf.columns:
+                plot_gdf = plot_gdf[plot_gdf[col] == selected_option]
 
     precision = indicators_meta[indicator]["precision"]
     unit = indicators_meta[indicator]["unit"]

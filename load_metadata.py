@@ -42,6 +42,7 @@ def load_metadata():
             "layer": meta.get("layer_naam"),
             "version": version,
             "key": meta["key"],
+            "options": meta.get("options", []),
             "key_gwb": meta.get("key_gwb", None),
             "gpkg_path": gpkg_path,
             "categories": meta.get("categories", []),
