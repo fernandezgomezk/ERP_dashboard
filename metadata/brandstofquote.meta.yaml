@@ -1,0 +1,68 @@
+# The input in the yaml metadata files determines how the indicators are shown in the dashboard. 
+# It defines which indicators are shown in the dashboard and how each one should be visualized (type of graph, text, classification...)
+# Each datafile should have its own corresponding yaml metadata file
+# The name of the metadata yaml file should be the same as the data file and end with .meta.yaml
+
+# [Name of the data file without extension]
+dataset_id: data_kaarten_2
+
+# [Name of the column that determines the level at which the data is shown]
+key: GM_code
+
+# [Version of the CBS gemeente/wijk/buurt layout]
+gwb_version: gemeente_gegeneraliseerd_2019_simplified_100m
+
+# [Name of the layer in the CBS gwb file containing the geometry]
+layer_naam: gemeente_gegeneraliseerd_2019_simplified_100m
+
+# [Column name in the CBS gwb file that is the identifier of the gemeente (or buurt/wijk, if applicable)
+key_gwb: statcode
+
+
+indicators:
+
+  Energiequote vergelijking:
+
+    # [Title of indicator no. 1]
+    title: Energiequote per gemeente voor en na
+    
+    # [Description / explanation of indicator no. 1]
+    description: Deze indicator geeft de energiequote voor en na verduurzaming van de woning. 
+
+    # [Title of the legend of indicator no. 1]
+    legend: Energiequote verandering
+    
+    # [High-level topic of indicator no. 1]
+    theme: Kwetsbaarheidsindex
+
+    # [Sub-category within the theme of indicator no. 1]
+    subject: 
+
+    #De unit die achter de waarde komt te staan in de kaart (bijvoorbeeld: 100 -> 100 euro)
+    unit: Dimensieloos
+    
+    # [Number of decimals to display for indicator no. 1]
+    # not applicable for side_by_side_maps
+    precision: 1
+    
+    # [Type of visualization:]
+    #   Map: a map that the user can hover over to see the value in each municipality
+    #   Map_with_timegraph_per_area: the map, but the user can click on a municipality to see how values evolved over time
+    #   side_by_side_maps: two maps
+    visualization_type: side_by_side_maps
+    
+    shared_color_scale: true
+    
+    map_columns:
+      - column: energiearmoede_gemiddelde_energiequote_voor_woningisolatie_procent
+        title: Voor verduurzaming
+        legend: energiequote
+        precision: 1
+        unit: "%"
+      - column: energiearmoede_gemiddelde_energiequote_na_woningisolatie_procent
+        title: Na verduurzaming
+        legend: energiequote
+        precision: 1
+        unit: "%"
+    
+    link: 
