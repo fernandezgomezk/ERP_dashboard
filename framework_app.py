@@ -234,26 +234,39 @@ if indicator is not None:
         st.plotly_chart(fig, width="stretch")
 
     elif visualization_type == "side_by_side_maps":
+        indicator_meta = INDICATORS_META[indicator]
+        n_maps = indicator_meta.get("shown_maps", 2)
+        logger.info(f"Number of maps: {n_maps}")
+        map_columns = indicator_meta.get("map_columns")
+        map_cols = [map_column_cfg["column"] if isinstance(map_column_cfg, dict) else map_column_cfg for map_column_cfg in map_columns]
 
-        map_figures = get_side_by_side_maps(
-            plot_df,
-            indicator,
-            INDICATORS_META,
-        )
+        selected_columns = []
+        selector_columns = st.columns(n_maps)
+        for i, (selector_col, col) in enumerate(zip(selector_columns, map_cols)):
+            with selector_col:
+                value = st.selectbox(
+                    f"Kolom voor kaartje {i + 1}",
+                    map_cols,
+                    index=i,
+                    key=f"option_col_{i}"
+                )
+            selected_columns.append(value)
 
-        col_left, col_right = st.columns(2)
-        (title_left, fig_left), (title_right, fig_right) = map_figures
-
-        with col_left:
-            st.subheader(title_left)
-            st.plotly_chart(fig_left, width="stretch")
-
-        with col_right:
-            st.subheader(title_right)
-            st.plotly_chart(fig_right, width="stretch")
+        map_figures = get_side_by_side_maps(plot_df, indicator, INDICATORS_META, selected_columns)
+        if not map_figures:
+            st.warning("Geen kaarten beschikbaar om te tonen.")
+        else:
+            # Render figures in rows so this works for 2, 3, or more maps.
+            maps_per_row = min(3, len(map_figures))
+            for i in range(0, len(map_figures), maps_per_row):
+                current_row = map_figures[i:i + maps_per_row]
+                columns = st.columns(len(current_row))
+                for column, (title, figure) in zip(columns, current_row):
+                    with column:
+                        st.subheader(title)
+                        st.plotly_chart(figure, width="stretch", key=f"map_{i}_{column}")
 
     elif visualization_type == "boxplot":
-
         if not selected_filters:
             st.warning("Selecteer filters om boxplot te tonen.")
         else:
@@ -264,7 +277,6 @@ if indicator is not None:
                 INDICATORS_META,
                 selected_filters
             )
-
             st.plotly_chart(fig, width="stretch")
     logger.info("After showing indicator")
 
