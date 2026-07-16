@@ -1,4 +1,4 @@
-dataset_id: data_kaarten_2
+dataset_id: data_kaarten_3
 key: GM_code
 
 # [Version of the CBS gemeente/wijk/buurt layout]
@@ -18,15 +18,21 @@ indicators:
     precision: 1
     visualization_type: side_by_side_maps
     shared_color_scale: true
+    shown_maps: 2
     
     map_columns:
-      - column: energiearmoede_gemiddelde_energiequote_voor_woningisolatie_procent
+      - column: gemiddelde_energiequote_voor_woningisolatie_procent
         title: Voor verduurzaming
         legend: energiequote
         precision: 1
         unit: "%"
-      - column: energiearmoede_gemiddelde_energiequote_na_woningisolatie_procent
+      - column: gemiddelde_energiequote_na_woningisolatie_procent
         title: Na verduurzaming
+        legend: energiequote
+        precision: 1
+        unit: "%"
+      - column: gemiddelde_energiequote_na_helft_woningisolatie_procent
+        title: Na halve verduurzaming
         legend: energiequote
         precision: 1
         unit: "%"
