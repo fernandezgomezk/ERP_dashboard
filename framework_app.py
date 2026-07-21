@@ -9,7 +9,7 @@ from collections import defaultdict
 import streamlit as st
 from streamlit.logger import get_logger
 
-from load_metadata import load_metadata #Loading the metadata, which only has to be done once
+from load_metadata import load_metadata
 from get_fig_with_graph import get_fig_with_graph
 from get_fig_no_graph import get_fig_no_graph, get_side_by_side_maps
 from get_boxplot import get_boxplot
@@ -17,15 +17,22 @@ from get_boxplot import get_boxplot
 logger = get_logger("app.log")
 logger.info("App script started")
 
-# Functie om databestanden in te laden, de bijbehorende gpkg in te laden en beiden te mergen 
-@st.cache_data(show_spinner=False)
+# =========================
+# DATA INLADEN
+# =========================@st.cache_data(show_spinner=False)
 def load_dataset(dataset_id, datasets_meta):
     logger.info(f"load_dataset: {dataset_id}")
     dataset_meta = datasets_meta[dataset_id]
 
     # CSV
     csv.field_size_limit(sys.maxsize)
-    df = pd.read_csv(dataset_meta["csv_path"], sep=None, engine="python")
+
+    df = pd.read_csv(dataset_meta["csv_path"], 
+                     sep=None, 
+                     engine="python", 
+                     encoding = "utf-8-sig",
+                     dtype={dataset_meta["key"]: str})
+    
     logger.info(f"after read_csv. {dataset_meta['csv_path']=}; {len(df)=}; {df.columns=}")
 
     if dataset_meta.get("gpkg_path") is None:
@@ -49,36 +56,66 @@ def load_dataset(dataset_id, datasets_meta):
 
 st.set_page_config(layout="wide") #Kaart even breed als scherm
 
-# DATASETS_META is een lijst met bestanden, de bijbehorende gpkg versie en andere metadata
-# INDICATORS_META is een lijst met alle indicatoren hun kenmerken
+# =========================
+# METADATA
+# =========================
 DATASETS_META, INDICATORS_META = load_metadata()
 
-# theme -> subject -> list of indicators
 indicators_by_theme_subject = defaultdict(lambda: defaultdict(list))
 
-for indicator, indicator_meta in INDICATORS_META.items():
-    theme = indicator_meta["theme"]
-    subject = indicator_meta.get("subject", "Overig")
+for indicator, variants in INDICATORS_META.items():
+    meta0 = variants[0]
+    theme = meta0["theme"]
+    subject = meta0.get("subject", "Overig")
     indicators_by_theme_subject[theme][subject].append(indicator)
 
+
+# =========================
+# SESSION STATE
+# =========================
 if "indicator" not in st.session_state:
     st.session_state.indicator = None
 
-if "clicked_gemeente" not in st.session_state:
-    st.session_state.clicked_gemeente = None
+if "aggregation" not in st.session_state:
+    st.session_state.aggregation = None
 
-selected_filters = {}
-plot_df = None
-dataset_meta = None
+if "clicked_area" not in st.session_state:
+    st.session_state.clicked_area = None
+
 
 indicator = st.session_state.indicator
+selected_variant = None
+labels = []
+dataset_map = {}
 
+# =========================
+# VARIANT SELECTION
+# =========================
 if indicator is not None:
-    dataset_id = INDICATORS_META[indicator]["dataset"]
-    dataset_meta = DATASETS_META[dataset_id]
-    plot_df = load_dataset(dataset_id, DATASETS_META)
+
+    variants = INDICATORS_META[indicator]
+
+    for v in variants:
+        dataset_meta_tmp = DATASETS_META[v["dataset"]]
+        label = dataset_meta_tmp.get(
+            "aggregation_label",
+            dataset_meta_tmp["key"]
+        )
+        labels.append(label)
+        dataset_map[label] = v["dataset"]
+
+    if st.session_state.aggregation is None:
+        st.session_state.aggregation = dataset_map[labels[0]]
+
+    selected_variant = next(
+        v for v in variants
+        if v["dataset"] == st.session_state.aggregation
+    )
 
 
+# =========================
+# SIDEBAR
+# =========================
 with st.sidebar:
     st.subheader("Onderwerpen")
 
@@ -86,77 +123,77 @@ with st.sidebar:
         with st.expander(theme, expanded=False):
 
             for subject, indicators in sorted(subjects.items()):
-                # Subject header (niet uitklapbaar)
                 st.markdown(f"**{subject}**")
 
                 for indicator_name in indicators:
+                    title = INDICATORS_META[indicator_name][0]["title"]
+
+                    safe_name = indicator_name.replace(" ", "_").replace("(", "").replace(")", "")
+                    btn_key = f"indicator_btn_{theme}_{subject}_{safe_name}"
 
                     if indicator_name == st.session_state.indicator:
-                        st.button(
-                            INDICATORS_META[indicator_name]["title"],
-                            key=f"indicator_btn_{indicator_name}",
-                            width="stretch",
-                            disabled=True
-                        )
+                        st.button(title, key=btn_key, disabled=True, use_container_width=True)
 
-                        dataset_id = INDICATORS_META[indicator_name]["dataset"]
-                        dataset_meta = DATASETS_META[dataset_id]
+                        # -------- CATEGORY FILTERS (BOXPLOT) --------
+                        if selected_variant is not None:
+                            dataset_id = selected_variant["dataset"]
+                            dataset_meta_current = DATASETS_META[dataset_id]
+                            plot_df_current = load_dataset(dataset_id, DATASETS_META)
 
-                        if (
-                            plot_df is not None
-                            and dataset_meta.get("categories")
-                        ):
+                            categories = dataset_meta_current.get("categories", [])
 
-                            selected_filters.clear()
+                            if categories:
+                                st.markdown("**Selecteer subpopulaties**")
 
-                            for col in dataset_meta["categories"]:
-                                options = sorted(plot_df[col].dropna().unique())
+                                for col in categories:
+                                    options = sorted(plot_df_current[col].dropna().unique())
 
-                                st.markdown(f"&nbsp;&nbsp;**{col}**", unsafe_allow_html=True)
-                                
-                                if f"filter_{col}" not in st.session_state:
-                                    st.session_state[f"filter_{col}"] = list(options)
+                                    state_key = f"filter_{dataset_id}_{col}"
 
-                                current_selection = st.session_state[f"filter_{col}"]
-                                new_selection = []
+                                    if state_key not in st.session_state:
+                                        st.session_state[state_key] = options.copy()
 
-                                for opt in options:
-                                    
-                                    if st.checkbox(
-                                        str(opt),
-                                        value=(opt in current_selection),
-                                        key=f"filter_{col}_{opt}"
-                                    ):
-                                        new_selection.append(opt)
+                                    selected = st.multiselect(
+                                        col,
+                                        options,
+                                        default=st.session_state[state_key],
+                                        key=f"{state_key}_widget"
+                                    )
 
-                                if len(new_selection) == 0:
-                                    new_selection = list(options)
+                                    if len(selected) == 0:
+                                        selected = options.copy()
 
-                                st.session_state[f"filter_{col}"] = new_selection
-                                selected_filters[col] = new_selection
+                                    st.session_state[state_key] = selected
 
                     else:
-                        if st.button(
-                            INDICATORS_META[indicator_name]["title"],
-                            key=f"indicator_btn_{indicator_name}",
-                            width="stretch"
-                        ):
+                        if st.button(title, key=btn_key, use_container_width=True):
                             st.session_state.indicator = indicator_name
-                            
-                            st.session_state.clicked_gemeente = None
-
+                            st.session_state.aggregation = None
+                            st.session_state.clicked_area = None
                             st.rerun()
 
-indicator = st.session_state.indicator
 
-if indicator is not None:
+# =========================
+# MAIN PANEL
+# =========================
+if indicator is not None and selected_variant is not None:
 
-    meta = INDICATORS_META[indicator]
+    meta = selected_variant
+    dataset_id = meta["dataset"]
+    dataset_meta = DATASETS_META[dataset_id]
 
-    # --- Title ---
+    plot_df = load_dataset(dataset_id, DATASETS_META)
+
+    # -------- CATEGORY FILTER COLLECTION --------
+    selected_filters = {}
+    for col in dataset_meta.get("categories", []):
+        key = f"filter_{dataset_id}_{col}"
+        if key in st.session_state:
+            selected_filters[col] = st.session_state[key]
+
+    # -------- UI HEADER --------
     st.title(meta["title"])
 
-    # --- Description ---
     st.markdown(
         f"""
         <div style="font-size:18px; color:#444; line-height:1.5;">
@@ -166,7 +203,6 @@ if indicator is not None:
         unsafe_allow_html=True
     )
 
-    # --- Link ---
     st.markdown(
         f"""
         <div style="margin-top:6px;">
@@ -178,67 +214,105 @@ if indicator is not None:
         unsafe_allow_html=True
     )
 
-    dataset_id = INDICATORS_META[indicator]["dataset"]
-    dataset_meta = DATASETS_META[dataset_id]
-    logger.info(f"Show indicator. {indicator=}; {dataset_id=}")
-    plot_df = load_dataset(dataset_id, DATASETS_META)
-    logger.info(f"After loading dataset. {dataset_id=}")
+    # -------- AGGREGATION SELECTOR --------
+    if len(labels) > 1:
+        selected_label = st.segmented_control("", labels, default=labels[0])
 
-    visualization_type = INDICATORS_META[indicator]["visualization_type"]
+        if dataset_map[selected_label] != st.session_state.aggregation:
+            st.session_state.aggregation = dataset_map[selected_label]
+            st.session_state.clicked_area = None
+            st.rerun()
 
-    if visualization_type == "map_with_timegraph_per_area":
+    # =========================
+    # VISUALIZATION
+    # =========================
+    visualization_type = meta["visualization_type"]
 
-        col_map, col_trend = st.columns([2, 1])
+    # -------- MAP --------
+    if visualization_type == "map":
 
-        # --- FIRST: build map ---
-        fig, _ = get_fig_with_graph(
-            plot_df,
-            indicator,
-            DATASETS_META,
-            INDICATORS_META,
-            st.session_state.clicked_gemeente
-        )
+        option_columns = dataset_meta.get("options", [])
+        selected_option = None
 
-        with col_map:
-            event = st.plotly_chart(fig, width="stretch", on_select="rerun")
 
-        # --- SECOND: update state from click ---
-        if event is not None and event.selection is not None and event.selection.points:
-            st.session_state.clicked_gemeente = event.selection.points[0]["customdata"][0]
+        # CASE 1: no options
+        if not option_columns:
+            selected_option = None
 
-        # --- THIRD: NOW compute trend with UPDATED state ---
-        _, fig_trend = get_fig_with_graph(
-            plot_df,
-            indicator,
-            DATASETS_META,
-            INDICATORS_META,
-            st.session_state.clicked_gemeente
-        )
+        # CASE 2: single column → single select (exclusive)
+        elif len(option_columns) == 1:
+            col = option_columns[0]
+            options = sorted(plot_df[col].dropna().unique())
 
-        # --- FOURTH: display ---
-        with col_trend:
-            if st.session_state.clicked_gemeente is None:
-                st.info("Klik op een gemeente om de trend te zien.")
-            elif fig_trend is not None:
-                st.plotly_chart(fig_trend, width="stretch")
+            state_key = f"option_{dataset_id}_{col}"
 
-    elif visualization_type == "map":
+            if state_key not in st.session_state:
+                st.session_state[state_key] = options[0]
 
+            selected = st.selectbox(
+                f"Selecteer {col}",
+                options,
+                index=options.index(st.session_state[state_key])
+                if st.session_state[state_key] in options else 0,
+                key=f"{state_key}_widget"
+            )
+
+            st.session_state[state_key] = selected
+            selected_option = {col: selected}
+
+        # CASE 3: multiple columns → cascading dropdowns (exclusive per column)
+        else:
+            selected_option = {}
+            filtered_df = plot_df.copy()
+
+            st.markdown("### Selectie")
+
+            cols = st.columns(len(option_columns))
+
+            for i, col in enumerate(option_columns):
+                with cols[i]:
+                    options = sorted(filtered_df[col].dropna().unique())
+
+                    state_key = f"option_{dataset_id}_{col}"
+
+                    if state_key not in st.session_state:
+                        st.session_state[state_key] = options[0]
+
+                    current_value = st.session_state[state_key]
+                    if current_value not in options:
+                        current_value = options[0]
+
+                    selected = st.selectbox(
+                        col,
+                        options,
+                        index=options.index(current_value),
+                        key=f"{state_key}_widget"
+                    )
+
+                    st.session_state[state_key] = selected
+                    selected_option[col] = selected
+
+                # Filter for next dropdown (grouping)
+                filtered_df = filtered_df[filtered_df[col] == selected]
+                         
+        # Build figure WITH selected_option
         fig = get_fig_no_graph(
             plot_df,
             indicator,
-            DATASETS_META,
-            INDICATORS_META
+            dataset_meta,
+            meta,
+            selected_option=selected_option
         )
 
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
 
+    # -------- SIDE BY SIDE --------
     elif visualization_type == "side_by_side_maps":
 
         map_figures = get_side_by_side_maps(
             plot_df,
-            indicator,
-            INDICATORS_META,
+            meta,
+            dataset_meta
         )
 
         col_left, col_right = st.columns(2)
@@ -252,6 +326,7 @@ if indicator is not None:
             st.subheader(title_right)
             st.plotly_chart(fig_right, width="stretch")
 
+    # -------- BOXPLOT --------
     elif visualization_type == "boxplot":
 
         if not selected_filters:
@@ -261,12 +336,13 @@ if indicator is not None:
                 plot_df,
                 indicator,
                 dataset_meta,
-                INDICATORS_META,
+                meta,
                 selected_filters
             )
 
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
     logger.info("After showing indicator")
+
 
 else:
     st.info("Selecteer een indicator.")
