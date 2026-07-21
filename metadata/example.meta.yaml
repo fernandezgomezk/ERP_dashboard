@@ -20,6 +20,10 @@ gwb_version: 2019_v3
 # [Name of the layer in the CBS gwb file containing the geometry]
 layer_naam: cbs_wijken_2019 
 
+# [Column name in the CBS gwb file that is the identifier of the gemeente (or buurt/wijk, if applicable)
+key_gwb: statnaam
+
+
 indicators:
 
   # [Name of the column of indicator no. 1]:

@@ -11,7 +11,7 @@ from streamlit.logger import get_logger
 
 from load_metadata import load_metadata #Loading the metadata, which only has to be done once
 from get_fig_with_graph import get_fig_with_graph
-from get_fig_no_graph import get_fig_no_graph
+from get_fig_no_graph import get_fig_no_graph, get_side_by_side_maps
 from get_boxplot import get_boxplot
 
 logger = get_logger("app.log")
@@ -26,7 +26,7 @@ def load_dataset(dataset_id, datasets_meta):
     # CSV
     csv.field_size_limit(sys.maxsize)
     df = pd.read_csv(dataset_meta["csv_path"], sep=None, engine="python")
-    logger.info(f"after read_csv. {dataset_meta['csv_path']=}; {len(df)=}")
+    logger.info(f"after read_csv. {dataset_meta['csv_path']=}; {len(df)=}; {df.columns=}")
 
     if dataset_meta.get("gpkg_path") is None:
         return df
@@ -279,6 +279,25 @@ if indicator is not None:
         )
 
         st.plotly_chart(fig, width="stretch")
+
+    elif visualization_type == "side_by_side_maps":
+
+        map_figures = get_side_by_side_maps(
+            plot_df,
+            indicator,
+            INDICATORS_META,
+        )
+
+        col_left, col_right = st.columns(2)
+        (title_left, fig_left), (title_right, fig_right) = map_figures
+
+        with col_left:
+            st.subheader(title_left)
+            st.plotly_chart(fig_left, width="stretch")
+
+        with col_right:
+            st.subheader(title_right)
+            st.plotly_chart(fig_right, width="stretch")
 
     elif visualization_type == "boxplot":
 
