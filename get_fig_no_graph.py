@@ -43,18 +43,19 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, rang
     )
     return fig
 
-def get_fig_no_graph(plot_gdf, indicator, datasets_meta, indicators_meta, selected_option=None):
+def get_fig_no_graph(plot_gdf, indicator, dataset_meta, indicator_meta, selected_option=None):
     logger.info(f"Generating figure for indicator: {indicator}")
 
-    dataset_id = indicators_meta[indicator]["dataset"]
-    key = datasets_meta[dataset_id]["key"]
-    option_columns = datasets_meta[dataset_id].get("options", [])
+    key = dataset_meta["key"]
+    option_columns = dataset_meta.get("options", [])
+
+    plot_gdf = plot_gdf.copy()
 
     # Apply filtering if options exist
     if option_columns and selected_option is not None:
         logger.info(f"Filtering on option columns: {option_columns}")
 
-        # Multi-column case: expect dict
+        # Multi-column case
         if isinstance(selected_option, dict):
             for col in option_columns:
                 if col in plot_gdf.columns and col in selected_option:
@@ -66,27 +67,24 @@ def get_fig_no_graph(plot_gdf, indicator, datasets_meta, indicators_meta, select
             if col in plot_gdf.columns:
                 plot_gdf = plot_gdf[plot_gdf[col] == selected_option]
 
-    precision = indicators_meta[indicator]["precision"]
-    unit = indicators_meta[indicator]["unit"]
+    precision = indicator_meta["precision"]
+    unit = indicator_meta["unit"]
 
     fig = _build_choropleth(
         plot_gdf,
         color_column=indicator,
-        legend=indicators_meta[indicator]["legend"],
+        legend=indicator_meta["legend"],
         precision=precision,
         unit=unit,
         key=key
     )
-    logger.info("After generating chloropleth")
+    logger.info("After generating choropleth")
 
     return fig
 
 
-def get_side_by_side_maps(plot_gdf, indicator, indicators_meta, datasets_meta):
-    dataset_id = indicators_meta[indicator]["dataset"]
-    key = datasets_meta[dataset_id]["key"]
-    
-    indicator_meta = indicators_meta[indicator]
+def get_side_by_side_maps(plot_gdf, indicator_meta, dataset_meta):
+    key = dataset_meta["key"]
     map_columns = indicator_meta.get("map_columns")
     shared_color_scale = indicator_meta.get("shared_color_scale", True)
 

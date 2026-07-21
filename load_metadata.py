@@ -2,13 +2,14 @@ import yaml
 from pathlib import Path
 
 from streamlit.logger import get_logger
+from collections import defaultdict
 
 logger = get_logger("app.log")
 
 # Functie om metadata in te lezen en bijbehorende gpkg zoeken
 def load_metadata():
     datasets_meta = {}
-    indicators_meta = {}
+    indicators_meta = defaultdict(list)
 
     metadata_dir = Path("metadata")
     data_dir = Path("data/indicatoren")
@@ -47,6 +48,7 @@ def load_metadata():
             "version": version,
             "key": meta["key"],
             "options": meta.get("options", []),
+            "time_column": meta.get("time_column", []),
             "key_gwb": meta.get("key_gwb", None),
             "gpkg_path": gpkg_path,
             "categories": meta.get("categories", []),
@@ -55,7 +57,7 @@ def load_metadata():
 
         # 4. Indicatoren registreren
         for indicator, indicator_meta in meta["indicators"].items():
-            indicators_meta[indicator] = {
+            indicators_meta[indicator].append({
                 "dataset": dataset_id,
                 "title": indicator_meta["title"],
                 "description": indicator_meta["description"],
@@ -69,6 +71,7 @@ def load_metadata():
                 "shared_color_scale": indicator_meta.get("shared_color_scale", True),
                 "link": indicator_meta["link"],
                 "test_values": indicator_meta.get("test_values", {})
-            }
+            })
+
 
     return datasets_meta, indicators_meta
