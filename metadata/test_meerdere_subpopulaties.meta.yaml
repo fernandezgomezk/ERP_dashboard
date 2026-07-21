@@ -1,0 +1,22 @@
+dataset_id: test_meerdere_subpopulaties
+key: gemeentenaam
+options:
+  - NaamOptie1
+  - NaamOptie2
+time_column: JAAR
+gwb_version: gemeente_gegeneraliseerd_2019_simplified_100m
+layer_naam: gemeente_gegeneraliseerd_2019_simplified_100m
+key_gwb: statnaam
+
+indicators:
+  TestIndicatorMeerdereSubpopulaties:
+    title: TestIndicatorMeerdereSubpopulaties
+    description: Deze indicator toont  de afname in de frequentie van huishoudens met energiearmoede in een gemodelleerde what-if-situatie waarin de woningen worden geïsoleerd tot de isolatiestandaard. De grootste dalingen in het lokale aandeel huishoudens met energiearmoede zijn met name te vinden gemeentes in de Randstad. In gemeenten als Den Haag en Amsterdam leven veel huishoudens rond de energiearmoedegrens; woningisolatie brengt hun energiequote naar onder de acht procent. 
+    legend: Afname in procentpunt
+    theme: Woningverduurzaming
+    subject: Isolatie naar de standaard bij energiearmoede
+    unit: "%"
+    precision: 1
+    visualization_type: map
+    link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
+    test_values:

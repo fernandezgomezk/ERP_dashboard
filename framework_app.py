@@ -286,6 +286,7 @@ if indicator is not None:
             plot_df,
             indicator,
             INDICATORS_META,
+            DATASETS_META
         )
 
         col_left, col_right = st.columns(2)
