@@ -66,7 +66,7 @@ indicators_by_theme_subject = defaultdict(lambda: defaultdict(list))
 for indicator, variants in INDICATORS_META.items():
     meta0 = variants[0]
     theme = meta0["theme"]
-    subject = meta0.get("subject", "Overig")
+    subject = meta0["subject"]
     indicators_by_theme_subject[theme][subject].append(indicator)
 
 
@@ -123,7 +123,8 @@ with st.sidebar:
         with st.expander(theme, expanded=False):
 
             for subject, indicators in sorted(subjects.items()):
-                st.markdown(f"**{subject}**")
+                if subject:
+                    st.markdown(f"**{subject}**")
 
                 for indicator_name in indicators:
                     title = INDICATORS_META[indicator_name][0]["title"]
