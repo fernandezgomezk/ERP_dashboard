@@ -6,7 +6,7 @@ from streamlit.logger import get_logger
 logger = get_logger("app.log")
 
 
-def _build_choropleth(plot_gdf, color_column, legend, precision, unit, range_color_override=None):
+def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, range_color_override=None):
     plot_gdf["_color_value"] = plot_gdf[color_column].astype(float).fillna(-999)
     plot_gdf["_hover_label"] = plot_gdf[color_column].apply(
         lambda x: f"{x:.{precision}f}{unit}" if pd.notna(x) else "data niet beschikbaar"
@@ -27,8 +27,7 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, range_col
         color="_color_value",
         color_continuous_scale=[[0.0, "#f0f3fa"], [1.0, "#123eb7"]],
         labels={"_color_value": legend},
-        # custom_data=["gemeentenaam", "_hover_label"],
-        custom_data=["statcode", "_hover_label"],
+        custom_data=[key, "_hover_label"],
         range_color=range_color,
         center={"lat": 52.15, "lon": 5.15},
         zoom=6.5,
@@ -44,26 +43,48 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, range_col
     )
     return fig
 
-def get_fig_no_graph(plot_gdf, indicator, datasets_meta, indicators_meta):
+def get_fig_no_graph(plot_gdf, indicator, dataset_meta, indicator_meta, selected_option=None):
     logger.info(f"Generating figure for indicator: {indicator}")
 
-    precision = indicators_meta[indicator]["precision"]
-    unit = indicators_meta[indicator]["unit"]
+    key = dataset_meta["key"]
+    option_columns = dataset_meta.get("options", [])
+
+    plot_gdf = plot_gdf.copy()
+
+    # Apply filtering if options exist
+    if option_columns and selected_option is not None:
+        logger.info(f"Filtering on option columns: {option_columns}")
+
+        # Multi-column case
+        if isinstance(selected_option, dict):
+            for col in option_columns:
+                if col in plot_gdf.columns and col in selected_option:
+                    plot_gdf = plot_gdf[plot_gdf[col] == selected_option[col]]
+
+        # Single-column case
+        elif len(option_columns) == 1:
+            col = option_columns[0]
+            if col in plot_gdf.columns:
+                plot_gdf = plot_gdf[plot_gdf[col] == selected_option]
+
+    precision = indicator_meta["precision"]
+    unit = indicator_meta["unit"]
 
     fig = _build_choropleth(
         plot_gdf,
         color_column=indicator,
-        legend=indicators_meta[indicator]["legend"],
+        legend=indicator_meta["legend"],
         precision=precision,
         unit=unit,
+        key=key
     )
-    logger.info("After generating chloropleth")
+    logger.info("After generating choropleth")
 
     return fig
 
 
-def get_side_by_side_maps(plot_gdf, indicator, indicators_meta, selected_columns):
-    indicator_meta = indicators_meta[indicator]
+def get_side_by_side_maps(plot_gdf, indicator_meta, dataset_meta, selected_columns):
+    key = dataset_meta["key"]
     map_columns = indicator_meta.get("map_columns")
     shared_color_scale = indicator_meta.get("shared_color_scale", True)
     if not isinstance(map_columns, list) or len(map_columns) < 2:
@@ -124,6 +145,7 @@ def get_side_by_side_maps(plot_gdf, indicator, indicators_meta, selected_columns
             legend=spec["legend"],
             precision=spec["precision"],
             unit=spec["unit"],
+            key=key,
             range_color_override=shared_range_color,
         )
 

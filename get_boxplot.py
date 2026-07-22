@@ -3,23 +3,16 @@ import streamlit as st
 import itertools
 
 
-def get_boxplot(plot_df, indicator, datasets_meta, indicators_meta, selected_filters):
-
-    meta = indicators_meta[indicator]
-    dataset_meta = datasets_meta
+def get_boxplot(plot_df, indicator, dataset_meta, indicator_meta, selected_filters):
 
     stat_col = dataset_meta["key"]         
     mapping = dataset_meta["mapping"]
     value_col = indicator                  
 
-    unit = meta["unit"]
-    precision = meta["precision"]
-    unit = meta["unit"]
-
+    unit = indicator_meta["unit"]
+    precision = indicator_meta["precision"]
 
     categories = dataset_meta.get("categories", [])
-
-
 
     # Check columns exist
     for col in categories:

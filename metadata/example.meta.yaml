@@ -1,8 +1,18 @@
+# The input in the yaml metadata files determines how the indicators are shown in the dashboard. 
+# It defines which indicators are shown in the dashboard and how each one should be visualized (type of graph, text, classification...)
+# Each datafile should have its own corresponding yaml metadata file
+# The name of the metadata yaml file should be the same as the data file and end with .meta.yaml
+
 # [Name of the data file without extension]
 dataset_id: data_kaarten_dashboard 
 
 # [Name of the column that determines the level at which the data is shown]
 key: gemeentenaam 
+
+# [Filters / options. The column or columns that determine sub-selections or subpopulations, if applicable]
+options:
+  - Eigendomstype
+  - Woningtype
 
 # [Version of the CBS gemeente/wijk/buurt layout]
 gwb_version: 2019_v3 
