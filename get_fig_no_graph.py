@@ -124,8 +124,8 @@ def get_side_by_side_maps(plot_gdf, indicator_meta, dataset_meta, selected_colum
         if selected_column not in plot_gdf.columns:
             raise KeyError(f"Kolom '{selected_column}' niet gevonden in dataframe.")
         map_specs.append(map_config_by_column[selected_column])
-    if len(map_specs) < 2:
-        raise ValueError("side_by_side_maps vereist minstens 2 items in 'map_columns' die in 'selected_columns' voorkomen.")
+    if len(map_specs) < 1:
+        raise ValueError("side_by_side_maps vereist minstens 1 item in 'map_columns' die in 'selected_columns' voorkomen.")
 
     # determine color range for shared color scale if applicable
     shared_range_color = None
