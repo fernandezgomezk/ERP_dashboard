@@ -1,4 +1,4 @@
-dataset_id: data_kaarten_dashboard_v2
+dataset_id: data_kaarten_dashboard_v3
 key: gemeentenaam
 options:
 gwb_version: gemeente_gegeneraliseerd_2019_simplified_100m
