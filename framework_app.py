@@ -320,40 +320,56 @@ if indicator is not None and selected_variant is not None:
 
     # -------- SIDE BY SIDE --------
     elif visualization_type == "side_by_side_maps":
-        indicator_meta = INDICATORS_META[indicator]
+        import math
+        
+        indicator_meta = meta
         n_maps = indicator_meta.get("shown_maps", 2)
         logger.info(f"Number of maps: {n_maps}")
         map_columns = indicator_meta.get("map_columns")
         map_cols = [map_column_cfg["column"] if isinstance(map_column_cfg, dict) else map_column_cfg for map_column_cfg in map_columns]
 
-        selected_columns = []
-        selector_columns = st.columns(n_maps)
-        for i, (selector_col, col) in enumerate(zip(selector_columns, map_cols)):
-            with selector_col:
-                value = st.selectbox(
-                    f"Kolom voor kaartje {i + 1}",
-                    map_cols,
-                    index=i,
-                    key=f"option_col_{i}"
-                )
-            selected_columns.append(value)
-        map_figures = get_side_by_side_maps(
-            plot_df,
-            meta,
-            dataset_meta, selected_columns
-        )
-        if not map_figures:
-            st.warning("Geen kaarten beschikbaar om te tonen.")
-        else:
-            # Render figures in rows so this works for 2, 3, or more maps.
-            maps_per_row = min(3, len(map_figures))
-            for i in range(0, len(map_figures), maps_per_row):
-                current_row = map_figures[i:i + maps_per_row]
-                columns = st.columns(len(current_row))
-                for column, (title, figure) in zip(columns, current_row):
+        # Calculate layout
+        maps_per_row = min(3, selected_number_of_maps)
+        num_rows = math.ceil(selected_number_of_maps / maps_per_row)
+
+        # Render each row: selectors first, then maps
+        for row_idx in range(num_rows):
+            row_start = row_idx * maps_per_row
+            row_end = min(row_start + maps_per_row, selected_number_of_maps)
+            row_count = row_end - row_start
+            
+            # Show selectors for this row
+            row_selected_columns = []
+            selector_columns = st.columns(row_count)
+            for col_idx in range(row_count):
+                with selector_columns[col_idx]:
+                    selector_idx = row_start + col_idx
+                    default_col = map_cols[selector_idx] if selector_idx < len(map_cols) else map_cols[0]
+                    value = st.selectbox(
+                        f"Kolom voor kaartje {selector_idx + 1}",
+                        map_cols,
+                        index=map_cols.index(default_col),
+                        key=f"option_col_{selector_idx}"
+                    )
+                row_selected_columns.append(value)
+            
+            # Get maps for this row
+            row_map_figures = get_side_by_side_maps(
+                plot_df,
+                meta,
+                dataset_meta,
+                row_selected_columns
+            )
+            
+            if not row_map_figures:
+                st.warning("Geen kaarten beschikbaar om te tonen.")
+            else:
+                # Render maps for this row
+                columns = st.columns(len(row_map_figures))
+                for col_idx, (column, (title, figure)) in enumerate(zip(columns, row_map_figures)):
                     with column:
                         st.subheader(title)
-                        st.plotly_chart(figure, width="stretch", key=f"map_{i}_{column}")
+                        st.plotly_chart(figure, use_container_width=True, key=f"map_{row_idx}_{col_idx}")
 
     # -------- BOXPLOT --------
     elif visualization_type == "boxplot":
