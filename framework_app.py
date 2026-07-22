@@ -87,6 +87,7 @@ indicator = st.session_state.indicator
 selected_variant = None
 labels = []
 dataset_map = {}
+selected_number_of_maps = 1
 
 # =========================
 # VARIANT SELECTION
@@ -165,6 +166,18 @@ with st.sidebar:
 
                                     st.session_state[state_key] = selected
 
+                        # -------- NUMBER OF MAPS SIDE BY SIDE --------
+                        if selected_variant is not None:
+                            meta_selected = selected_variant
+                            num_maps = meta_selected.get("shown_maps")
+                            if num_maps is not None:
+                                selected_number_of_maps = st.number_input(
+                                    "Aantal kaarten naast elkaar",
+                                    value=num_maps,
+                                    step=1,
+                                    min_value=1,
+                                )
+ 
                     else:
                         if st.button(title, key=btn_key, use_container_width=True):
                             st.session_state.indicator = indicator_name
@@ -233,7 +246,6 @@ if indicator is not None and selected_variant is not None:
 
         option_columns = dataset_meta.get("options", [])
         selected_option = None
-
 
         # CASE 1: no options
         if not option_columns:
