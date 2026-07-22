@@ -12,8 +12,12 @@ indicators:
     title: Energiequote per gemeente voor en na
     description: Deze indicator geeft de energiequote voor en na verduurzaming van de woning. 
     legend: Energiequote verandering
-    theme: Kwetsbaarheidsindex
-    subject: 
+    
+    # [High-level topic of indicator no. 1]
+    theme: Woningverduurzaming
+    # [Sub-category within the theme of indicator no. 1]
+    subject: Isolatie naar de standaard bij energiearmoede
+    #De unit die achter de waarde komt te staan in de kaart (bijvoorbeeld: 100 -> 100 euro)
     unit: Dimensieloos
     precision: 1
     visualization_type: side_by_side_maps
