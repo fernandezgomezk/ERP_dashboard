@@ -134,7 +134,7 @@ with st.sidebar:
                     btn_key = f"indicator_btn_{theme}_{subject}_{safe_name}"
 
                     if indicator_name == st.session_state.indicator:
-                        st.button(title, key=btn_key, disabled=True, use_container_width=True)
+                        st.button(title, key=btn_key, disabled=True, width="stretch")
 
                         # -------- CATEGORY FILTERS (BOXPLOT) --------
                         if selected_variant is not None:
@@ -180,7 +180,7 @@ with st.sidebar:
                                 )
  
                     else:
-                        if st.button(title, key=btn_key, use_container_width=True):
+                        if st.button(title, key=btn_key, width="stretch"):
                             st.session_state.indicator = indicator_name
                             st.session_state.aggregation = None
                             st.session_state.clicked_area = None
@@ -317,7 +317,7 @@ if indicator is not None and selected_variant is not None:
             selected_option=selected_option
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     # -------- SIDE BY SIDE --------
     elif visualization_type == "side_by_side_maps":
@@ -370,7 +370,7 @@ if indicator is not None and selected_variant is not None:
                 for col_idx, (column, (title, figure)) in enumerate(zip(columns, row_map_figures)):
                     with column:
                         st.subheader(title)
-                        st.plotly_chart(figure, use_container_width=True, key=f"map_{row_idx}_{col_idx}")
+                        st.plotly_chart(figure, width="stretch", key=f"map_{row_idx}_{col_idx}")
 
     # -------- BOXPLOT --------
     elif visualization_type == "boxplot":
