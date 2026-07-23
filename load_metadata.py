@@ -67,6 +67,7 @@ def load_metadata():
                 "precision": indicator_meta.get("precision", 1),
                 "unit": indicator_meta.get("unit", "") or "",
                 "visualization_type": indicator_meta["visualization_type"],
+                "shown_maps": indicator_meta.get("shown_maps"),
                 "map_columns": indicator_meta.get("map_columns"),
                 "shared_color_scale": indicator_meta.get("shared_color_scale", True),
                 "link": indicator_meta["link"],

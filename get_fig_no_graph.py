@@ -34,7 +34,7 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, rang
         map_style="white-bg"
     )
 
-    fig.update_layout(height=800)
+    fig.update_layout(height=750)
     fig.update_traces(
         hovertemplate=(
             "%{customdata[0]}: %{customdata[1]}"
@@ -83,59 +83,62 @@ def get_fig_no_graph(plot_gdf, indicator, dataset_meta, indicator_meta, selected
     return fig
 
 
-def get_side_by_side_maps(plot_gdf, indicator_meta, dataset_meta):
+def get_side_by_side_maps(plot_gdf, indicator_meta, dataset_meta, selected_columns):
     key = dataset_meta["key"]
     map_columns = indicator_meta.get("map_columns")
     shared_color_scale = indicator_meta.get("shared_color_scale", True)
+    if not isinstance(map_columns, list) or len(map_columns) < 2:
+        raise ValueError("side_by_side_maps vereist minstens 2 items in 'map_columns'.")
 
-    if not isinstance(map_columns, list) or len(map_columns) != 2:
-        raise ValueError("side_by_side_maps vereist precies 2 items in 'map_columns'.")
-
-    map_specs = []
-
+    # build lookup dictionary for map configuration based on column names
+    map_config_by_column = {}
     for map_column_cfg in map_columns:
         if isinstance(map_column_cfg, str):
             column_name = map_column_cfg
-            map_title = map_column_cfg
-            legend = indicator_meta["legend"]
-            precision = indicator_meta["precision"]
-            unit = indicator_meta["unit"]
+            map_config_by_column[column_name] = {
+                "column_name": column_name,
+                "map_title": column_name,
+                "legend": indicator_meta["legend"],
+                "precision": indicator_meta["precision"],
+                "unit": indicator_meta["unit"],
+            }
         elif isinstance(map_column_cfg, dict):
             column_name = map_column_cfg.get("column")
-            map_title = map_column_cfg.get("title", column_name)
-            legend = map_column_cfg.get("legend", indicator_meta["legend"])
-            precision = map_column_cfg.get("precision", indicator_meta["precision"])
-            unit = map_column_cfg.get("unit", indicator_meta["unit"])
+            if column_name is None:
+                raise ValueError("Items in 'map_columns' als dict moeten een 'column' bevatten.")
+            map_config_by_column[column_name] = {
+                "column_name": column_name,
+                "map_title": map_column_cfg.get("title", column_name),
+                "legend": map_column_cfg.get("legend", indicator_meta["legend"]),
+                "precision": map_column_cfg.get("precision", indicator_meta["precision"]),
+                "unit": map_column_cfg.get("unit", indicator_meta["unit"]),
+            }
         else:
             raise ValueError("Elk item in 'map_columns' moet een string of dict zijn.")
 
-        if column_name not in plot_gdf.columns:
-            raise KeyError(f"Kolom '{column_name}' niet gevonden in dataframe.")
+    # build list of map specifications based on selected columns
+    map_specs = []
+    for selected_column in selected_columns:
+        if selected_column not in map_config_by_column:
+            continue
+        if selected_column not in plot_gdf.columns:
+            raise KeyError(f"Kolom '{selected_column}' niet gevonden in dataframe.")
+        map_specs.append(map_config_by_column[selected_column])
+    if len(map_specs) < 1:
+        raise ValueError("side_by_side_maps vereist minstens 1 item in 'map_columns' die in 'selected_columns' voorkomen.")
 
-        map_specs.append(
-            {
-                "column_name": column_name,
-                "map_title": map_title,
-                "legend": legend,
-                "precision": precision,
-                "unit": unit,
-            }
-        )
-
+    # determine color range for shared color scale if applicable
     shared_range_color = None
     if shared_color_scale:
         combined_series = pd.concat(
             [pd.to_numeric(plot_gdf[spec["column_name"]], errors="coerce") for spec in map_specs],
             ignore_index=True,
         ).dropna()
-
         if not combined_series.empty:
             shared_range_color = (combined_series.min(), combined_series.max())
 
     figures = []
-
-    for spec in map_specs:
-
+    for idx, spec in enumerate(map_specs):
         fig = _build_choropleth(
             plot_gdf,
             color_column=spec["column_name"],
@@ -145,6 +148,10 @@ def get_side_by_side_maps(plot_gdf, indicator_meta, dataset_meta):
             key=key,
             range_color_override=shared_range_color,
         )
+
+        if shared_color_scale and idx > 0:
+            fig.update_layout(coloraxis_showscale=False)
+
         figures.append((spec["map_title"], fig))
 
     return figures
