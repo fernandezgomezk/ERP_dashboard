@@ -169,8 +169,7 @@ with st.sidebar:
 
                         # -------- NUMBER OF MAPS SIDE BY SIDE --------
                         if selected_variant is not None:
-                            meta_selected = selected_variant
-                            num_maps = meta_selected.get("shown_maps")
+                            num_maps = selected_variant.get("shown_maps")
                             if num_maps is not None:
                                 selected_number_of_maps = st.number_input(
                                     "Aantal kaarten naast elkaar",
