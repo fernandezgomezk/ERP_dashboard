@@ -202,54 +202,39 @@ if indicator is not None:
 # =========================
 with st.sidebar:
     st.subheader("Onderwerpen")
-
     for theme, subjects in sorted(indicators_by_theme_subject.items()):
         with st.expander(theme, expanded=False):
-
             for subject, indicators in sorted(subjects.items()):
                 if subject:
                     st.markdown(f"**{subject}**")
-
                 for indicator_name in indicators:
                     title = INDICATORS_META[indicator_name][0]["title"]
-
                     safe_name = indicator_name.replace(" ", "_").replace("(", "").replace(")", "")
                     btn_key = f"indicator_btn_{theme}_{subject}_{safe_name}"
-
                     if indicator_name == st.session_state.indicator:
                         st.button(title, key=btn_key, disabled=True, width="stretch")
-
                         # -------- CATEGORY FILTERS (BOXPLOT) --------
                         if selected_variant is not None:
                             dataset_id = selected_variant["dataset"]
                             dataset_meta_current = DATASETS_META[dataset_id]
                             plot_df_current = load_dataset(dataset_id, DATASETS_META)
-
                             categories = dataset_meta_current.get("categories", [])
-
                             if categories:
                                 st.markdown("**Selecteer subpopulaties**")
-
                                 for col in categories:
                                     options = sorted(plot_df_current[col].dropna().unique())
-
                                     state_key = f"filter_{dataset_id}_{col}"
-
                                     if state_key not in st.session_state:
                                         st.session_state[state_key] = options.copy()
-
                                     selected = st.multiselect(
                                         col,
                                         options,
                                         default=st.session_state[state_key],
                                         key=f"{state_key}_widget"
                                     )
-
                                     if len(selected) == 0:
                                         selected = options.copy()
-
                                     st.session_state[state_key] = selected
-
                         # -------- NUMBER OF MAPS SIDE BY SIDE --------
                         if selected_variant is not None:
                             num_maps = selected_variant.get("shown_maps")
@@ -260,7 +245,6 @@ with st.sidebar:
                                     step=1,
                                     min_value=1,
                                 )
- 
                     else:
                         if st.button(title, key=btn_key, width="stretch"):
                             st.session_state.indicator = indicator_name
@@ -273,23 +257,18 @@ with st.sidebar:
 # MAIN PANEL
 # =========================
 if indicator is not None and selected_variant is not None:
-
     meta = selected_variant
     dataset_id = meta["dataset"]
     dataset_meta = DATASETS_META[dataset_id]
-
     plot_df = load_dataset(dataset_id, DATASETS_META)
-
     # -------- CATEGORY FILTER COLLECTION --------
     selected_filters = {}
     for col in dataset_meta.get("categories", []):
         key = f"filter_{dataset_id}_{col}"
         if key in st.session_state:
             selected_filters[col] = st.session_state[key]
-
     # -------- UI HEADER --------
     st.title(meta["title"])
-
     st.markdown(
         f"""
         <div style="font-size:18px; color:#444; line-height:1.5;">
@@ -298,7 +277,6 @@ if indicator is not None and selected_variant is not None:
         """,
         unsafe_allow_html=True
     )
-
     st.markdown(
         f"""
         <div style="margin-top:6px;">
@@ -309,24 +287,19 @@ if indicator is not None and selected_variant is not None:
         """,
         unsafe_allow_html=True
     )
-
     # -------- AGGREGATION SELECTOR --------
     if len(labels) > 1:
         selected_label = st.segmented_control("", labels, default=labels[0])
-
         if dataset_map[selected_label] != st.session_state.aggregation:
             st.session_state.aggregation = dataset_map[selected_label]
             st.session_state.clicked_area = None
             st.rerun()
-
     # =========================
     # VISUALIZATION
     # =========================
     visualization_type = meta["visualization_type"]
-
     # -------- MAP --------
     if visualization_type == "map":
-
         selected_option = get_selected_option_for_map(dataset_id, dataset_meta, plot_df)
         # Build figure WITH selected_option
         fig = get_fig_no_graph(
@@ -336,29 +309,23 @@ if indicator is not None and selected_variant is not None:
             meta,
             selected_option=selected_option
         )
-
         st.plotly_chart(fig, width="stretch")
-
     # -------- SIDE BY SIDE --------
     elif visualization_type == "side_by_side_maps":
         import math
-        
         indicator_meta = meta
         n_maps = indicator_meta.get("shown_maps", 2)
         logger.info(f"Number of maps: {n_maps}")
         map_columns = indicator_meta.get("map_columns")
         map_cols = [map_column_cfg["column"] if isinstance(map_column_cfg, dict) else map_column_cfg for map_column_cfg in map_columns]
-
         # Calculate layout
         maps_per_row = min(3, selected_number_of_maps)
         num_rows = math.ceil(selected_number_of_maps / maps_per_row)
-
         # Render each row: selectors first, then maps
         for row_idx in range(num_rows):
             row_start = row_idx * maps_per_row
             row_end = min(row_start + maps_per_row, selected_number_of_maps)
             row_count = row_end - row_start
-            
             # Show selectors for this row
             row_selected_columns = []
             selector_columns = st.columns(row_count)
@@ -373,7 +340,6 @@ if indicator is not None and selected_variant is not None:
                         key=f"option_col_{selector_idx}"
                     )
                 row_selected_columns.append(value)
-            
             # Get maps for this row
             row_map_figures = get_side_by_side_maps(
                 plot_df,
@@ -381,7 +347,6 @@ if indicator is not None and selected_variant is not None:
                 dataset_meta,
                 row_selected_columns
             )
-            
             if not row_map_figures:
                 st.warning("Geen kaarten beschikbaar om te tonen.")
             else:
@@ -391,7 +356,6 @@ if indicator is not None and selected_variant is not None:
                     with column:
                         st.subheader(title)
                         st.plotly_chart(figure, width="stretch", key=f"map_{row_idx}_{col_idx}")
-
     # -------- BOXPLOT --------
     elif visualization_type == "boxplot":
         if not selected_filters:
