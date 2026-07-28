@@ -177,9 +177,7 @@ selected_number_of_maps = 1
 # VARIANT SELECTION
 # =========================
 if indicator is not None:
-
     variants = INDICATORS_META[indicator]
-
     for v in variants:
         dataset_meta_tmp = DATASETS_META[v["dataset"]]
         label = dataset_meta_tmp.get(
@@ -188,15 +186,12 @@ if indicator is not None:
         )
         labels.append(label)
         dataset_map[label] = v["dataset"]
-
     if st.session_state.aggregation is None:
         st.session_state.aggregation = dataset_map[labels[0]]
-
     selected_variant = next(
         v for v in variants
         if v["dataset"] == st.session_state.aggregation
     )
-
 
 # =========================
 # SIDEBAR
