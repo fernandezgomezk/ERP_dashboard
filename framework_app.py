@@ -19,7 +19,8 @@ logger.info("App script started")
 
 # =========================
 # DATA INLADEN
-# =========================@st.cache_data(show_spinner=False)
+# =========================
+@st.cache_data(show_spinner=False)
 def load_dataset(dataset_id, datasets_meta):
     logger.info(f"load_dataset: {dataset_id}")
     dataset_meta = datasets_meta[dataset_id]
