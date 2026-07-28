@@ -30,7 +30,7 @@ indicators:
     title: Gemiddelde kosten klimaatadaptatie per vierkante meter nieuwbouw 
     
     # [Description / explanation of indicator no. 1]
-    description: Deze indicator laat zien hoevel euro per vierkante meter nieuwbouw moet worden geïnvesteerd om de woning te beschermen tegen klimaat-gerelateerde events
+    description: Deze indicator laat zien hoeveel euro per vierkante meter nieuwbouw moet worden geïnvesteerd om de woning te beschermen tegen klimaat-gerelateerde events
 
     # [Title of the legend of indicator no. 1]
     legend: Euro per vierkante meter 
