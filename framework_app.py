@@ -54,6 +54,89 @@ def load_dataset(dataset_id, datasets_meta):
     return plot_df
 
 
+def get_selected_option_for_map(dataset_id, dataset_meta, plot_df):
+    """Build map option selectors and return the selected option mapping.
+
+    Supports three modes based on dataset metadata:
+    - No option columns: returns None.
+    - One option column: renders one selectbox and returns {column: value}.
+    - Multiple option columns: renders cascading selectboxes and returns
+        {column: value} for each column.
+
+    Session state is used to persist selections per dataset/column.
+    """
+    option_columns = dataset_meta.get("options", [])
+    selected_option = None
+
+    # CASE 1: no options
+    if not option_columns:
+        return selected_option
+
+    # CASE 2: single column -> single select (exclusive)
+    if len(option_columns) == 1:
+        col = option_columns[0]
+        options = sorted(plot_df[col].dropna().unique())
+
+        if not options:
+            return selected_option
+
+        state_key = f"option_{dataset_id}_{col}"
+
+        if state_key not in st.session_state:
+            st.session_state[state_key] = options[0]
+
+        selected = st.selectbox(
+            f"Selecteer {col}",
+            options,
+            index=options.index(st.session_state[state_key])
+            if st.session_state[state_key] in options else 0,
+            key=f"{state_key}_widget"
+        )
+
+        st.session_state[state_key] = selected
+        selected_option = {col: selected}
+        return selected_option
+
+    # CASE 3: multiple columns -> cascading dropdowns (exclusive per column)
+    selected_option = {}
+    filtered_df = plot_df.copy()
+
+    st.markdown("### Selectie")
+    cols = st.columns(len(option_columns))
+
+    for i, col in enumerate(option_columns):
+        with cols[i]:
+            options = sorted(filtered_df[col].dropna().unique())
+
+            if not options:
+                selected_option[col] = None
+                continue
+
+            state_key = f"option_{dataset_id}_{col}"
+
+            if state_key not in st.session_state:
+                st.session_state[state_key] = options[0]
+
+            current_value = st.session_state[state_key]
+            if current_value not in options:
+                current_value = options[0]
+
+            selected = st.selectbox(
+                col,
+                options,
+                index=options.index(current_value),
+                key=f"{state_key}_widget"
+            )
+
+            st.session_state[state_key] = selected
+            selected_option[col] = selected
+
+        # Filter for next dropdown (grouping)
+        filtered_df = filtered_df[filtered_df[col] == selected]
+
+    return selected_option
+
+
 st.set_page_config(layout="wide") #Kaart even breed als scherm
 
 # =========================
@@ -244,69 +327,7 @@ if indicator is not None and selected_variant is not None:
     # -------- MAP --------
     if visualization_type == "map":
 
-        option_columns = dataset_meta.get("options", [])
-        selected_option = None
-
-        # CASE 1: no options
-        if not option_columns:
-            selected_option = None
-
-        # CASE 2: single column → single select (exclusive)
-        elif len(option_columns) == 1:
-            col = option_columns[0]
-            options = sorted(plot_df[col].dropna().unique())
-
-            state_key = f"option_{dataset_id}_{col}"
-
-            if state_key not in st.session_state:
-                st.session_state[state_key] = options[0]
-
-            selected = st.selectbox(
-                f"Selecteer {col}",
-                options,
-                index=options.index(st.session_state[state_key])
-                if st.session_state[state_key] in options else 0,
-                key=f"{state_key}_widget"
-            )
-
-            st.session_state[state_key] = selected
-            selected_option = {col: selected}
-
-        # CASE 3: multiple columns → cascading dropdowns (exclusive per column)
-        else:
-            selected_option = {}
-            filtered_df = plot_df.copy()
-
-            st.markdown("### Selectie")
-
-            cols = st.columns(len(option_columns))
-
-            for i, col in enumerate(option_columns):
-                with cols[i]:
-                    options = sorted(filtered_df[col].dropna().unique())
-
-                    state_key = f"option_{dataset_id}_{col}"
-
-                    if state_key not in st.session_state:
-                        st.session_state[state_key] = options[0]
-
-                    current_value = st.session_state[state_key]
-                    if current_value not in options:
-                        current_value = options[0]
-
-                    selected = st.selectbox(
-                        col,
-                        options,
-                        index=options.index(current_value),
-                        key=f"{state_key}_widget"
-                    )
-
-                    st.session_state[state_key] = selected
-                    selected_option[col] = selected
-
-                # Filter for next dropdown (grouping)
-                filtered_df = filtered_df[filtered_df[col] == selected]
-                         
+        selected_option = get_selected_option_for_map(dataset_id, dataset_meta, plot_df)
         # Build figure WITH selected_option
         fig = get_fig_no_graph(
             plot_df,
