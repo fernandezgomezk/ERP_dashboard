@@ -13,6 +13,7 @@ from load_metadata import load_metadata
 from get_fig_with_graph import get_fig_with_graph
 from get_fig_no_graph import get_fig_no_graph, get_side_by_side_maps
 from get_boxplot import get_boxplot
+from get_scatterplot import get_scatterplot
 
 logger = get_logger("app.log")
 logger.info("App script started")
@@ -365,6 +366,29 @@ if indicator is not None and selected_variant is not None:
                 selected_filters
             )
             st.plotly_chart(fig, width="stretch")
+
+    # -------- SCATTERPLOT --------
+    elif visualization_type == "scatterplot":
+        selected_indicators = meta.get("indicators", [])        
+        if not selected_indicators or len(selected_indicators) != 2:
+            st.warning("Selecteer precies twee indicatoren (in meta file) om scatterplot te tonen.")
+        else:
+            show_regression_line = st.toggle(
+                "Toon regressielijn",
+                value=False,
+                key=f"scatter_regression_{dataset_id}_{indicator}"
+            )
+            fig = get_scatterplot(
+                plot_df,
+                indicator,
+                dataset_meta,
+                meta,
+                selected_indicators,
+                INDICATORS_META,
+                show_regression_line
+            )
+            st.plotly_chart(fig, width="stretch")
+
     logger.info("After showing indicator")
 
 
