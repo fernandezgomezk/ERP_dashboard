@@ -1,0 +1,1938 @@
+dataset_id: cbs_gemeente_2019
+key: gemeentecode
+options: []
+time_column: jaar
+gwb_version: gemeente_gegeneraliseerd_2019
+layer_naam: gemeente_gegeneraliseerd_2019
+key_gwb: statcode
+indicators:
+  omgevingsadressendichtheid:
+    title: Omgevingsadressendichtheid
+    description: Omgevingsadressendichtheid per gemeente op basis van CBS GWB data.
+    legend: Omgevingsadressendichtheid
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  stedelijkheid_adressen_per_km2:
+    title: Stedelijkheid adressen per km2
+    description: Stedelijkheid adressen per km2 per gemeente op basis van CBS GWB data.
+    legend: Stedelijkheid adressen per km2
+    theme: CBS GWB
+    subject: Overig
+    unit: ' per km2'
+    precision: 0
+    visualization_type: map
+    link: ''
+  bevolkingsdichtheid_inwoners_per_km2:
+    title: Bevolkingsdichtheid inwoners per km2
+    description: Bevolkingsdichtheid [aantal inwoners per km2]
+    legend: Bevolkingsdichtheid inwoners per km2
+    theme: Demografie
+    subject: Bevolking
+    unit: ' per km2'
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_inwoners:
+    title: Aantal inwoners
+    description: Aantal inwoners per gemeente.
+    legend: Aantal inwoners
+    theme: Demografie
+    subject: Bevolking
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  mannen:
+    title: Mannen
+    description: Mannen per gemeente op basis van CBS GWB data.
+    legend: Mannen
+    theme: Demografie
+    subject: Bevolking
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  vrouwen:
+    title: Vrouwen
+    description: Vrouwen per gemeente op basis van CBS GWB data.
+    legend: Vrouwen
+    theme: Demografie
+    subject: Bevolking
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_personen_0_tot_15_jaar:
+    title: Percentage personen 0 tot 15 jaar
+    description: Personen 0 tot 15 jaar [%]
+    legend: Percentage personen 0 tot 15 jaar
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_personen_15_tot_25_jaar:
+    title: Percentage personen 15 tot 25 jaar
+    description: Personen 15 tot 25 jaar [%]
+    legend: Percentage personen 15 tot 25 jaar
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_personen_25_tot_45_jaar:
+    title: Percentage personen 25 tot 45 jaar
+    description: Personen 25 tot 45 jaar [%]
+    legend: Percentage personen 25 tot 45 jaar
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_personen_45_tot_65_jaar:
+    title: Percentage personen 45 tot 65 jaar
+    description: Personen 45 tot 65 jaar [%]
+    legend: Percentage personen 45 tot 65 jaar
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_personen_65_jaar_en_ouder:
+    title: Percentage personen 65 jaar en ouder
+    description: Personen 65 jaar en ouder [%]
+    legend: Percentage personen 65 jaar en ouder
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_ongehuwd:
+    title: Percentage ongehuwd
+    description: Percentage ongehuwd per gemeente.
+    legend: Percentage ongehuwd
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_gehuwd:
+    title: Percentage gehuwd
+    description: Percentage gehuwd per gemeente.
+    legend: Percentage gehuwd
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_gescheid:
+    title: Percentage gescheiden
+    description: Percentage gescheiden per gemeente.
+    legend: Percentage gescheiden
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_verweduwd:
+    title: Percentage verweduwd
+    description: Percentage verweduwd per gemeente.
+    legend: Percentage verweduwd
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  geboorte_totaal:
+    title: Geboorte totaal
+    description: Geboorte totaal [aantal]
+    legend: Geboorte totaal
+    theme: Demografie
+    subject: Bevolking
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  geboortes_per_1000_inwoners:
+    title: Geboortes per 1000 inwoners
+    description: Geboorte relatief [per 1 000 inwoners]
+    legend: Geboortes per 1000 inwoners
+    theme: Demografie
+    subject: Bevolking
+    unit: ' per 1000'
+    precision: 0
+    visualization_type: map
+    link: ''
+  sterfte_totaal:
+    title: Sterfte totaal
+    description: Sterfte totaal [aantal]
+    legend: Sterfte totaal
+    theme: Demografie
+    subject: Bevolking
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  sterfte_relatief:
+    title: Sterfte relatief
+    description: Sterfte relatief [per 1 000 inwoners]
+    legend: Sterfte relatief
+    theme: Demografie
+    subject: Bevolking
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_huishoudens:
+    title: Aantal huishoudens
+    description: Aantal huishoudens per gemeente.
+    legend: Aantal huishoudens
+    theme: Demografie
+    subject: Bevolking
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_eenpersoonshuishoudens:
+    title: Percentage eenpersoonshuishoudens
+    description: Percentage eenpersoonshuishoudens per gemeente.
+    legend: Percentage eenpersoonshuishoudens
+    theme: Demografie
+    subject: Bevolking
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_huishoudens_zonder_kinderen:
+    title: Percentage huishoudens zonder kinderen
+    description: Huishoudens zonder kinderen [%]
+    legend: Percentage huishoudens zonder kinderen
+    theme: Demografie
+    subject: Bevolking
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_huishoudens_met_kinderen:
+    title: Percentage huishoudens met kinderen
+    description: Percentage huishoudens met kinderen per gemeente.
+    legend: Percentage huishoudens met kinderen
+    theme: Demografie
+    subject: Bevolking
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddelde_huishoudsgrootte:
+    title: Gemiddelde huishoudsgrootte
+    description: Gemiddelde waarde van 'Gemiddelde huishoudsgrootte' per gemeente.
+    legend: Gemiddelde huishoudsgrootte
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  percentage_westerse_migratieachtergrond:
+    title: Percentage westerse migratieachtergrond
+    description: Percentage westerse migratieachtergrond per gemeente.
+    legend: Percentage westerse migratieachtergrond
+    theme: Demografie
+    subject: Bevolking
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_niet_westerse_migratieachtergrond:
+    title: Percentage niet westerse migratieachtergrond
+    description: Percentage niet westerse migratieachtergrond per gemeente.
+    legend: Percentage niet westerse migratieachtergrond
+    theme: Demografie
+    subject: Bevolking
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_uit_marokko:
+    title: Percentage uit marokko
+    description: Percentage uit marokko per gemeente.
+    legend: Percentage uit marokko
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_uit_nederlandse_antillen_en_aruba:
+    title: Percentage uit nederlandse antillen en aruba
+    description: Nederlandse Antillen en Aruba [%]
+    legend: Percentage uit nederlandse antillen en aruba
+    theme: Ruimte
+    subject: Oppervlakte
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_uit_suriname:
+    title: Percentage uit suriname
+    description: Percentage uit suriname per gemeente.
+    legend: Percentage uit suriname
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_uit_turkije:
+    title: Percentage uit turkije
+    description: Percentage uit turkije per gemeente.
+    legend: Percentage uit turkije
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_overige_nietwestersemigratieachtergrond:
+    title: Percentage overige nietwestersemigratieachtergrond
+    description: Percentage overige nietwestersemigratieachtergrond per gemeente.
+    legend: Percentage overige nietwestersemigratieachtergrond
+    theme: Demografie
+    subject: Bevolking
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_bedrijven_landbouw_bosbouw_visserij:
+    title: Aantal bedrijven landbouw bosbouw visserij
+    description: A Landbouw, bosbouw en visserij [aantal]
+    legend: Aantal bedrijven landbouw bosbouw visserij
+    theme: Ruimte
+    subject: Oppervlakte
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_bedrijven_nijverheid_energie:
+    title: Aantal bedrijven nijverheid energie
+    description: B-F Nijverheid en energie [aantal]
+    legend: Aantal bedrijven nijverheid energie
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_bedrijven_handel_en_horeca:
+    title: Aantal bedrijven handel en horeca
+    description: G+I Handel en horeca [aantal]
+    legend: Aantal bedrijven handel en horeca
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_bedrijven_vervoer_informatie_communicatie:
+    title: Aantal bedrijven vervoer informatie communicatie
+    description: H+J Vervoer, informatie en communicatie [aantal]
+    legend: Aantal bedrijven vervoer informatie communicatie
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_bedrijven_financieel_onroerend_goed:
+    title: Aantal bedrijven financieel onroerend goed
+    description: "K-L Financi\xEBle diensten, onroerend goed [aantal]"
+    legend: Aantal bedrijven financieel onroerend goed
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_bedrijven_zakelijke_dienstverlening:
+    title: Aantal bedrijven zakelijke dienstverlening
+    description: M-N Zakelijke dienstverlening [aantal]
+    legend: Aantal bedrijven zakelijke dienstverlening
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_bedrijven_cultuur_recreatie_overige:
+    title: Aantal bedrijven cultuur recreatie overige
+    description: R-U Cultuur, recreatie, overige diensten [aantal]
+    legend: Aantal bedrijven cultuur recreatie overige
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_bedrijfsvestigingen:
+    title: Aantal bedrijfsvestigingen
+    description: Aantal bedrijfsvestigingen per gemeente.
+    legend: Aantal bedrijfsvestigingen
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  woningvoorraad:
+    title: Woningvoorraad
+    description: Woningvoorraad per gemeente op basis van CBS GWB data.
+    legend: Woningvoorraad
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddelde_woningwaarde:
+    title: Gemiddelde woningwaarde
+    description: Gemiddelde waarde van 'Gemiddelde woningwaarde' per gemeente.
+    legend: Gemiddelde woningwaarde
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' x1000 euro'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_eengezinswoning:
+    title: Percentage eengezinswoning
+    description: Percentage eengezinswoning per gemeente.
+    legend: Percentage eengezinswoning
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_meergezinswoning:
+    title: Percentage meergezinswoning
+    description: Percentage meergezinswoning per gemeente.
+    legend: Percentage meergezinswoning
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_bewoond:
+    title: Percentage bewoond
+    description: Percentage bewoond per gemeente.
+    legend: Percentage bewoond
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_koopwoningen:
+    title: Percentage koopwoningen
+    description: Percentage koopwoningen per gemeente.
+    legend: Percentage koopwoningen
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_huurwoningen:
+    title: Percentage huurwoningen
+    description: Percentage huurwoningen per gemeente.
+    legend: Percentage huurwoningen
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  perc_huurwoningen_in_bezit_woningcorporaties:
+    title: Perc huurwoningen in bezit woningcorporaties
+    description: In bezit woningcorporatie [%]
+    legend: Perc huurwoningen in bezit woningcorporaties
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  perc_huurwoningen_in_bezit_overige_verhuurders:
+    title: Perc huurwoningen in bezit overige verhuurders
+    description: In bezit overige verhuurders [%]
+    legend: Perc huurwoningen in bezit overige verhuurders
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_woningen_met_eigendom_onbekend:
+    title: Percentage woningen met eigendom onbekend
+    description: Eigendom onbekend [%]
+    legend: Percentage woningen met eigendom onbekend
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_bouwjaarklasse_tot_2000:
+    title: Percentage bouwjaarklasse tot 2000
+    description: Bouwjaarklasse vanaf 2000 [%]
+    legend: Percentage bouwjaarklasse tot 2000
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_bouwjaarklasse_vanaf_2000:
+    title: Percentage bouwjaarklasse vanaf 2000
+    description: Bouwjaarklasse vanaf 2000 [%]
+    legend: Percentage bouwjaarklasse vanaf 2000
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_leegstand_woningen:
+    title: Percentage leegstand woningen
+    description: Leegstand woningen [%]
+    legend: Percentage leegstand woningen
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_gasverbruik_totaal:
+    title: Gemiddeld gasverbruik totaal
+    description: Gemiddelde waarde van 'Gemiddeld gasverbruik totaal' per gemeente.
+    legend: Gemiddeld gasverbruik totaal
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' m3'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_gasverbruik_appartement:
+    title: Gemiddeld gasverbruik appartement
+    description: Gemiddelde waarde van 'Gemiddeld gasverbruik appartement' per gemeente.
+    legend: Gemiddeld gasverbruik appartement
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' m3'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_gasverbruik_tussenwoning:
+    title: Gemiddeld gasverbruik tussenwoning
+    description: Gemiddelde waarde van 'Gemiddeld gasverbruik tussenwoning' per gemeente.
+    legend: Gemiddeld gasverbruik tussenwoning
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' m3'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_gasverbruik_hoekwoning:
+    title: Gemiddeld gasverbruik hoekwoning
+    description: Gemiddelde waarde van 'Gemiddeld gasverbruik hoekwoning' per gemeente.
+    legend: Gemiddeld gasverbruik hoekwoning
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' m3'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_gasverbruik_2_onder_1_kap_woning:
+    title: Gemiddeld gasverbruik 2 onder 1 kap woning
+    description: "Twee-onder-\xE9\xE9n-kap-woning [m 3]"
+    legend: Gemiddeld gasverbruik 2 onder 1 kap woning
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' m3'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_gasverbruik_vrijstaande_woning:
+    title: Gemiddeld gasverbruik vrijstaande woning
+    description: Vrijstaande woning [m 3]
+    legend: Gemiddeld gasverbruik vrijstaande woning
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' m3'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_gasverbruik_huurwoning:
+    title: Gemiddeld gasverbruik huurwoning
+    description: Gasverbruik huurwoning [m 3]
+    legend: Gemiddeld gasverbruik huurwoning
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' m3'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_gasverbruikkoopwoning:
+    title: Gemiddeld gasverbruikkoopwoning
+    description: Gemiddelde waarde van 'Gemiddeld gasverbruikkoopwoning' per gemeente.
+    legend: Gemiddeld gasverbruikkoopwoning
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' m3'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_elektriciteitsverbruik_totaal:
+    title: Gemiddeld elektriciteitsverbruik totaal
+    description: Gemiddeld elektriciteitsverbruik totaal [kWh]
+    legend: Gemiddeld elektriciteitsverbruik totaal
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' kWh'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_elektriciteitsverbruik_appartement:
+    title: Gemiddeld elektriciteitsverbruik appartement
+    description: Gemiddelde waarde van 'Gemiddeld elektriciteitsverbruik appartement' per gemeente.
+    legend: Gemiddeld elektriciteitsverbruik appartement
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' kWh'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_elektriciteitsverbruik_tussenwoning:
+    title: Gemiddeld elektriciteitsverbruik tussenwoning
+    description: Gemiddelde waarde van 'Gemiddeld elektriciteitsverbruik tussenwoning' per gemeente.
+    legend: Gemiddeld elektriciteitsverbruik tussenwoning
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' kWh'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_elektriciteitsverbruik_hoekwoning:
+    title: Gemiddeld elektriciteitsverbruik hoekwoning
+    description: Gemiddelde waarde van 'Gemiddeld elektriciteitsverbruik hoekwoning' per gemeente.
+    legend: Gemiddeld elektriciteitsverbruik hoekwoning
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' kWh'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gem_elektriciteitsverbruik_2_onder_1_kap_woning:
+    title: Gem elektriciteitsverbruik 2 onder 1 kap woning
+    description: "Twee-onder-\xE9\xE9n-kap-woning [m 3]"
+    legend: Gem elektriciteitsverbruik 2 onder 1 kap woning
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' kWh'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gem_elektriciteitsverbruik_vrijstaande_woning:
+    title: Gem elektriciteitsverbruik vrijstaande woning
+    description: Vrijstaande woning [m 3]
+    legend: Gem elektriciteitsverbruik vrijstaande woning
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' kWh'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_elektriciteitsverbruik_huurwoning:
+    title: Gemiddeld elektriciteitsverbruik huurwoning
+    description: Gemiddelde waarde van 'Gemiddeld elektriciteitsverbruik huurwoning' per gemeente.
+    legend: Gemiddeld elektriciteitsverbruik huurwoning
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' kWh'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_elektriciteitsverbruikkoopwoning:
+    title: Gemiddeld elektriciteitsverbruikkoopwoning
+    description: Gemiddelde waarde van 'Gemiddeld elektriciteitsverbruikkoopwoning' per gemeente.
+    legend: Gemiddeld elektriciteitsverbruikkoopwoning
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: ' kWh'
+    precision: 0
+    visualization_type: map
+    link: ''
+  netto_arbeidsparticipatie:
+    title: Netto arbeidsparticipatie
+    description: Netto arbeidsparticipatie per gemeente op basis van CBS GWB data.
+    legend: Netto arbeidsparticipatie
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_werknemers:
+    title: Percentage werknemers
+    description: Percentage werknemers per gemeente.
+    legend: Percentage werknemers
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_zelfstandigen:
+    title: Percentage zelfstandigen
+    description: Percentage zelfstandigen per gemeente.
+    legend: Percentage zelfstandigen
+    theme: CBS GWB
+    subject: Overig
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_inkomensontvangers:
+    title: Aantal inkomensontvangers
+    description: Aantal inkomensontvangers per gemeente.
+    legend: Aantal inkomensontvangers
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: ' x1000 euro'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_inkomen_per_inkomensontvanger:
+    title: Gemiddeld inkomen per inkomensontvanger
+    description: Gemiddeld inkomen per inkomensontvanger [x 1 000 euro]
+    legend: Gemiddeld inkomen per inkomensontvanger
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: ' x1000 euro'
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_inkomen_per_inwoner:
+    title: Gemiddeld inkomen per inwoner
+    description: Gemiddeld inkomen per inwoner [x 1 000 euro]
+    legend: Gemiddeld inkomen per inwoner
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: ' x1000 euro'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_personen_met_laag_inkomen:
+    title: Percentage personen met laag inkomen
+    description: Personen met laagste inkomen [%]
+    legend: Percentage personen met laag inkomen
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_personen_met_hoog_inkomen:
+    title: Percentage personen met hoog inkomen
+    description: Personen met laagste inkomen [%]
+    legend: Percentage personen met hoog inkomen
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_huishoudens_met_laag_inkomen:
+    title: Percentage huishoudens met laag inkomen
+    description: Huishoudens met een laag inkomen[%]
+    legend: Percentage huishoudens met laag inkomen
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_huishoudens_met_hoog_inkomen:
+    title: Percentage huishoudens met hoog inkomen
+    description: Huishoudens met laagste inkomen [%]
+    legend: Percentage huishoudens met hoog inkomen
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_huishoudens_onder_of_rond_sociaal_minimum:
+    title: Percentage huishoudens onder of rond sociaal minimum
+    description: Huish. onder of rond sociaal minimum [%]
+    legend: Percentage huishoudens onder of rond sociaal minimum
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_huishoudens_met_lage_koopkracht:
+    title: Percentage huishoudens met lage koopkracht
+    description: Percentage huishoudens met lage koopkracht per gemeente.
+    legend: Percentage huishoudens met lage koopkracht
+    theme: Wonen en Energie
+    subject: Wonen
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_personen_met_een_ao_uitkering_totaal:
+    title: Aantal personen met een ao uitkering totaal
+    description: Personen met een AOW-uitkering totaal [aantal]
+    legend: Aantal personen met een ao uitkering totaal
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_personen_met_een_ww_uitkering_totaal:
+    title: Aantal personen met een ww uitkering totaal
+    description: Personen met een AOW-uitkering totaal [aantal]
+    legend: Aantal personen met een ww uitkering totaal
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_personen_met_een_algemene_bijstandsuitkering_totaal:
+    title: Aantal personen met een algemene bijstandsuitkering totaal
+    description: Algemene bijstandsuitkeringen totaal [absoluut]
+    legend: Aantal personen met een algemene bijstandsuitkering totaal
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_personen_met_een_aow_uitkering_totaal:
+    title: Aantal personen met een aow uitkering totaal
+    description: Personen met een AOW-uitkering totaal [aantal]
+    legend: Aantal personen met een aow uitkering totaal
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_gestandaardiseerd_inkomen_van_huishoudens:
+    title: Gemiddeld gestandaardiseerd inkomen van huishoudens
+    description: Huishoudens met laagste inkomen [%]
+    legend: Gemiddeld gestandaardiseerd inkomen van huishoudens
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: ' x1000 euro'
+    precision: 1
+    visualization_type: map
+    link: ''
+  huishoudens_tot_110_percent_van_sociaal_minimum:
+    title: Huishoudens tot 110 percent van sociaal minimum
+    description: Huishoudens tot 110 percent van sociaal minimum per gemeente op basis van CBS GWB data.
+    legend: Huishoudens tot 110 percent van sociaal minimum
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  huishoudens_tot_120_percent_van_sociaal_minimum:
+    title: Huishoudens tot 120 percent van sociaal minimum
+    description: Huishoudens tot 120 percent van sociaal minimum per gemeente op basis van CBS GWB data.
+    legend: Huishoudens tot 120 percent van sociaal minimum
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  mediaan_vermogen_van_particuliere_huish:
+    title: Mediaan vermogen van particuliere huish
+    description: Mediaan vermogen van particuliere huish per gemeente op basis van CBS GWB data.
+    legend: Mediaan vermogen van particuliere huish
+    theme: Inkomen en Zekerheid
+    subject: Inkomen
+    unit: ' x1000 euro'
+    precision: 1
+    visualization_type: map
+    link: ''
+  aantal_jongeren_met_jeugdzorg_in_natura:
+    title: Aantal jongeren met jeugdzorg in natura
+    description: Aantal jongeren met jeugdzorg in natura per gemeente.
+    legend: Aantal jongeren met jeugdzorg in natura
+    theme: Zorg en Voorzieningen
+    subject: Zorg
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  percentage_jongeren_met_jeugdzorg_in_natura:
+    title: Percentage jongeren met jeugdzorg in natura
+    description: Percentage jongeren met jeugdzorg in natura per gemeente.
+    legend: Percentage jongeren met jeugdzorg in natura
+    theme: Zorg en Voorzieningen
+    subject: Zorg
+    unit: '%'
+    precision: 0
+    visualization_type: map
+    link: ''
+  "aantal_Wmo_cli\xEBnten":
+    title: "Aantal Wmo cli\xEBnten"
+    description: "Aantal Wmo cli\xEBnten per gemeente."
+    legend: "Aantal Wmo cli\xEBnten"
+    theme: Zorg en Voorzieningen
+    subject: Zorg
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  "aantal_Wmo_cli\xEBnten_per_1000_inwoners":
+    title: "Aantal Wmo cli\xEBnten per 1000 inwoners"
+    description: "Aantal Wmo cli\xEBnten per 1000 inwoners per gemeente."
+    legend: "Aantal Wmo cli\xEBnten per 1000 inwoners"
+    theme: Demografie
+    subject: Bevolking
+    unit: ' per 1000'
+    precision: 0
+    visualization_type: map
+    link: ''
+  personenautos_totaal:
+    title: Personenautos totaal
+    description: "Personenauto\u2019s totaal [absoluut]"
+    legend: Personenautos totaal
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  personenautos_per_huishouden:
+    title: Personenautos per huishouden
+    description: "Personenauto\u2019s per huishouden [per huishouden]"
+    legend: Personenautos per huishouden
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  personenautos_per_km2:
+    title: Personenautos per km2
+    description: Personenautos per km2 per gemeente op basis van CBS GWB data.
+    legend: Personenautos per km2
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' per km2'
+    precision: 0
+    visualization_type: map
+    link: ''
+  motortweewielers_totaal:
+    title: Motortweewielers totaal
+    description: Motortweewielers totaal [absoluut]
+    legend: Motortweewielers totaal
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_personenautos_met_brandstof_benzine:
+    title: Aantal personenautos met brandstof benzine
+    description: "Personenauto\u2019s; brandstof benzine [aantal]"
+    legend: Aantal personenautos met brandstof benzine
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  aantal_personenautos_met_overige_brandstof:
+    title: Aantal personenautos met overige brandstof
+    description: "Personenauto\u2019s; overige brandstof [aantal]"
+    legend: Aantal personenautos met overige brandstof
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  oppervlakte_totaal_in_ha:
+    title: Oppervlakte totaal in ha
+    description: Oppervlakte totaal [ha]
+    legend: Oppervlakte totaal in ha
+    theme: Ruimte
+    subject: Oppervlakte
+    unit: ' ha'
+    precision: 0
+    visualization_type: map
+    link: ''
+  oppervlakte_land_in_ha:
+    title: Oppervlakte land in ha
+    description: "Personenauto\u2019s naar oppervlakte [per km 2]"
+    legend: Oppervlakte land in ha
+    theme: Ruimte
+    subject: Oppervlakte
+    unit: ' ha'
+    precision: 0
+    visualization_type: map
+    link: ''
+  oppervlakte_water_in_ha:
+    title: Oppervlakte water in ha
+    description: Oppervlakte water in ha per gemeente op basis van CBS GWB data.
+    legend: Oppervlakte water in ha
+    theme: Ruimte
+    subject: Oppervlakte
+    unit: ' ha'
+    precision: 0
+    visualization_type: map
+    link: ''
+  huisartsenpraktijk_gemiddelde_afstand_in_km:
+    title: Huisartsenpraktijk gemiddelde afstand in km
+    description: Afstand tot huisartsenpraktijk [km]
+    legend: Huisartsenpraktijk gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  huisartsenpraktijk_gemiddeld_aantal_binnen_1_km:
+    title: Huisartsenpraktijk gemiddeld aantal binnen 1 km
+    description: Huisartsenpraktijk gemiddeld aantal binnen 1 km per gemeente op basis van CBS GWB data.
+    legend: Huisartsenpraktijk gemiddeld aantal binnen 1 km
+    theme: Zorg en Voorzieningen
+    subject: Zorg
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  huisartsenpraktijk_gemiddeld_aantal_binnen_3_km:
+    title: Huisartsenpraktijk gemiddeld aantal binnen 3 km
+    description: Huisartsenpraktijk gemiddeld aantal binnen 3 km per gemeente op basis van CBS GWB data.
+    legend: Huisartsenpraktijk gemiddeld aantal binnen 3 km
+    theme: Zorg en Voorzieningen
+    subject: Zorg
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  huisartsenpraktijk_gemiddeld_aantal_binnen_5_km:
+    title: Huisartsenpraktijk gemiddeld aantal binnen 5 km
+    description: Huisartsenpraktijk gemiddeld aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Huisartsenpraktijk gemiddeld aantal binnen 5 km
+    theme: Zorg en Voorzieningen
+    subject: Zorg
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  huisartsenpost_gemiddelde_afstand_in_km:
+    title: Huisartsenpost gemiddelde afstand in km
+    description: Huisartsenpost gemiddelde afstand in km per gemeente op basis van CBS GWB data.
+    legend: Huisartsenpost gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  apotheek_gemiddelde_afstand_in_km:
+    title: Apotheek gemiddelde afstand in km
+    description: Afstand tot apotheek [km]
+    legend: Apotheek gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  ziekenhuis_incl_buitenpolikliniek_gem_afst_in_km:
+    title: Ziekenhuis incl buitenpolikliniek gem afst in km
+    description: Afstand tot ziekenhuis incl. buitenpolikliniek [km]
+    legend: Ziekenhuis incl buitenpolikliniek gem afst in km
+    theme: Zorg en Voorzieningen
+    subject: Zorg
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  ziekenhuis_incl_buitenpoli_gem_aantal_binnen_5_km:
+    title: Ziekenhuis incl buitenpoli gem aantal binnen 5 km
+    description: Ziekenhuis incl buitenpoli gem aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Ziekenhuis incl buitenpoli gem aantal binnen 5 km
+    theme: Zorg en Voorzieningen
+    subject: Zorg
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  ziekenhuis_incl_buitenpoli_gem_aantal_binnen_10_km:
+    title: Ziekenhuis incl buitenpoli gem aantal binnen 10 km
+    description: Ziekenhuis incl buitenpoli gem aantal binnen 10 km per gemeente op basis van CBS GWB data.
+    legend: Ziekenhuis incl buitenpoli gem aantal binnen 10 km
+    theme: Zorg en Voorzieningen
+    subject: Zorg
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  ziekenhuis_incl_buitenpoli_gem_aantal_binnen_20_km:
+    title: Ziekenhuis incl buitenpoli gem aantal binnen 20 km
+    description: Ziekenhuis incl buitenpoli gem aantal binnen 20 km per gemeente op basis van CBS GWB data.
+    legend: Ziekenhuis incl buitenpoli gem aantal binnen 20 km
+    theme: Zorg en Voorzieningen
+    subject: Zorg
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  ziekenhuis_excl_buitenpolikliniek_gem_afst_in_km:
+    title: Ziekenhuis excl buitenpolikliniek gem afst in km
+    description: Afstand tot ziekenhuis excl. Buitenpolikliniek [km]
+    legend: Ziekenhuis excl buitenpolikliniek gem afst in km
+    theme: Zorg en Voorzieningen
+    subject: Zorg
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  ziekenhuis_excl_buitenpoli_gem_aantal_binnen_5_km:
+    title: Ziekenhuis excl buitenpoli gem aantal binnen 5 km
+    description: Ziekenhuis excl buitenpoli gem aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Ziekenhuis excl buitenpoli gem aantal binnen 5 km
+    theme: Zorg en Voorzieningen
+    subject: Zorg
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  ziekenhuis_excl_buitenpoli_gem_aantal_binnen_10_km:
+    title: Ziekenhuis excl buitenpoli gem aantal binnen 10 km
+    description: Ziekenhuis excl buitenpoli gem aantal binnen 10 km per gemeente op basis van CBS GWB data.
+    legend: Ziekenhuis excl buitenpoli gem aantal binnen 10 km
+    theme: Zorg en Voorzieningen
+    subject: Zorg
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  ziekenhuis_excl_buitenpoli_gem_aantal_binnen_20_km:
+    title: Ziekenhuis excl buitenpoli gem aantal binnen 20 km
+    description: Ziekenhuis excl buitenpoli gem aantal binnen 20 km per gemeente op basis van CBS GWB data.
+    legend: Ziekenhuis excl buitenpoli gem aantal binnen 20 km
+    theme: Zorg en Voorzieningen
+    subject: Zorg
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  grote_supermarkt_gemiddelde_afstand_in_km:
+    title: Grote supermarkt gemiddelde afstand in km
+    description: Afstand tot grote supermarkt [km]
+    legend: Grote supermarkt gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  grote_supermarkt_gemiddeld_aantal_binnen_1_km:
+    title: Grote supermarkt gemiddeld aantal binnen 1 km
+    description: Afstand tot grote supermarkt [km]
+    legend: Grote supermarkt gemiddeld aantal binnen 1 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  grote_supermarkt_gemiddeld_aantal_binnen_3_km:
+    title: Grote supermarkt gemiddeld aantal binnen 3 km
+    description: Afstand tot grote supermarkt [km]
+    legend: Grote supermarkt gemiddeld aantal binnen 3 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  grote_supermarkt_gemiddeld_aantal_binnen_5_km:
+    title: Grote supermarkt gemiddeld aantal binnen 5 km
+    description: Afstand tot grote supermarkt [km]
+    legend: Grote supermarkt gemiddeld aantal binnen 5 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  winkels_ov_dagelijkse_levensm_gem_afst_in_km:
+    title: Winkels ov dagelijkse levensm gem afst in km
+    description: Winkels ov dagelijkse levensm gem afst in km per gemeente op basis van CBS GWB data.
+    legend: Winkels ov dagelijkse levensm gem afst in km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  winkels_ov_dagel_levensm_gem_aantal_binnen_1_km:
+    title: Winkels ov dagel levensm gem aantal binnen 1 km
+    description: Winkels ov dagel levensm gem aantal binnen 1 km per gemeente op basis van CBS GWB data.
+    legend: Winkels ov dagel levensm gem aantal binnen 1 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  winkels_ov_dagel_levensm_gem_aantal_binnen_3_km:
+    title: Winkels ov dagel levensm gem aantal binnen 3 km
+    description: Winkels ov dagel levensm gem aantal binnen 3 km per gemeente op basis van CBS GWB data.
+    legend: Winkels ov dagel levensm gem aantal binnen 3 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  winkels_ov_dagel_levensm_gem_aantal_binnen_5_km:
+    title: Winkels ov dagel levensm gem aantal binnen 5 km
+    description: Winkels ov dagel levensm gem aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Winkels ov dagel levensm gem aantal binnen 5 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  warenhuis_gemiddelde_afstand_in_km:
+    title: Warenhuis gemiddelde afstand in km
+    description: Afstand tot warenhuis [km]
+    legend: Warenhuis gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  warenhuis_gemiddeld_aantal_binnen_5_km:
+    title: Warenhuis gemiddeld aantal binnen 5 km
+    description: Warenhuis gemiddeld aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Warenhuis gemiddeld aantal binnen 5 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  warenhuis_gemiddeld_aantal_binnen_10_km:
+    title: Warenhuis gemiddeld aantal binnen 10 km
+    description: Warenhuis gemiddeld aantal binnen 10 km per gemeente op basis van CBS GWB data.
+    legend: Warenhuis gemiddeld aantal binnen 10 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  warenhuis_gemiddeld_aantal_binnen_20_km:
+    title: Warenhuis gemiddeld aantal binnen 20 km
+    description: Warenhuis gemiddeld aantal binnen 20 km per gemeente op basis van CBS GWB data.
+    legend: Warenhuis gemiddeld aantal binnen 20 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  cafe_gemiddelde_afstand_in_km:
+    title: Cafe gemiddelde afstand in km
+    description: "Afstand tot caf\xE9 [km]"
+    legend: Cafe gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  cafe_gemiddeld_aantal_binnen_1_km:
+    title: Cafe gemiddeld aantal binnen 1 km
+    description: Cafe gemiddeld aantal binnen 1 km per gemeente op basis van CBS GWB data.
+    legend: Cafe gemiddeld aantal binnen 1 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  cafe_gemiddeld_aantal_binnen_3_km:
+    title: Cafe gemiddeld aantal binnen 3 km
+    description: Cafe gemiddeld aantal binnen 3 km per gemeente op basis van CBS GWB data.
+    legend: Cafe gemiddeld aantal binnen 3 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  cafe_gemiddeld_aantal_binnen_5_km:
+    title: Cafe gemiddeld aantal binnen 5 km
+    description: Cafe gemiddeld aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Cafe gemiddeld aantal binnen 5 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  cafetaria_gemiddelde_afstand_in_km:
+    title: Cafetaria gemiddelde afstand in km
+    description: Cafetaria gemiddelde afstand in km per gemeente op basis van CBS GWB data.
+    legend: Cafetaria gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  cafetaria_gemiddeld_aantal_binnen_1_km:
+    title: Cafetaria gemiddeld aantal binnen 1 km
+    description: Cafetaria gemiddeld aantal binnen 1 km per gemeente op basis van CBS GWB data.
+    legend: Cafetaria gemiddeld aantal binnen 1 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  cafetaria_gemiddeld_aantal_binnen_3_km:
+    title: Cafetaria gemiddeld aantal binnen 3 km
+    description: Cafetaria gemiddeld aantal binnen 3 km per gemeente op basis van CBS GWB data.
+    legend: Cafetaria gemiddeld aantal binnen 3 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  cafetaria_gemiddeld_aantal_binnen_5_km:
+    title: Cafetaria gemiddeld aantal binnen 5 km
+    description: Cafetaria gemiddeld aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Cafetaria gemiddeld aantal binnen 5 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  restaurant_gemiddelde_afstand_in_km:
+    title: Restaurant gemiddelde afstand in km
+    description: Restaurant gemiddelde afstand in km per gemeente op basis van CBS GWB data.
+    legend: Restaurant gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  restaurant_gemiddeld_aantal_binnen_1_km:
+    title: Restaurant gemiddeld aantal binnen 1 km
+    description: Restaurant gemiddeld aantal binnen 1 km per gemeente op basis van CBS GWB data.
+    legend: Restaurant gemiddeld aantal binnen 1 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  restaurant_gemiddeld_aantal_binnen_3_km:
+    title: Restaurant gemiddeld aantal binnen 3 km
+    description: Restaurant gemiddeld aantal binnen 3 km per gemeente op basis van CBS GWB data.
+    legend: Restaurant gemiddeld aantal binnen 3 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  restaurant_gemiddeld_aantal_binnen_5_km:
+    title: Restaurant gemiddeld aantal binnen 5 km
+    description: Restaurant gemiddeld aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Restaurant gemiddeld aantal binnen 5 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  hotel_gemiddelde_afstand_in_km:
+    title: Hotel gemiddelde afstand in km
+    description: Afstand tot hotel [km]
+    legend: Hotel gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  hotel_gemiddeld_aantal_binnen_5_km:
+    title: Hotel gemiddeld aantal binnen 5 km
+    description: Hotel gemiddeld aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Hotel gemiddeld aantal binnen 5 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  hotel_gemiddeld_aantal_binnen_10_km:
+    title: Hotel gemiddeld aantal binnen 10 km
+    description: Hotel gemiddeld aantal binnen 10 km per gemeente op basis van CBS GWB data.
+    legend: Hotel gemiddeld aantal binnen 10 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  hotel_gemiddeld_aantal_binnen_20_km:
+    title: Hotel gemiddeld aantal binnen 20 km
+    description: Hotel gemiddeld aantal binnen 20 km per gemeente op basis van CBS GWB data.
+    legend: Hotel gemiddeld aantal binnen 20 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  kinderdagverblijf_gemiddelde_afstand_in_km:
+    title: Kinderdagverblijf gemiddelde afstand in km
+    description: Afstand tot kinderdagverblijf [km]
+    legend: Kinderdagverblijf gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  kinderdagverblijf_gemiddeld_aantal_binnen_1_km:
+    title: Kinderdagverblijf gemiddeld aantal binnen 1 km
+    description: Kinderdagverblijf gemiddeld aantal binnen 1 km per gemeente op basis van CBS GWB data.
+    legend: Kinderdagverblijf gemiddeld aantal binnen 1 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  kinderdagverblijf_gemiddeld_aantal_binnen_3_km:
+    title: Kinderdagverblijf gemiddeld aantal binnen 3 km
+    description: Kinderdagverblijf gemiddeld aantal binnen 3 km per gemeente op basis van CBS GWB data.
+    legend: Kinderdagverblijf gemiddeld aantal binnen 3 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  kinderdagverblijf_gemiddeld_aantal_binnen_5_km:
+    title: Kinderdagverblijf gemiddeld aantal binnen 5 km
+    description: Kinderdagverblijf gemiddeld aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Kinderdagverblijf gemiddeld aantal binnen 5 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  buitenschoolse_opvang_gem_afstand_in_km:
+    title: Buitenschoolse opvang gem afstand in km
+    description: Afstand tot buitenschoolse opvang [km]
+    legend: Buitenschoolse opvang gem afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  buitenschoolse_opvang_gemiddeld_aantal_binnen_1_km:
+    title: Buitenschoolse opvang gemiddeld aantal binnen 1 km
+    description: Afstand tot buitenschoolse opvang [km]
+    legend: Buitenschoolse opvang gemiddeld aantal binnen 1 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  buitenschoolse_opvang_gemiddeld_aantal_binnen_3_km:
+    title: Buitenschoolse opvang gemiddeld aantal binnen 3 km
+    description: Afstand tot buitenschoolse opvang [km]
+    legend: Buitenschoolse opvang gemiddeld aantal binnen 3 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  buitenschoolse_opvang_gemiddeld_aantal_binnen_5_km:
+    title: Buitenschoolse opvang gemiddeld aantal binnen 5 km
+    description: Afstand tot buitenschoolse opvang [km]
+    legend: Buitenschoolse opvang gemiddeld aantal binnen 5 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  basisonderwijs_gemiddelde_afstand_in_km:
+    title: Basisonderwijs gemiddelde afstand in km
+    description: Basisonderwijs gemiddelde afstand in km per gemeente op basis van CBS GWB data.
+    legend: Basisonderwijs gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  basisonderwijs_gemiddeld_aantal_binnen_1_km:
+    title: Basisonderwijs gemiddeld aantal binnen 1 km
+    description: Basisonderwijs gemiddeld aantal binnen 1 km per gemeente op basis van CBS GWB data.
+    legend: Basisonderwijs gemiddeld aantal binnen 1 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  basisonderwijs_gemiddeld_aantal_binnen_3_km:
+    title: Basisonderwijs gemiddeld aantal binnen 3 km
+    description: Basisonderwijs gemiddeld aantal binnen 3 km per gemeente op basis van CBS GWB data.
+    legend: Basisonderwijs gemiddeld aantal binnen 3 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  basisonderwijs_gemiddeld_aantal_binnen_5_km:
+    title: Basisonderwijs gemiddeld aantal binnen 5 km
+    description: Basisonderwijs gemiddeld aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Basisonderwijs gemiddeld aantal binnen 5 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  voortgezet_onderwijs_gem_afstand_in_km:
+    title: Voortgezet onderwijs gem afstand in km
+    description: Afstand tot voortgezet onderwijs [km]
+    legend: Voortgezet onderwijs gem afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  voortgezet_onderwijs_gemiddeld_aantal_binnen_3_km:
+    title: Voortgezet onderwijs gemiddeld aantal binnen 3 km
+    description: Afstand tot voortgezet onderwijs [km]
+    legend: Voortgezet onderwijs gemiddeld aantal binnen 3 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  voortgezet_onderwijs_gemiddeld_aantal_binnen_5_km:
+    title: Voortgezet onderwijs gemiddeld aantal binnen 5 km
+    description: Afstand tot voortgezet onderwijs [km]
+    legend: Voortgezet onderwijs gemiddeld aantal binnen 5 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  voortgezet_onderwijs_gemiddeld_aantal_binnen_10_km:
+    title: Voortgezet onderwijs gemiddeld aantal binnen 10 km
+    description: Afstand tot voortgezet onderwijs [km]
+    legend: Voortgezet onderwijs gemiddeld aantal binnen 10 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  vmbo_gemiddelde_afstand_in_km:
+    title: Vmbo gemiddelde afstand in km
+    description: Afstand tot scholen VMBO [km]
+    legend: Vmbo gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  vmbo_gemiddeld_aantal_binnen_3_km:
+    title: Vmbo gemiddeld aantal binnen 3 km
+    description: Vmbo gemiddeld aantal binnen 3 km per gemeente op basis van CBS GWB data.
+    legend: Vmbo gemiddeld aantal binnen 3 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  vmbo_gemiddeld_aantal_binnen_5_km:
+    title: Vmbo gemiddeld aantal binnen 5 km
+    description: Vmbo gemiddeld aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Vmbo gemiddeld aantal binnen 5 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  vmbo_gemiddeld_aantal_binnen_10_km:
+    title: Vmbo gemiddeld aantal binnen 10 km
+    description: Vmbo gemiddeld aantal binnen 10 km per gemeente op basis van CBS GWB data.
+    legend: Vmbo gemiddeld aantal binnen 10 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  havo_vwo_gemiddelde_afstand_in_km:
+    title: Havo vwo gemiddelde afstand in km
+    description: Afstand tot scholen HA VO/VWO [km]
+    legend: Havo vwo gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  havo_vwo_gemiddeld_aantal_binnen_3_km:
+    title: Havo vwo gemiddeld aantal binnen 3 km
+    description: Havo vwo gemiddeld aantal binnen 3 km per gemeente op basis van CBS GWB data.
+    legend: Havo vwo gemiddeld aantal binnen 3 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  havo_vwo_gemiddeld_aantal_binnen_5_km:
+    title: Havo vwo gemiddeld aantal binnen 5 km
+    description: Havo vwo gemiddeld aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Havo vwo gemiddeld aantal binnen 5 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  havo_vwo_gemiddeld_aantal_binnen_10_km:
+    title: Havo vwo gemiddeld aantal binnen 10 km
+    description: Havo vwo gemiddeld aantal binnen 10 km per gemeente op basis van CBS GWB data.
+    legend: Havo vwo gemiddeld aantal binnen 10 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  brandweerkazerne_gemiddelde_afstand_in_km:
+    title: Brandweerkazerne gemiddelde afstand in km
+    description: Afstand tot brandweerkazerne [km]
+    legend: Brandweerkazerne gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  oprit_hoofdverkeersweg_gemiddelde_afstand_in_km:
+    title: Oprit hoofdverkeersweg gemiddelde afstand in km
+    description: Afstand tot oprit hoofdverkeersweg [km]
+    legend: Oprit hoofdverkeersweg gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  treinstation_gemiddelde_afstand_in_km:
+    title: Treinstation gemiddelde afstand in km
+    description: Afstand tot treinstation [km]
+    legend: Treinstation gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  overstapstation_gemiddelde_afstand_in_km:
+    title: Overstapstation gemiddelde afstand in km
+    description: Afstand tot belangrijk overstapstation [km]
+    legend: Overstapstation gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  zwembad_gemiddelde_afstand_in_km:
+    title: Zwembad gemiddelde afstand in km
+    description: Afstand tot zwembad [km]
+    legend: Zwembad gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 0
+    visualization_type: map
+    link: ''
+  kunstijsbaan_gemiddelde_afstand_in_km:
+    title: Kunstijsbaan gemiddelde afstand in km
+    description: Afstand tot kunstijsbaan [km]
+    legend: Kunstijsbaan gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  bibliotheek_gemiddelde_afstand_in_km:
+    title: Bibliotheek gemiddelde afstand in km
+    description: Afstand tot bibliotheek [km]
+    legend: Bibliotheek gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  poppodium_gemiddelde_afstand_in_km:
+    title: Poppodium gemiddelde afstand in km
+    description: Afstand tot poppodium [km]
+    legend: Poppodium gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  bioscoop_gemiddelde_afstand_in_km:
+    title: Bioscoop gemiddelde afstand in km
+    description: Afstand tot bioscoop [km]
+    legend: Bioscoop gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  bioscoop_gemiddeld_aantal_binnen_5_km:
+    title: Bioscoop gemiddeld aantal binnen 5 km
+    description: Bioscoop gemiddeld aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Bioscoop gemiddeld aantal binnen 5 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  bioscoop_gemiddeld_aantal_binnen_10_km:
+    title: Bioscoop gemiddeld aantal binnen 10 km
+    description: Bioscoop gemiddeld aantal binnen 10 km per gemeente op basis van CBS GWB data.
+    legend: Bioscoop gemiddeld aantal binnen 10 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  bioscoop_gemiddeld_aantal_binnen_20_km:
+    title: Bioscoop gemiddeld aantal binnen 20 km
+    description: Bioscoop gemiddeld aantal binnen 20 km per gemeente op basis van CBS GWB data.
+    legend: Bioscoop gemiddeld aantal binnen 20 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  sauna_gemiddelde_afstand_in_km:
+    title: Sauna gemiddelde afstand in km
+    description: Afstand tot sauna [km]
+    legend: Sauna gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  zonnebank_gemiddelde_afstand_in_km:
+    title: Zonnebank gemiddelde afstand in km
+    description: Afstand tot zonnebank [km]
+    legend: Zonnebank gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  attractiepark_gemiddelde_afstand_in_km:
+    title: Attractiepark gemiddelde afstand in km
+    description: Attractiepark gemiddelde afstand in km per gemeente op basis van CBS GWB data.
+    legend: Attractiepark gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  attractiepark_gemiddeld_aantal_binnen_10_km:
+    title: Attractiepark gemiddeld aantal binnen 10 km
+    description: Attractiepark gemiddeld aantal binnen 10 km per gemeente op basis van CBS GWB data.
+    legend: Attractiepark gemiddeld aantal binnen 10 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  attractiepark_gemiddeld_aantal_binnen_20_km:
+    title: Attractiepark gemiddeld aantal binnen 20 km
+    description: Attractiepark gemiddeld aantal binnen 20 km per gemeente op basis van CBS GWB data.
+    legend: Attractiepark gemiddeld aantal binnen 20 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  attractiepark_gemiddeld_aantal_binnen_50_km:
+    title: Attractiepark gemiddeld aantal binnen 50 km
+    description: Attractiepark gemiddeld aantal binnen 50 km per gemeente op basis van CBS GWB data.
+    legend: Attractiepark gemiddeld aantal binnen 50 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  theater_gemiddelde_afstand_in_km:
+    title: Theater gemiddelde afstand in km
+    description: Theater gemiddelde afstand in km per gemeente op basis van CBS GWB data.
+    legend: Theater gemiddelde afstand in km
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  theater_gemiddeld_aantal_binnen_5_km:
+    title: Theater gemiddeld aantal binnen 5 km
+    description: Theater gemiddeld aantal binnen 5 km per gemeente op basis van CBS GWB data.
+    legend: Theater gemiddeld aantal binnen 5 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  theater_gemiddeld_aantal_binnen_10_km:
+    title: Theater gemiddeld aantal binnen 10 km
+    description: Theater gemiddeld aantal binnen 10 km per gemeente op basis van CBS GWB data.
+    legend: Theater gemiddeld aantal binnen 10 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  theater_gemiddeld_aantal_binnen_20_km:
+    title: Theater gemiddeld aantal binnen 20 km
+    description: Theater gemiddeld aantal binnen 20 km per gemeente op basis van CBS GWB data.
+    legend: Theater gemiddeld aantal binnen 20 km
+    theme: Voorzieningen
+    subject: Voorzieningenniveau
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  gemiddelde_afstand_tot_museum:
+    title: Gemiddelde afstand tot museum
+    description: Afstand tot museum [km]
+    legend: Gemiddelde afstand tot museum
+    theme: Mobiliteit en Bereikbaarheid
+    subject: Bereikbaarheid
+    unit: ' km'
+    precision: 1
+    visualization_type: map
+    link: ''
+  gemiddeld_aantal_musea_binnen_5_km:
+    title: Gemiddeld aantal musea binnen 5 km
+    description: Gemiddelde waarde van 'Gemiddeld aantal musea binnen 5 km' per gemeente.
+    legend: Gemiddeld aantal musea binnen 5 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
+  gemiddeld_aantal_musea_binnen_10_km:
+    title: Gemiddeld aantal musea binnen 10 km
+    description: Gemiddelde waarde van 'Gemiddeld aantal musea binnen 10 km' per gemeente.
+    legend: Gemiddeld aantal musea binnen 10 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 0
+    visualization_type: map
+    link: ''
+  gemiddeld_aantal_musea_binnen_20_km:
+    title: Gemiddeld aantal musea binnen 20 km
+    description: Gemiddelde waarde van 'Gemiddeld aantal musea binnen 20 km' per gemeente.
+    legend: Gemiddeld aantal musea binnen 20 km
+    theme: CBS GWB
+    subject: Overig
+    unit: ''
+    precision: 1
+    visualization_type: map
+    link: ''
