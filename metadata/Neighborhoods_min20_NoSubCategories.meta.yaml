@@ -1,0 +1,63 @@
+contact: Chris ten Dam
+
+dataset_id: Neighborhoods_min20_NoSubCategories
+
+key: wijkcode
+
+options: []
+
+gwb_version: wijk_gegeneraliseerd_2019
+
+layer_naam: wijk_gegeneraliseerd_2019
+
+key_gwb: statcode
+
+indicators:
+
+  EnergyCosts:
+    title: Gemiddelde energiekosten
+    description: Gemiddelde kosten voor verwarming en elektriciteit per huishouden in 2023.
+    legend: Euro per huishouden in 2023
+    theme: Kosten huishoudens
+    subject:
+    unit: " euro"
+    precision: 0
+    visualization_type: map
+    link: ""
+    test_values: {}
+
+  CarCosts:
+    title: Gemiddelde brandstofkosten auto
+    description: Gemiddelde kosten voor autobrandstof per huishouden in 2023, inclusief elektriciteitskosten voor batterij-elektrische voertuigen.
+    legend: Euro per huishouden in 2023
+    theme: Kosten huishoudens
+    subject:
+    unit: " euro"
+    precision: 0
+    visualization_type: map
+    link: ""
+    test_values: {}
+
+  HousingCosts:
+    title: Gemiddelde woonkosten
+    description: Totale woonkosten per huishouden in 2023, inclusief VvE-bijdragen, hypotheekrenteaftrek en eigenwoningforfait.
+    legend: Euro per huishouden in 2023
+    theme: Kosten huishoudens
+    subject:
+    unit: " euro"
+    precision: 0
+    visualization_type: map
+    link: ""
+    test_values: {}
+
+  OtherCosts:
+    title: Overig besteedbaar budget
+    description: Budget minus energie-, woon- en autokosten. Kilometervergoedingen, energietoeslagen en heffingskortingen zijn hierbij opgeteld omdat huishoudens deze vrij kunnen besteden.
+    legend: Euro per huishouden in 2023
+    theme: Kosten huishoudens
+    subject:
+    unit: " euro"
+    precision: 0
+    visualization_type: map
+    link: ""
+    test_values: {}

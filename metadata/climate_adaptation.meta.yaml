@@ -3,6 +3,9 @@
 # Each datafile should have its own corresponding yaml metadata file
 # The name of the metadata yaml file should be the same as the data file and end with .meta.yaml
 
+# [Contact person(s) for the data file]
+contact: Yashvant Premchand
+
 # [Name of the data file without extension]
 dataset_id: data_climate_adaptation 
 
