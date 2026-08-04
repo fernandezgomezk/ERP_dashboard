@@ -1,4 +1,5 @@
 dataset_id: cbs_gemeente_2019
+contact: Reinier Sterkenburg
 key: gemeentecode
 options: []
 time_column: jaar
