@@ -47,6 +47,7 @@ def load_metadata():
             "layer": meta.get("layer_naam"),
             "version": version,
             "key": meta["key"],
+            "year": meta.get("year"),
             "options": meta.get("options", []),
             "time_column": meta.get("time_column", []),
             "key_gwb": meta.get("key_gwb", None),

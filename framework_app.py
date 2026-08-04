@@ -86,6 +86,7 @@ if "clicked_area" not in st.session_state:
 indicator = st.session_state.indicator
 selected_variant = None
 labels = []
+years = []
 dataset_map = {}
 selected_number_of_maps = 1
 
@@ -102,8 +103,13 @@ if indicator is not None:
             "aggregation_label",
             dataset_meta_tmp["key"]
         )
-        labels.append(label)
+        if label not in labels:
+            labels.append(label)
         dataset_map[label] = v["dataset"]
+        year = dataset_meta_tmp.get("year")
+        if year is not None and year not in years:
+            years.append(year)
+        dataset_map[year] = v["dataset"]
 
     if st.session_state.aggregation is None:
         st.session_state.aggregation = dataset_map[labels[0]]
@@ -230,9 +236,15 @@ if indicator is not None and selected_variant is not None:
     # -------- AGGREGATION SELECTOR --------
     if len(labels) > 1:
         selected_label = st.segmented_control("", labels, default=labels[0])
-
         if dataset_map[selected_label] != st.session_state.aggregation:
             st.session_state.aggregation = dataset_map[selected_label]
+            st.session_state.clicked_area = None
+            st.rerun()
+
+    if len(years) > 1:
+        selected_year = st.segmented_control("", years, default=years[0])
+        if dataset_map[selected_year] != st.session_state.aggregation:
+            st.session_state.aggregation = dataset_map[selected_year]
             st.session_state.clicked_area = None
             st.rerun()
 
