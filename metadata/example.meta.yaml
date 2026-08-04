@@ -26,6 +26,8 @@ layer_naam: cbs_wijken_2019
 # [Column name in the CBS gwb file that is the identifier of the gemeente (or buurt/wijk, if applicable)
 key_gwb: statnaam
 
+# [The year of the data that was used to determine the indcators. 'zichtjaar']
+year: 2019
 
 indicators:
 

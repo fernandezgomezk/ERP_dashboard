@@ -13,6 +13,8 @@ mapping:
     min: "10% percentile"
     max: "90% percentile"
 
+year: 2019
+
 indicators:
   gas bespaard per euro (m3/EUR):
     title: Verdeling gasbesparing per geïnvesteerde euro

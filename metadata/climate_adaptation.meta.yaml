@@ -24,6 +24,8 @@ layer_naam: wijk_gegeneraliseerd_2019
 
 key_gwb: statcode
 
+year: 2019
+
 indicators:
 
   # [Name of the column of indicator no. 1]:

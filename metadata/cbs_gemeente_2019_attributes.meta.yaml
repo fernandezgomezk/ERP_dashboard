@@ -5,6 +5,7 @@ time_column: jaar
 gwb_version: gemeente_gegeneraliseerd_2019
 layer_naam: gemeente_gegeneraliseerd_2019
 key_gwb: statcode
+year: 2019
 indicators:
   omgevingsadressendichtheid:
     title: Omgevingsadressendichtheid
