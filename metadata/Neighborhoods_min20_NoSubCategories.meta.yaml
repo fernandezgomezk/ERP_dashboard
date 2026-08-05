@@ -61,3 +61,82 @@ indicators:
     visualization_type: map
     link: ""
     test_values: {}
+
+attributes:
+
+  EntriesPerNeighborhood:
+    title: Aantal woningen
+    description: Aantal observaties in het gebied
+    unit:
+    precision: 0
+    test_values:
+
+  Budget:
+    title: Gemiddeld budget
+    description: Gemiddeld beschikbaar budget
+    unit: euro
+    precision: 0
+    test_values:
+
+  Building_age_since1973:
+    title: Gebouwleeftijd sinds 1973
+    description: Gemiddelde leeftijd van bebouwing sinds 1973
+    unit: jaar
+    precision: 1
+    test_values:
+
+  DwellingSize:
+    title: Woningoppervlakte
+    description: Gemiddelde woningoppervlakte
+    unit: m²
+    precision: 1
+    test_values:
+
+  km_super:
+    title: Afstand tot supermarkt
+    description: Gemiddelde afstand tot dichtstbijzijnde supermarkt
+    unit: km
+    precision: 2
+    test_values:
+
+  km_station:
+    title: Afstand tot station
+    description: Gemiddelde afstand tot dichtstbijzijnde treinstation
+    unit: km
+    precision: 2
+    test_values:
+
+  Density:
+    title: Dichtheid
+    description: Bevolkings- of bebouwingsdichtheid
+    unit:
+    precision: 0
+    test_values:
+
+  Landuse_mix:
+    title: Landgebruiksmix
+    description: Mate van functiemenging binnen de buurt
+    unit:
+    precision: 2
+    test_values:
+
+  NDVI:
+    title: NDVI
+    description: Indicator voor hoeveelheid groen
+    unit:
+    precision: 2
+    test_values:
+
+  km_4Randstadcenters:
+    title: Afstand tot Randstadcentra
+    description: Afstand tot de vier belangrijkste Randstadcentra
+    unit: km
+    precision: 1
+    test_values:
+
+  km_25majorcenters:
+    title: Afstand tot grote centra
+    description: Afstand tot de 25 grootste stedelijke centra
+    unit: km
+    precision: 1
+    test_values:
