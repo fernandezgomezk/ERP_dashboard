@@ -46,8 +46,16 @@ def load_dataset(dataset_id, datasets_meta):
     logger.info(f"after reading of gpkg. {dataset_meta['gpkg_path']=}; {dataset_meta['layer']=}; {len(gdf)=}")
 
     key_gwb = dataset_meta["key_gwb"]
-    gdf = gdf[[key_gwb, "geometry"]]
 
+    # Naam gebied behouden ook al is het niet de key
+    cols = [key_gwb, "geometry"]
+
+    if "statnaam" in gdf.columns and "statnaam" != key_gwb:
+        cols.append("statnaam")
+
+    gdf = gdf[cols]
+
+    # Merge geometry aan indicator
     gdf = gdf.to_crs(epsg=4326)
     plot_df = gdf.merge(df, left_on=key_gwb, right_on=dataset_meta["key"], how="left")
     logger.info(f"after merge. ({len(plot_df)=})")
@@ -353,12 +361,12 @@ if indicator is not None and selected_variant is not None:
                 )
 
 
-                st.subheader(st.session_state.clicked_area)
-
                 selected_row = plot_df[
                     plot_df[dataset_meta["key"]].astype(str)
                     == str(st.session_state.clicked_area)
                 ]
+
+                st.subheader(selected_row["statnaam"].iloc[0])
 
                 if not selected_row.empty:
 

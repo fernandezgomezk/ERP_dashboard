@@ -27,7 +27,7 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, rang
         color="_color_value",
         color_continuous_scale=[[0.0, "#f0f3fa"], [1.0, "#123eb7"]],
         labels={"_color_value": legend},
-        custom_data=[key, "_hover_label"],
+        custom_data=[key, "statnaam", "_hover_label"],
         range_color=range_color,
         center={"lat": 52.15, "lon": 5.15},
         zoom=6.5,
@@ -37,7 +37,7 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, rang
     fig.update_layout(height=750)
     fig.update_traces(
         hovertemplate=(
-            "%{customdata[0]}: %{customdata[1]}"
+            "%{customdata[1]}: %{customdata[2]}"
             "<extra></extra>"
         )
     )
