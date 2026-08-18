@@ -48,10 +48,11 @@ def load_dataset(dataset_id, datasets_meta):
     key_gwb = dataset_meta["key_gwb"]
 
     # Naam gebied behouden ook al is het niet de key
+    area_name_field = dataset_meta.get("area_name_field")
     cols = [key_gwb, "geometry"]
 
-    if "statnaam" in gdf.columns and "statnaam" != key_gwb:
-        cols.append("statnaam")
+    if area_name_field and area_name_field in gdf.columns and area_name_field != key_gwb:
+        cols.append(area_name_field)
 
     gdf = gdf[cols]
 
@@ -366,7 +367,12 @@ if indicator is not None and selected_variant is not None:
                     == str(st.session_state.clicked_area)
                 ]
 
-                st.subheader(selected_row["statnaam"].iloc[0])
+                area_name_field = dataset_meta.get("area_name_field")
+                if not selected_row.empty:
+                    if area_name_field and area_name_field in selected_row.columns:
+                        st.subheader(selected_row[area_name_field].iloc[0])
+                    else:
+                        st.subheader(str(st.session_state.clicked_area))
 
                 if not selected_row.empty:
 

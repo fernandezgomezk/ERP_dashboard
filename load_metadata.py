@@ -51,6 +51,7 @@ def load_metadata():
             "options": meta.get("options", []),
             "time_column": meta.get("time_column", []),
             "key_gwb": meta.get("key_gwb", None),
+            "area_name_field": meta.get("area_name_field"),
             "gpkg_path": gpkg_path,
             "categories": meta.get("categories", []),
             "mapping": meta.get("mapping", {})

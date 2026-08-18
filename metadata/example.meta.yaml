@@ -26,6 +26,9 @@ layer_naam: cbs_wijken_2019
 # [Column name in the CBS gwb file that is the identifier of the gemeente (or buurt/wijk, if applicable)
 key_gwb: statnaam
 
+# [Column name in the CBS gwb file that contains the names (text) of the identifier.]
+area_name_field: statnaam
+
 
 indicators:
 

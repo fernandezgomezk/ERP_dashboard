@@ -5,6 +5,7 @@ categories:
     - Eigendom
     - Energiearmoede
 gwb_version: 
+area_name_field: statnaam
 layer_naam: 
 mapping:
     median: "Mediaan"
