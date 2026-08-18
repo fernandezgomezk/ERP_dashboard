@@ -6,7 +6,7 @@ from streamlit.logger import get_logger
 logger = get_logger("app.log")
 
 
-def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area_name_field=None, range_color_override=None):
+def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area_name_field=None, range_color_override=None, coloraxis_name=None, include_colorbar=False):
     plot_gdf["_color_value"] = plot_gdf[color_column].astype(float).fillna(-999)
     plot_gdf["_hover_label"] = plot_gdf[color_column].apply(
         lambda x: f"{x:.{precision}f}{unit}" if pd.notna(x) else "data niet beschikbaar"
@@ -49,10 +49,40 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area
         hovertemplate = "%{customdata[1]}: %{customdata[2]}<extra></extra>"
     else:
         hovertemplate = "%{customdata[0]}: %{customdata[1]}<extra></extra>"
-    fig.update_traces(hovertemplate=(hovertemplate,))
+    fig.update_traces(hovertemplate=hovertemplate)
+
+    # If a shared coloraxis is requested, assign the trace(s) to that coloraxis
+    # and set a layout-level coloraxis with the shared cmin/cmax. Only include
+    # the visible colorbar when `include_colorbar` is True.
+    if coloraxis_name is not None and range_color is not None:
+        try:
+            for tr in fig.data:
+                try:
+                    tr.update(coloraxis=coloraxis_name)
+                except Exception:
+                    pass
+                try:
+                    # remove per-trace colorbar to rely on layout coloraxis
+                    if getattr(tr, "colorbar", None) is not None:
+                        tr.colorbar = None
+                except Exception:
+                    pass
+
+            layout_coloraxis = {"cmin": range_color[0], "cmax": range_color[1]}
+            if include_colorbar:
+                layout_coloraxis["colorbar"] = {"title": legend}
+
+            try:
+                # assign to layout under the provided name (e.g. 'coloraxis')
+                fig.update_layout(**{coloraxis_name: layout_coloraxis})
+            except Exception:
+                pass
+        except Exception:
+            pass
+
     return fig
 
-def get_fig_no_graph(plot_gdf, indicator, dataset_meta, indicator_meta, selected_option=None):
+def get_fig_no_graph(plot_gdf, indicator, dataset_meta, indicator_meta, selected_option=None, range_color_override=None, coloraxis_name=None, include_colorbar=False):
     logger.info(f"Generating figure for indicator: {indicator}")
 
     key = dataset_meta["key"]
@@ -86,7 +116,10 @@ def get_fig_no_graph(plot_gdf, indicator, dataset_meta, indicator_meta, selected
         precision=precision,
         unit=unit,
         key=key,
-        area_name_field=dataset_meta.get("area_name_field")
+        area_name_field=dataset_meta.get("area_name_field"),
+        range_color_override=range_color_override,
+        coloraxis_name=coloraxis_name,
+        include_colorbar=include_colorbar,
     )
     logger.info("After generating choropleth")
 
@@ -158,10 +191,10 @@ def get_side_by_side_maps(plot_gdf, indicator_meta, dataset_meta, selected_colum
             key=key,
             range_color_override=shared_range_color,
             area_name_field=dataset_meta.get("area_name_field"),
+            coloraxis_name=("coloraxis" if shared_range_color is not None else None),
+            include_colorbar=(shared_range_color is not None and idx == len(map_specs) - 1),
         )
 
-        if shared_color_scale and idx > 0:
-            fig.update_layout(coloraxis_showscale=False)
 
         figures.append((spec["map_title"], fig))
 

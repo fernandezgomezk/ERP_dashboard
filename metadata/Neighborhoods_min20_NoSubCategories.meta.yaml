@@ -20,7 +20,7 @@ indicators:
     description: Gemiddelde kosten voor verwarming en elektriciteit per huishouden in 2023.
     legend: Euro per huishouden in 2023
     theme: Kosten huishoudens
-    subject:
+    subject: Kosten huishoudens
     unit: " euro"
     precision: 0
     visualization_type: map
@@ -32,7 +32,7 @@ indicators:
     description: Gemiddelde kosten voor autobrandstof per huishouden in 2023, inclusief elektriciteitskosten voor batterij-elektrische voertuigen.
     legend: Euro per huishouden in 2023
     theme: Kosten huishoudens
-    subject:
+    subject: Kosten huishoudens
     unit: " euro"
     precision: 0
     visualization_type: map
@@ -44,7 +44,7 @@ indicators:
     description: Totale woonkosten per huishouden in 2023, inclusief VvE-bijdragen, hypotheekrenteaftrek en eigenwoningforfait.
     legend: Euro per huishouden in 2023
     theme: Kosten huishoudens
-    subject:
+    subject: Kosten huishoudens
     unit: " euro"
     precision: 0
     visualization_type: map
@@ -56,7 +56,7 @@ indicators:
     description: Budget minus energie-, woon- en autokosten. Kilometervergoedingen, energietoeslagen en heffingskortingen zijn hierbij opgeteld omdat huishoudens deze vrij kunnen besteden.
     legend: Euro per huishouden in 2023
     theme: Kosten huishoudens
-    subject:
+    subject: Kosten huishoudens
     unit: " euro"
     precision: 0
     visualization_type: map

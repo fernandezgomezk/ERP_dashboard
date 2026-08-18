@@ -43,7 +43,7 @@ indicators:
     theme: Klimaatadaptatie
 
     # [Sub-category within the theme of indicator no. 1]
-    subject: 
+    subject: Klimaatadaptatie
 
     #De unit die achter de waarde komt te staan in de kaart (bijvoorbeeld: 100 -> 100 euro)
     unit: " €/m²"
