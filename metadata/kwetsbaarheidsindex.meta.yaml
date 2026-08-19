@@ -29,9 +29,11 @@ area_name_field: statnaam
 indicators:
 
   Gemiddelde Kwetsbaarheidsindex:
-
-    # [Title of indicator no. 1]
-    title: Gemiddelde kwetsbaarheidsindex per gemeente 
+    # [Short title of indicator no. 1 (one or two words)]
+    title: Kwetsbaarheidsindex
+    
+    # [Longer title of indicator no. 1]
+    subtitle: Gemiddelde kwetsbaarheidsindex per gemeente 
     
     # [Description / explanation of indicator no. 1]
     description: Deze indicator geeft de gemiddelde kwetsbaarheidsindex per gemeente weer. De kwetsbaarheidsindex word berekent door de blootstelling (exposure) te verminderen met de weerbaarheid (resilience) van een huishouden. Weerbaarheid is de sensitiviteit van een huishouden verminderd met de adaptiviteit van het huishouden. 
@@ -60,8 +62,11 @@ indicators:
     
   Gemiddelde Weerbaarheid:
 
-    # [Title of indicator no. 1]
-    title: Gemiddelde weerbaarheid per gemeente 
+     # [Short title of indicator no. 1 (one or two words)]
+    title: Weerbaarheid
+    
+    # [Longer title of indicator no. 1]
+    subtitle: Gemiddelde weerbaarheid per gemeente 
     
     # [Description / explanation of indicator no. 1]
     description: Deze indicator geeft de gemiddelde weerbaarheid per gemeente weer. Weerbaarheid is de sensitiviteit van een huishouden verminderd met de adaptiviteit van het huishouden. 
@@ -90,8 +95,11 @@ indicators:
     
   Gemiddelde Blootstelling:
 
-    # [Title of indicator no. 1]
-    title: Gemiddelde blootstelling per gemeente 
+    # [Short title of indicator no. 1 (one or two words)]
+    title: Blootstelling
+    
+    # [Longer title of indicator no. 1]
+    subtitle: Gemiddelde blootstelling per gemeente 
     
     # [Description / explanation of indicator no. 1]
     description: "Deze indicator geeft de gemiddelde blootstelling per gemeente weer. De blootstelling is opgebouwd uit drie componenten: energie, mobiliteit en leefomgeving. Deze zijn op hun beurt weer opgebouwd uit meerdere subcomponenten, zie voor uitgebreide documentatie de link naar de publicatie."
@@ -119,8 +127,11 @@ indicators:
     link: https://doi.org/10.1016/j.eist.2026.101162
   Gemiddelde Mobility Blootstelling:
 
-    # [Title of indicator no. 1]
-    title: Gemiddelde blootstelling binnen het mobiliteitscomponent per gemeente 
+    # [Short title of indicator no. 1 (one or two words)]
+    title: Blootstelling mobiliteit
+    
+    # [Longer title of indicator no. 1]
+    subtitle: Gemiddelde blootstelling binnen het mobiliteitscomponent per gemeente 
     
     # [Description / explanation of indicator no. 1]
     description: Deze indicator geeft de blootstelling binnen het mobiliteitscomponent per gemeente weer. Zie voor uitgebreide documentatie van de subcomponenten de link naar de publicatie. 
@@ -148,8 +159,11 @@ indicators:
     link: https://doi.org/10.1016/j.eist.2026.101162
   Gemiddelde Energie Blootstelling:
 
-    # [Title of indicator no. 1]
-    title: Gemiddelde blootstelling binnen het energiecomponent per gemeente 
+    # [Short title of indicator no. 1 (one or two words)]
+    title: Blootstelling energie
+    
+    # [Longer title of indicator no. 1]
+    subtitle: Gemiddelde blootstelling binnen het energiecomponent per gemeente 
     
     # [Description / explanation of indicator no. 1]
     description: Deze indicator geeft de blootstelling binnen het energiecomponent per gemeente weer. Zie voor uitgebreide documentatie van de subcomponenten de link naar de publicatie. 
@@ -177,8 +191,11 @@ indicators:
     link: https://doi.org/10.1016/j.eist.2026.101162
   Gemiddelde Leefomgeving Blootstelling:
 
-    # [Title of indicator no. 1]
-    title: Gemiddelde blootstelling binnen het leefomgevingcomponent per gemeente 
+    # [Short title of indicator no. 1 (one or two words)]
+    title: Blootstelling leefomgeving
+    
+    # [Longer title of indicator no. 1]
+    subtitle: Gemiddelde blootstelling binnen het leefomgevingcomponent per gemeente 
     
     # [Description / explanation of indicator no. 1]
     description: Deze indicator geeft de blootstelling binnen het leefomgevingcomponent per gemeente weer. Zie voor uitgebreide documentatie van de subcomponenten de link naar de publicatie. 
@@ -206,8 +223,11 @@ indicators:
     link: https://doi.org/10.1016/j.eist.2026.101162
   Gemiddelde Sensitiviteit:
 
-    # [Title of indicator no. 1]
-    title: Gemiddelde sensitiviteit per gemeente 
+    # [Short title of indicator no. 1 (one or two words)]
+    title: Sensitiviteit
+    
+    # [Longer title of indicator no. 1]
+    subtitle: Gemiddelde sensitiviteit per gemeente 
     
     # [Description / explanation of indicator no. 1]
     description: Deze indicator geeft de gemiddelde sensitiviteit per gemeente weer. De sensitiveit is een maatstaf om te meten hoe gevoelig huishoudens zijn voor klimaat- en energierisico's. 
@@ -236,8 +256,11 @@ indicators:
     # [Name of the column of indicator no. 1]:
   Gemiddelde Adaptiviteit:
 
-    # [Title of indicator no. 1]
-    title: Gemiddelde adaptiviteit per gemeente 
+    # [Short title of indicator no. 1 (one or two words)]
+    title: Adaptiviteit
+    
+    # [Longer title of indicator no. 1]
+    subtitle: Gemiddelde adaptiviteit per gemeente 
     
     # [Description / explanation of indicator no. 1]
     description: Deze indicator geeft de gemiddelde adaptiviteit per gemeente weer. De adaptiviteit is een maatstaf om weer te geven in welke mate huishoudens kunnen omgaan met een klimaat- of energierisico. 

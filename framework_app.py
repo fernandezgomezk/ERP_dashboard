@@ -215,7 +215,7 @@ if indicator is not None and selected_variant is not None:
             selected_filters[col] = st.session_state[key]
 
     # -------- UI HEADER --------
-    st.title(meta["title"])
+    st.header(meta["subtitle"])
 
     st.markdown(
         f"""

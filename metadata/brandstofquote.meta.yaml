@@ -11,7 +11,8 @@ area_name_field: statnaam
 indicators:
 
   Energiequote vergelijking:
-    title: Energiequote per gemeente voor en na
+    title: Energiequote
+    subtitle: Energiequote per gemeente voor en na
     description: Deze indicator geeft de energiequote voor en na verduurzaming van de woning. 
     legend: Energiequote verandering
     
@@ -29,16 +30,19 @@ indicators:
     map_columns:
       - column: gemiddelde_energiequote_voor_woningisolatie_procent
         title: Voor verduurzaming
+        subtitle: Energiequote voor verduurzaming
         legend: energiequote
         precision: 1
         unit: "%"
       - column: gemiddelde_energiequote_na_woningisolatie_procent
         title: Na verduurzaming
+        subtitle: Energiequote na verduurzaming
         legend: energiequote
         precision: 1
         unit: "%"
       - column: gemiddelde_energiequote_na_helft_woningisolatie_procent
         title: Na halve verduurzaming
+        subtitle: Energiequote na halve verduurzaming
         legend: energiequote
         precision: 1
         unit: "%"
