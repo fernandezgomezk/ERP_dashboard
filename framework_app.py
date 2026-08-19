@@ -46,8 +46,17 @@ def load_dataset(dataset_id, datasets_meta):
     logger.info(f"after reading of gpkg. {dataset_meta['gpkg_path']=}; {dataset_meta['layer']=}; {len(gdf)=}")
 
     key_gwb = dataset_meta["key_gwb"]
-    gdf = gdf[[key_gwb, "geometry"]]
 
+    # Naam gebied behouden ook al is het niet de key
+    area_name_field = dataset_meta.get("area_name_field")
+    cols = [key_gwb, "geometry"]
+
+    if area_name_field and area_name_field in gdf.columns and area_name_field != key_gwb:
+        cols.append(area_name_field)
+
+    gdf = gdf[cols]
+
+    # Merge geometry aan indicator
     gdf = gdf.to_crs(epsg=4326)
     plot_df = gdf.merge(df, left_on=key_gwb, right_on=dataset_meta["key"], how="left")
     logger.info(f"after merge. ({len(plot_df)=})")
@@ -125,7 +134,7 @@ with st.sidebar:
         with st.expander(theme, expanded=False):
 
             for subject, indicators in sorted(subjects.items()):
-                if subject:
+                if subject and subject != theme:
                     st.markdown(f"**{subject}**")
 
                 for indicator_name in indicators:
@@ -206,7 +215,8 @@ if indicator is not None and selected_variant is not None:
             selected_filters[col] = st.session_state[key]
 
     # -------- UI HEADER --------
-    st.title(meta["title"])
+    st.caption(f"{meta["theme"]} > {meta["subject"]}" if meta["subject"] and meta["subject"] != meta["theme"] else meta["theme"])
+    st.header(meta["subtitle"])
 
     st.markdown(
         f"""
@@ -353,12 +363,17 @@ if indicator is not None and selected_variant is not None:
                 )
 
 
-                st.subheader(st.session_state.clicked_area)
-
                 selected_row = plot_df[
                     plot_df[dataset_meta["key"]].astype(str)
                     == str(st.session_state.clicked_area)
                 ]
+
+                area_name_field = dataset_meta.get("area_name_field")
+                if not selected_row.empty:
+                    if area_name_field and area_name_field in selected_row.columns:
+                        st.subheader(selected_row[area_name_field].iloc[0])
+                    else:
+                        st.subheader(str(st.session_state.clicked_area))
 
                 if not selected_row.empty:
 
