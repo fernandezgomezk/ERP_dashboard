@@ -14,6 +14,7 @@ from get_fig_with_graph import get_fig_with_graph
 from get_fig_no_graph import get_fig_no_graph, get_side_by_side_maps
 from get_boxplot import get_boxplot
 from get_scatterplot import get_scatterplot
+from get_attributes_for_area import get_attributes_for_area
 
 logger = get_logger("app.log")
 logger.info("App script started")
@@ -144,7 +145,7 @@ st.set_page_config(layout="wide") #Kaart even breed als scherm
 # =========================
 # METADATA
 # =========================
-DATASETS_META, INDICATORS_META = load_metadata()
+DATASETS_META, INDICATORS_META, ATTRIBUTES_META = load_metadata()
 
 indicators_by_theme_subject = defaultdict(lambda: defaultdict(list))
 
@@ -306,7 +307,81 @@ if indicator is not None and selected_variant is not None:
             meta,
             selected_option=selected_option
         )
-        st.plotly_chart(fig, width="stretch")
+
+        # Show value of indicator + attributes upon clicking on area
+        col_map, col_attributes = st.columns([4, 1])
+        with col_map:
+            event = st.plotly_chart(
+                fig,
+                width="stretch",
+                on_select="rerun"
+            )
+            if (
+                event is not None
+                and event.selection is not None
+                and event.selection.points
+            ):
+                st.session_state.clicked_area = (
+                    event.selection.points[0]["customdata"][0]
+                )
+        with col_attributes:
+            if st.session_state.clicked_area is None:
+                st.info("Klik op een gebied voor meer informatie.")
+            else:
+                attributes = get_attributes_for_area(
+                    plot_df,
+                    dataset_meta,
+                    ATTRIBUTES_META,
+                    dataset_id,
+                    st.session_state.clicked_area
+                )
+                st.subheader(st.session_state.clicked_area)
+                selected_row = plot_df[
+                    plot_df[dataset_meta["key"]].astype(str)
+                    == str(st.session_state.clicked_area)
+                ]
+                if not selected_row.empty:
+                    selected_row = selected_row.iloc[0]
+                    indicator_value = selected_row[indicator]
+                    if pd.notna(indicator_value):
+                        indicator_text = (
+                            f"{indicator_value:.{meta['precision']}f}"
+                            f" {meta['unit']}"
+                        )
+                    else:
+                        indicator_text = "Niet beschikbaar"
+                    st.markdown(
+                        f"""
+                        <div style="
+                            font-size: 2rem;
+                            font-weight: 700;
+                            margin-bottom: 0.5rem;
+                        ">
+                            {indicator_text}
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+                    st.divider()
+                if attributes:
+                    for attr in attributes:
+                        value = attr["value"]
+                        if pd.isna(value):
+                            value_str = "Niet beschikbaar"
+                        else:
+                            value_str = (
+                                f"{value:.{attr['precision']}f} "
+                                f"{attr['unit']}"
+                            )
+                        c1, c2 = st.columns([2, 1])
+                        with c1:
+                            st.caption(attr["title"])
+                        with c2:
+                            st.markdown(
+                                f"<b>{value_str}</b>",
+                                unsafe_allow_html=True
+                            )
+
     # -------- SIDE BY SIDE --------
     elif visualization_type == "side_by_side_maps":
         import math

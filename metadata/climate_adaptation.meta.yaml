@@ -6,18 +6,6 @@
 # [Contact person(s) for the data file]
 contact: Yashvant Premchand
 
-# [Contact person(s) for the data file]
-contact: Yashvant Premchand
-
-# [Contact person(s) for the data file]
-contact: Yashvant Premchand
-
-# [Contact person(s) for the data file]
-contact: Yashvant Premchand
-
-# [Contact person(s) for the data file]
-contact: Yashvant Premchand
-
 # [Name of the data file without extension]
 dataset_id: data_climate_adaptation 
 
@@ -57,7 +45,7 @@ indicators:
     subject: 
 
     #De unit die achter de waarde komt te staan in de kaart (bijvoorbeeld: 100 -> 100 euro)
-    unit: " euro per vierkanter meter"
+    unit: " €/m²"
     
     # [Number of decimals to display for indicator no. 1]
     precision: 0 
@@ -76,3 +64,71 @@ indicators:
       WK197904: 127.25
       WK099503: 266.54
       WK066406: 123.92
+
+attributes:
+
+  dist_water_m:
+    title: Afstand tot water 
+    description: Afstand tot water
+    unit: m  
+    precision: 0     
+    test_values:
+      WK019320: 1373.00
+      WK197904: 2001.00
+      WK099503: 3932.00
+      WK066406: 5045.00
+  
+  land_value:
+    title: Grondwaarde
+    description: Grondwaarde
+    unit: euro  
+    precision: 0     
+    test_values:
+      WK019320: 118.43
+      WK197904: 43.52
+      WK099503: 213.5
+      WK066406: 121.24
+
+  density:
+    title: Dichtheid
+    description: Bevolkingsdichtheid
+    unit:
+    precision: 0
+    test_values:
+      WK019320: 164
+      WK197904: 2582
+      WK099503: 4024
+      WK066406: 363
+
+  height_m:
+    title: Hoogte
+    description: Hoogte ten opzichte van NAP
+    unit: m
+    precision: 2
+    test_values:
+      WK019320: 3.25
+      WK197904: 1.13
+      WK099503: -1.53
+      WK066406: 1.09
+
+  corrected_lv:
+    title: Gecorrigeerde grondwaarde
+    description: Gecorrigeerde grondwaarde gebruikt in het model
+    unit: euro
+    precision: 2
+    test_values:
+      WK019320: -123.38
+      WK197904: -83.73
+      WK099503: -53.04
+      WK066406: -24.60
+
+  population:
+    title: Bevolking
+    description: Aantal inwoners
+    unit:
+    precision: 0
+    test_values:
+      WK019320: 370
+      WK197904: 2985
+      WK099503: 10765
+      WK066406: 205

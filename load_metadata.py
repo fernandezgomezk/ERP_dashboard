@@ -10,6 +10,7 @@ logger = get_logger("app.log")
 def load_metadata():
     datasets_meta = {}
     indicators_meta = defaultdict(list)
+    attributes_meta = defaultdict(list)
 
     metadata_dir = Path("metadata")
     data_dir = Path("data/indicatoren")
@@ -75,5 +76,15 @@ def load_metadata():
                 "test_values": indicator_meta.get("test_values", {})
             })
 
+        # 5. Attributen registreren
+        for attribute, attribute_meta in meta.get("attributes", {}).items():
+            attributes_meta[attribute].append({
+                "dataset": dataset_id,
+                "title": attribute_meta["title"],
+                "description": attribute_meta["description"],
+                "precision": attribute_meta.get("precision", 1),
+                "unit": attribute_meta.get("unit", "") or "",
+                "test_values": attribute_meta.get("test_values", {})
+            })
 
-    return datasets_meta, indicators_meta
+    return datasets_meta, indicators_meta, attributes_meta
