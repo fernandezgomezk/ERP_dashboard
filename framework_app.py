@@ -134,7 +134,7 @@ with st.sidebar:
         with st.expander(theme, expanded=False):
 
             for subject, indicators in sorted(subjects.items()):
-                if subject:
+                if subject and subject != theme:
                     st.markdown(f"**{subject}**")
 
                 for indicator_name in indicators:
@@ -215,6 +215,7 @@ if indicator is not None and selected_variant is not None:
             selected_filters[col] = st.session_state[key]
 
     # -------- UI HEADER --------
+    st.caption(f"{meta["theme"]} > {meta["subject"]}" if meta["subject"] and meta["subject"] != meta["theme"] else meta["theme"])
     st.header(meta["subtitle"])
 
     st.markdown(
