@@ -31,8 +31,11 @@ indicators:
   # [Name of the column of indicator no. 1]:
   LLHT_PRB_i:
 
-    # [Title of indicator no. 1]
-    title: Procentuele verandering in gevestigde huishoudens
+    # [Short title of indicator no. 1]
+    title: Gevestigde huishoudens
+
+    # [Longer title of indicator no. 1]
+    subtitle: Procentuele verandering in gevestigde huishoudens
     
     # [Description / explanation of indicator no. 1]
     description: Deze indicator laat de Procentuele verandering in gevestigde huishoudens (totaal) zien
@@ -41,10 +44,10 @@ indicators:
     legend: LLHT
     
     # [High-level topic of indicator no. 1]
-    theme: Mobiliteit - Brede welvaarteffecten van de Lelylijn
+    theme: Mobiliteit
 
     # [Sub-category within the theme of indicator no. 1]
-    subject: Gevestigde huishoudens
+    subject: Brede welvaarteffecten van de Lelylijn
 
     #De unit die achter de waarde komt te staan in de kaart (bijvoorbeeld: 100 -> 100 euro)
     unit:
