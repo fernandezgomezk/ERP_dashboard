@@ -40,11 +40,7 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area
         range_color=range_color,
         center={"lat": 52.15, "lon": 5.15},
         zoom=6.5,
-        map_style={
-            "version": 8,
-            "sources": {},
-            "layers": []
-        }
+        map_style = "white-bg"
     )
 
     fig.update_layout(height=750)
@@ -53,7 +49,7 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area
         hovertemplate = "%{customdata[1]}: %{customdata[2]}<extra></extra>"
     else:
         hovertemplate = "%{customdata[0]}: %{customdata[1]}<extra></extra>"
-    fig.update_traces(hovertemplate=(hovertemplate,))
+    fig.update_traces(hovertemplate=hovertemplate)
     return fig
 
 def get_fig_no_graph(plot_gdf, indicator, dataset_meta, indicator_meta, selected_option=None):
