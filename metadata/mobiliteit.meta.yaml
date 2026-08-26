@@ -23,6 +23,9 @@ layer_naam: corops_hettie
 # [Column name in the CBS gwb file that is the identifier of the gemeente (or buurt/wijk, if applicable)
 key_gwb: Code
 
+# [Column name in the CBS gwb file that contains the names (text) of the identifier.]
+area_name_field: statnaam
+
 # [The year of the data that was used to determine the indicators. 'zichtjaar']
 year: 2020
 
