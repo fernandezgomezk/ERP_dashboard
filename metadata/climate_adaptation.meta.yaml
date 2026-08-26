@@ -30,8 +30,11 @@ indicators:
   # [Name of the column of indicator no. 1]:
   costs:
 
-    # [Title of indicator no. 1]
-    title: Gemiddelde kosten klimaatadaptatie per vierkante meter nieuwbouw 
+    # [Short title of indicator no.1 (one or two words)]
+    title: Kosten
+
+    # [Longer title of indicator no. 1]
+    subtitle: Gemiddelde kosten klimaatadaptatie per vierkante meter nieuwbouw 
     
     # [Description / explanation of indicator no. 1]
     description: Deze indicator laat zien hoevel euro per vierkante meter nieuwbouw moet worden geïnvesteerd om de woning te beschermen tegen klimaat-gerelateerde events

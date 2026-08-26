@@ -40,7 +40,7 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area
         range_color=range_color,
         center={"lat": 52.15, "lon": 5.15},
         zoom=6.5,
-        map_style="white-bg"
+        map_style = "white-bg"
     )
 
     fig.update_layout(height=750)

@@ -11,6 +11,7 @@ area_name_field: statnaam
 indicators:
   gemiddelde_energiequote_voor_woningisolatie_procent:
     title: Voor verduurzaming
+    subtitle: Energiequote voor verduurzaming
     description: Energiequote voor verduurzaming (voor)
     legend: Energiequote
     theme: Woningverduurzaming
@@ -22,6 +23,7 @@ indicators:
   
   gemiddelde_energiequote_na_woningisolatie_procent:
     title: Na verduurzaming
+    subtitle: Energiequote na verduurzaming
     description: Energiequote na volledige verduurzaming
     legend: Energiequote
     theme: Woningverduurzaming
@@ -33,6 +35,7 @@ indicators:
 
   gemiddelde_energiequote_na_helft_woningisolatie_procent:
     title: Na halve verduurzaming
+    subtitle: Energiequote na halve verduurzaming
     description: Energiequote na halve verduurzaming
     legend: Energiequote
     theme: Woningverduurzaming

@@ -181,6 +181,8 @@ if indicator is not None and selected_variant is not None:
     # Note: Title/description/link are rendered per-map below. This keeps
     # the main panel clean when multiple maps are shown and attaches
     # metadata to each map's column.
+    # -------- UI HEADER --------
+    st.caption(f"{meta["theme"]} > {meta["subject"]}" if meta["subject"] and meta["subject"] != meta["theme"] else meta["theme"])
 
     # -------- AGGREGATION SELECTOR --------
     if len(labels) > 1:

@@ -13,6 +13,7 @@ area_name_field: statnaam
 indicators:
   TestIndicatorMeerdereSubpopulaties:
     title: TestIndicatorMeerdereSubpopulaties
+    subtitle: Testindicator meerdere subpopulaties
     description: Deze indicator toont  de afname in de frequentie van huishoudens met energiearmoede in een gemodelleerde what-if-situatie waarin de woningen worden geïsoleerd tot de isolatiestandaard. De grootste dalingen in het lokale aandeel huishoudens met energiearmoede zijn met name te vinden gemeentes in de Randstad. In gemeenten als Den Haag en Amsterdam leven veel huishoudens rond de energiearmoedegrens; woningisolatie brengt hun energiequote naar onder de acht procent. 
     legend: Afname in procentpunt
     theme: Woningverduurzaming
