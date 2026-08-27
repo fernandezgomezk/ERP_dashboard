@@ -88,15 +88,11 @@ def get_selected_option_for_map(dataset_id, dataset_meta, plot_df):
     if len(option_columns) == 1:
         col = option_columns[0]
         options = sorted(plot_df[col].dropna().unique())
-
         if not options:
             return selected_option
-
         state_key = f"option_{dataset_id}_{col}"
-
         if state_key not in st.session_state:
             st.session_state[state_key] = options[0]
-
         selected = st.selectbox(
             f"Selecteer {col}",
             options,
@@ -104,7 +100,6 @@ def get_selected_option_for_map(dataset_id, dataset_meta, plot_df):
             if st.session_state[state_key] in options else 0,
             key=f"{state_key}_widget"
         )
-
         st.session_state[state_key] = selected
         selected_option = {col: selected}
         return selected_option
@@ -112,37 +107,28 @@ def get_selected_option_for_map(dataset_id, dataset_meta, plot_df):
     # CASE 3: multiple columns -> cascading dropdowns (exclusive per column)
     selected_option = {}
     filtered_df = plot_df.copy()
-
     st.markdown("### Selectie")
     cols = st.columns(len(option_columns))
-
     for i, col in enumerate(option_columns):
         with cols[i]:
             options = sorted(filtered_df[col].dropna().unique())
-
             if not options:
                 selected_option[col] = None
                 continue
-
             state_key = f"option_{dataset_id}_{col}"
-
             if state_key not in st.session_state:
                 st.session_state[state_key] = options[0]
-
             current_value = st.session_state[state_key]
             if current_value not in options:
                 current_value = options[0]
-
             selected = st.selectbox(
                 col,
                 options,
                 index=options.index(current_value),
                 key=f"{state_key}_widget"
             )
-
             st.session_state[state_key] = selected
             selected_option[col] = selected
-
         # Filter for next dropdown (grouping)
         filtered_df = filtered_df[filtered_df[col] == selected]
 
