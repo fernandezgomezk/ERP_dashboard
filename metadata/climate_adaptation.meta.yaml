@@ -16,6 +16,7 @@ key: code
 options:
 
 time_column:
+
 # [Version of the CBS gemeente/wijk/buurt layout]
 gwb_version: wijk_gegeneraliseerd_2019
 
@@ -23,6 +24,7 @@ gwb_version: wijk_gegeneraliseerd_2019
 layer_naam: wijk_gegeneraliseerd_2019
 
 key_gwb: statcode
+
 area_name_field: statnaam
 
 indicators:
