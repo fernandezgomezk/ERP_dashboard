@@ -279,6 +279,8 @@ if indicator is not None and selected_variant is not None:
         extra_info.append(f"GWB/COROP/PC jaar: {dataset_meta['gwb_year']}")
     if dataset_meta["year"] is not None:
         extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
+    if dataset_meta["contact"] is not None:
+        extra_info.append(f"Contactpersoon: {dataset_meta['contact']}")
     s_info = " | ".join(extra_info)
     st.markdown(
         f"""

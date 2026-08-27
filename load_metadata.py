@@ -44,6 +44,7 @@ def load_metadata():
 
         # 3. Dataset registreren
         datasets_meta[dataset_id] = {
+            "contact": meta.get("contact"),
             "csv_path": csv_path,
             "layer": meta.get("layer_naam"),
             "version": version,
