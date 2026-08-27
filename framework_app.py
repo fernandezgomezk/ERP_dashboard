@@ -278,6 +278,7 @@ if indicator is not None and selected_variant is not None:
     st.caption(f"{meta["theme"]} > {meta["subject"]}" if meta["subject"] and meta["subject"] != meta["theme"] else meta["theme"])
     st.header(meta["subtitle"])
 
+    # description (longer text)
     st.markdown(
         f"""
         <div style="font-size:18px; color:#444; line-height:1.5;">
@@ -286,6 +287,22 @@ if indicator is not None and selected_variant is not None:
         """,
         unsafe_allow_html=True
     )
+    # year info and contact person
+    extra_info = []
+    if dataset_meta["gwb_year"] is not None:
+        extra_info.append(f"GWB/COROP/PC jaar: {dataset_meta['gwb_year']}")
+    if dataset_meta["year"] is not None:
+        extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
+    s_info = " | ".join(extra_info)
+    st.markdown(
+        f"""
+        <div style="font-size:18px; color:#444; line-height:1.5;">
+            {s_info}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    # link to publication
     st.markdown(
         f"""
         <div style="margin-top:6px;">
