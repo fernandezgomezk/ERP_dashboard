@@ -3,6 +3,9 @@
 # Each datafile should have its own corresponding yaml metadata file
 # The name of the metadata yaml file should be the same as the data file and end with .meta.yaml
 
+# [Contact person(s) for the data file]
+contact: Yashvant Premchand
+
 # [Name of the data file without extension]
 dataset_id: data_climate_adaptation 
 
@@ -12,6 +15,8 @@ key: code
 # [Filters / options. The column or columns that determine sub-selections or subpopulations, if applicable]
 options:
 
+time_column:
+
 # [Version of the CBS gemeente/wijk/buurt layout]
 gwb_version: wijk_gegeneraliseerd_2019
 
@@ -20,14 +25,19 @@ layer_naam: wijk_gegeneraliseerd_2019
 
 key_gwb: statcode
 
+area_name_field: statnaam
+
 indicators:
 
   # [Name of indicator. For visualization type "scatter", the names of the involved columns are the names
   # of other indicators which must exist separately. Preferrably in this same meta file.
   correlations:
 
-    # [Title of indicator]
-    title: Verband tussen indicatoren
+    # [Short title of indicator no.1 (one or two words)]
+    title: Kosten
+
+    # [Longer title of indicator no. 1]
+    subtitle: Gemiddelde kosten klimaatadaptatie per vierkante meter nieuwbouw 
 
     # [Description / explanation of indicator no. 1]
     description: Deze indicator laat verbanden zien tussen indicatoren in de vorm van een scatter plot
@@ -59,6 +69,9 @@ indicators:
     # [Title of indicator no. 1]
     title: Gemiddelde kosten klimaatadaptatie per vierkante meter nieuwbouw 
     
+    # [Longer title of indicator no. 1]
+    subtitle: Gemiddelde kosten klimaatadaptatie per vierkante meter nieuwbouw 
+
     # [Description / explanation of indicator no. 1]
     description: Deze indicator laat zien hoeveel euro per vierkante meter nieuwbouw moet worden geïnvesteerd om de woning te beschermen tegen klimaat-gerelateerde events
 
@@ -99,6 +112,9 @@ indicators:
     # [Title of indicator no. 2]
     title: Gemiddelde afstand tot water
     
+    # [Longer title of indicator no. 2]
+    subtitle: Gemiddelde afstand tot water
+
     # [Description / explanation of indicator no. 1]
     description: Deze indicator laat zien wat de gemiddelde afstand tot water is
 
