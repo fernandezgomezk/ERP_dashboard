@@ -44,6 +44,7 @@ def load_metadata():
 
         # 3. Dataset registreren
         datasets_meta[dataset_id] = {
+            "contact": meta.get("contact"),
             "csv_path": csv_path,
             "layer": meta.get("layer_naam"),
             "version": version,
@@ -51,6 +52,8 @@ def load_metadata():
             "options": meta.get("options", []),
             "time_column": meta.get("time_column", []),
             "key_gwb": meta.get("key_gwb", None),
+            "gwb_year": meta.get("gwb_year", None),
+            "year": meta.get("year", None),
             "area_name_field": meta.get("area_name_field"),
             "gpkg_path": gpkg_path,
             "categories": meta.get("categories", []),
@@ -70,6 +73,7 @@ def load_metadata():
                 "precision": indicator_meta.get("precision", 1),
                 "unit": indicator_meta.get("unit", "") or "",
                 "visualization_type": indicator_meta["visualization_type"],
+                "indicators": indicator_meta.get("indicators", []),
                 "shown_maps": indicator_meta.get("shown_maps"),
                 "map_columns": indicator_meta.get("map_columns"),
                 "shared_color_scale": indicator_meta.get("shared_color_scale", True),
