@@ -26,14 +26,20 @@ layer_naam: cbs_wijken_2019
 # [Column name in the CBS gwb file that is the identifier of the gemeente (or buurt/wijk, if applicable)
 key_gwb: statnaam
 
+# [Column name in the CBS gwb file that contains the names (text) of the identifier.]
+area_name_field: statnaam
+
 
 indicators:
 
   # [Name of the column of indicator no. 1]:
   Gemiddelde.verandering.energiequote.(absoluut):
 
-    # [Title of indicator no. 1]
-    title: Gemiddelde afname energiequote van huishoudens met energiearmoede 
+    # [Short title of indicator no. 1 (one or two words)]
+    title: Afname energiequote
+
+    # [Longer title of indicator no. 1]
+    subtitle: Gemiddelde afname energiequote van huishoudens met energiearmoede 
     
     # [Description / explanation of indicator no. 1]
     description: Deze indicator laat zien hoeveel de energiequote van huishoudens in energiearmoede gemiddeld afneemt in een gemodelleerde what-if-situatie waarin de woning wordt geïsoleerd tot de isolatiestandaard. De grootte van de afname verschilt per gemeente, voornamelijk vanwege de verschillen in woninggrootte, woningtype, inkomens en warmtevraag.
@@ -70,7 +76,8 @@ indicators:
 
   # [Name of the column of indicator no. 2]:
   Gemiddelde.investeringskosten.(EUR):
-    title: Gemiddelde investeringskosten voor huishoudens met energiearmoede
+    title: Investeringskosten
+    subtitle: Gemiddelde investeringskosten voor huishoudens met energiearmoede
     description: Deze kaart toont de gemiddelde investeringskosten per woning voor het isoleren naar de isolatiestandaard van woningen met huishoudens met een laag inkomen en met een hoge energierekening óf een woning van lage energetische kwaliteit. 
     legend: euro
     theme: Woningverduurzaming

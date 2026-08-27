@@ -6,7 +6,7 @@ from streamlit.logger import get_logger
 logger = get_logger("app.log")
 
 
-def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, range_color_override=None):
+def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area_name_field=None, range_color_override=None):
     plot_gdf["_color_value"] = plot_gdf[color_column].astype(float).fillna(-999)
     plot_gdf["_hover_label"] = plot_gdf[color_column].apply(
         lambda x: f"{x:.{precision}f}{unit}" if pd.notna(x) else "data niet beschikbaar"
@@ -20,6 +20,15 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, rang
         if not range_series.empty:
             range_color = (range_series.min(), range_series.max())
 
+    # Build custom_data dynamically: always include key and hover label;
+    # include area_name_field only when provided and present on the dataframe.
+    custom_data = [key]
+    include_area_name = False
+    if area_name_field and area_name_field in plot_gdf.columns:
+        custom_data.append(area_name_field)
+        include_area_name = True
+    custom_data.append("_hover_label")
+
     fig = px.choropleth_map(
         plot_gdf,
         geojson=plot_gdf.geometry.__geo_interface__,
@@ -27,20 +36,20 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, rang
         color="_color_value",
         color_continuous_scale=[[0.0, "#f0f3fa"], [1.0, "#123eb7"]],
         labels={"_color_value": legend},
-        custom_data=[key, "_hover_label"],
+        custom_data=custom_data,
         range_color=range_color,
         center={"lat": 52.15, "lon": 5.15},
         zoom=6.5,
-        map_style="white-bg"
+        map_style = "white-bg"
     )
 
     fig.update_layout(height=750)
-    fig.update_traces(
-        hovertemplate=(
-            "%{customdata[0]}: %{customdata[1]}"
-            "<extra></extra>"
-        )
-    )
+    # Choose hovertemplate indices depending on whether area name was added
+    if include_area_name:
+        hovertemplate = "%{customdata[1]}: %{customdata[2]}<extra></extra>"
+    else:
+        hovertemplate = "%{customdata[0]}: %{customdata[1]}<extra></extra>"
+    fig.update_traces(hovertemplate=hovertemplate)
     return fig
 
 def get_fig_no_graph(plot_gdf, indicator, dataset_meta, indicator_meta, selected_option=None):
@@ -76,7 +85,8 @@ def get_fig_no_graph(plot_gdf, indicator, dataset_meta, indicator_meta, selected
         legend=indicator_meta["legend"],
         precision=precision,
         unit=unit,
-        key=key
+        key=key,
+        area_name_field=dataset_meta.get("area_name_field")
     )
     logger.info("After generating choropleth")
 
@@ -147,6 +157,7 @@ def get_side_by_side_maps(plot_gdf, indicator_meta, dataset_meta, selected_colum
             unit=spec["unit"],
             key=key,
             range_color_override=shared_range_color,
+            area_name_field=dataset_meta.get("area_name_field"),
         )
 
         if shared_color_scale and idx > 0:

@@ -3,7 +3,7 @@
 
 base = "light"
 
-backgroundColor = "#f0f3fa"         
-secondaryBackgroundColor = "#ffffff" 
+backgroundColor = "#ffffff" 
+secondaryBackgroundColor = "#f0f3fa"  
 primaryColor = "#123eb7"             
 textColor = "#123eb7"              

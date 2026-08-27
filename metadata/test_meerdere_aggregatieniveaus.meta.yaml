@@ -5,10 +5,12 @@ options:
 gwb_version: wijk_gegeneraliseerd_2019
 layer_naam: wijk_gegeneraliseerd_2019
 key_gwb: statcode
+area_name_field: statnaam
 
 indicators:
   TestIndicatorMeerdereAggregatieniveaus:
     title: TestIndicatorMeerdereAggregatieniveaus
+    subtitle: Testindicator meerdere aggregatieniveaus
     description: Deze kaart toont de gemiddelde investeringskosten per woning voor het isoleren naar de isolatiestandaard van woningen met huishoudens met een laag inkomen en met een hoge energierekening óf een woning van lage energetische kwaliteit. 
     legend: euro
     theme: Woningverduurzaming

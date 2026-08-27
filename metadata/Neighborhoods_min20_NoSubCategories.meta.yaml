@@ -1,0 +1,147 @@
+contact: Chris ten Dam
+
+dataset_id: Neighborhoods_min20_NoSubCategories
+
+key: wijkcode
+
+options: []
+
+gwb_version: wijk_gegeneraliseerd_2019
+
+layer_naam: wijk_gegeneraliseerd_2019
+
+key_gwb: statcode
+area_name_field: statnaam
+
+indicators:
+
+  EnergyCosts:
+    title: Energiekosten
+    subtitle: Gemiddelde energiekosten
+    description: Gemiddelde kosten voor verwarming en elektriciteit per huishouden in 2023.
+    legend: Euro per huishouden in 2023
+    theme: Kosten huishoudens
+    subject:
+    unit: " euro"
+    precision: 0
+    visualization_type: map
+    link: ""
+    test_values: {}
+
+  CarCosts:
+    title: Brandstofkosten
+    subtitle: Gemiddelde brandstofkosten auto
+    description: Gemiddelde kosten voor autobrandstof per huishouden in 2023, inclusief elektriciteitskosten voor batterij-elektrische voertuigen.
+    legend: Euro per huishouden in 2023
+    theme: Kosten huishoudens
+    subject:
+    unit: " euro"
+    precision: 0
+    visualization_type: map
+    link: ""
+    test_values: {}
+
+  HousingCosts:
+    title: Woonkosten
+    subtitle: Gemiddelde woonkosten
+    description: Totale woonkosten per huishouden in 2023, inclusief VvE-bijdragen, hypotheekrenteaftrek en eigenwoningforfait.
+    legend: Euro per huishouden in 2023
+    theme: Kosten huishoudens
+    subject:
+    unit: " euro"
+    precision: 0
+    visualization_type: map
+    link: ""
+    test_values: {}
+
+  OtherCosts:
+    title: Overig budget
+    subtitle: Overig besteedbaar budget
+    description: Budget minus energie-, woon- en autokosten. Kilometervergoedingen, energietoeslagen en heffingskortingen zijn hierbij opgeteld omdat huishoudens deze vrij kunnen besteden.
+    legend: Euro per huishouden in 2023
+    theme: Kosten huishoudens
+    subject:
+    unit: " euro"
+    precision: 0
+    visualization_type: map
+    link: ""
+    test_values: {}
+
+attributes:
+
+  EntriesPerNeighborhood:
+    title: Aantal woningen
+    description: Aantal observaties in het gebied
+    unit:
+    precision: 0
+    test_values:
+
+  Budget:
+    title: Gemiddeld budget
+    description: Gemiddeld beschikbaar budget
+    unit: euro
+    precision: 0
+    test_values:
+
+  Building_age_since1973:
+    title: Gebouwleeftijd sinds 1973
+    description: Gemiddelde leeftijd van bebouwing sinds 1973
+    unit: jaar
+    precision: 1
+    test_values:
+
+  DwellingSize:
+    title: Woningoppervlakte
+    description: Gemiddelde woningoppervlakte
+    unit: m²
+    precision: 1
+    test_values:
+
+  km_super:
+    title: Afstand tot supermarkt
+    description: Gemiddelde afstand tot dichtstbijzijnde supermarkt
+    unit: km
+    precision: 2
+    test_values:
+
+  km_station:
+    title: Afstand tot station
+    description: Gemiddelde afstand tot dichtstbijzijnde treinstation
+    unit: km
+    precision: 2
+    test_values:
+
+  Density:
+    title: Dichtheid
+    description: Bevolkings- of bebouwingsdichtheid
+    unit:
+    precision: 0
+    test_values:
+
+  Landuse_mix:
+    title: Landgebruiksmix
+    description: Mate van functiemenging binnen de buurt
+    unit:
+    precision: 2
+    test_values:
+
+  NDVI:
+    title: NDVI
+    description: Indicator voor hoeveelheid groen
+    unit:
+    precision: 2
+    test_values:
+
+  km_4Randstadcenters:
+    title: Afstand tot Randstadcentra
+    description: Afstand tot de vier belangrijkste Randstadcentra
+    unit: km
+    precision: 1
+    test_values:
+
+  km_25majorcenters:
+    title: Afstand tot grote centra
+    description: Afstand tot de 25 grootste stedelijke centra
+    unit: km
+    precision: 1
+    test_values:
