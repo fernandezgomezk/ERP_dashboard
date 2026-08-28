@@ -13,6 +13,9 @@ layer_naam: wijk_gegeneraliseerd_2019
 key_gwb: statcode
 area_name_field: statnaam
 
+year: 2023
+gwb_year: 2025
+
 indicators:
 
   EnergyCosts:

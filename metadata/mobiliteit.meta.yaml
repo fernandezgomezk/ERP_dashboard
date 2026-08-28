@@ -27,7 +27,10 @@ key_gwb: Code
 area_name_field: statnaam
 
 # [The year of the data that was used to determine the indicators. 'zichtjaar']
-year: 2020
+year: 2040
+
+# [The year of the data that was used for the polygons (CBS / GWB). In this case: the year of the COROP regions]
+gwb_year: 2020
 
 indicators:
 
