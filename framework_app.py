@@ -302,23 +302,36 @@ if indicator is not None and selected_variant is not None:
         # Main page title: always show the dataset/indicator subject above the
         # indicator selection UI so it's visible in both single- and
         # multi-map modes.
-        st.title(meta.get("subject", ""))
+        st.header(meta.get("subject", ""))
 
-        st.markdown("**Selecteer indicatoren**")
-        # Simple checkbox grid: one checkbox per title, arranged in columns.
-        chk_cols = st.columns(4)
-        for i, title in enumerate(titles):
-            col = chk_cols[i % 4]
-            chk_key = f"{state_key}_chk_{i}"
-            if chk_key not in st.session_state:
-                st.session_state[chk_key] = title in st.session_state[state_key]
-            _ = col.checkbox(title, value=st.session_state[chk_key], key=chk_key)
 
-        selected_titles = [title for i, title in enumerate(titles) if st.session_state.get(f"{state_key}_chk_{i}")]
         prev_count_key = f"{state_key}_prev_count"
-        prev_count = st.session_state.get(prev_count_key, None)
-        st.session_state[state_key] = selected_titles
-        selected_inds = [title_by_ind[t] for t in selected_titles if t in title_by_ind]
+        prev_count = st.session_state.get(prev_count_key)
+
+        # Only one indicator available → select automatically
+        if len(titles) == 1:
+            selected_titles = titles
+
+        # Multiple indicators available → allow user choice
+        else:
+
+            selected_titles = st.multiselect(
+                "Selecteer indicatoren",
+                options=titles,
+                default=st.session_state[state_key],
+                key=f"{state_key}_multiselect",
+            )
+
+            if not selected_titles:
+                st.info("Selecteer minimaal één indicator.")
+                st.stop()
+
+        selected_inds = [
+            title_by_ind[t]
+            for t in selected_titles
+            if t in title_by_ind
+        ]
+
 
         # If the number of selected maps changed, clear the clicked area so
         # the UI returns to the default "Klik op een gebied..." state.
@@ -356,6 +369,8 @@ if indicator is not None and selected_variant is not None:
                     variant_meta = next((v for v in INDICATORS_META[ind_name] if v.get("dataset") == dataset_id), INDICATORS_META[ind_name][0])
                     # Render compact per-map header (title + optional description/link)
                     st.subheader(variant_meta.get("title", ind_name))
+                    st.caption(variant_meta.get("subtitle", ind_name))
+
                     desc = variant_meta.get("description", meta.get("description"))
                     if desc:
                         st.markdown(f"<div style='font-size:14px;color:#444'>{desc}</div>", unsafe_allow_html=True)
@@ -388,21 +403,32 @@ if indicator is not None and selected_variant is not None:
             # when showing multiple, set fig to None to avoid double render
             fig = None
         else:
-            # single map as before
+            selected_ind = selected_inds[0]
+
+            selected_meta = next(
+                (
+                    v for v in INDICATORS_META[selected_ind]
+                    if v.get("dataset") == dataset_id
+                ),
+                INDICATORS_META[selected_ind][0]
+            )
+
             fig = get_fig_no_graph(
                 plot_df,
-                indicator,
+                selected_ind,
                 dataset_meta,
-                meta,
+                selected_meta,
                 selected_option=selected_option
             )
             # Use the same compact per-map header style as multi-map view.
-            st.subheader(meta.get("title", indicator))
-            desc = meta.get("description")
+            st.subheader(selected_meta.get("title", selected_ind))
+            st.caption(selected_meta.get("subtitle", ind_name))
+            desc = selected_meta.get("description")
+
             if desc:
                 st.markdown(f"<div style='font-size:14px;color:#444'>{desc}</div>", unsafe_allow_html=True)
 
-            link = meta.get("link")
+            link = selected_meta.get("link")
             if link:
                 st.markdown(
                     f'<a href="{link}" target="_blank">Link naar publicatie &#8599;</a>',
@@ -509,9 +535,7 @@ if indicator is not None and selected_variant is not None:
                                     f"<b>{value_str}</b>",
                                     unsafe_allow_html=True
                                 )
-        else:
-            st.info("Meerdere kaarten worden getoond; klik-voor-details is uitgeschakeld.")
-
+        
     
 
     # -------- BOXPLOT --------
