@@ -1,4 +1,3 @@
-from pathlib import Path
 import pandas as pd
 import geopandas as gpd
 import csv
@@ -10,8 +9,7 @@ import streamlit as st
 from streamlit.logger import get_logger
 
 from load_metadata import load_metadata
-from get_fig_with_graph import get_fig_with_graph
-from get_fig_no_graph import get_fig_no_graph, get_side_by_side_maps
+from get_fig_no_graph import get_fig_no_graph
 from get_boxplot import get_boxplot
 from get_scatterplot import get_scatterplot
 from get_attributes_for_area import get_attributes_for_area
@@ -198,52 +196,31 @@ with st.sidebar:
     for theme, subjects in sorted(indicators_by_theme_subject.items()):
         with st.expander(theme, expanded=False):
             for subject, indicators in sorted(subjects.items()):
-                if subject and subject != theme:
-                    st.markdown(f"**{subject}**")
-                for indicator_name in indicators:
-                    title = INDICATORS_META[indicator_name][0]["title"]
-                    safe_name = indicator_name.replace(" ", "_").replace("(", "").replace(")", "")
-                    btn_key = f"indicator_btn_{theme}_{subject}_{safe_name}"
-                    if indicator_name == st.session_state.indicator:
-                        st.button(title, key=btn_key, disabled=True, width="stretch")
-                        # -------- CATEGORY FILTERS (BOXPLOT) --------
-                        if selected_variant is not None:
-                            dataset_id = selected_variant["dataset"]
-                            dataset_meta_current = DATASETS_META[dataset_id]
-                            plot_df_current = load_dataset(dataset_id, DATASETS_META)
-                            categories = dataset_meta_current.get("categories", [])
-                            if categories:
-                                st.markdown("**Selecteer subpopulaties**")
-                                for col in categories:
-                                    options = sorted(plot_df_current[col].dropna().unique())
-                                    state_key = f"filter_{dataset_id}_{col}"
-                                    if state_key not in st.session_state:
-                                        st.session_state[state_key] = options.copy()
-                                    selected = st.multiselect(
-                                        col,
-                                        options,
-                                        default=st.session_state[state_key],
-                                        key=f"{state_key}_widget"
-                                    )
-                                    if len(selected) == 0:
-                                        selected = options.copy()
-                                    st.session_state[state_key] = selected
-                        # -------- NUMBER OF MAPS SIDE BY SIDE --------
-                        if selected_variant is not None:
-                            num_maps = selected_variant.get("shown_maps")
-                            if num_maps is not None:
-                                selected_number_of_maps = st.number_input(
-                                    "Aantal kaarten naast elkaar",
-                                    value=num_maps,
-                                    step=1,
-                                    min_value=1,
-                                )
-                    else:
-                        if st.button(title, key=btn_key, width="stretch"):
-                            st.session_state.indicator = indicator_name
-                            st.session_state.aggregation = None
-                            st.session_state.clicked_area = None
-                            st.rerun()
+                # Show the subject as a clickable button (selects the first
+                # indicator in that subject). Indicators are shown in the
+                # main panel, so the sidebar only provides subject-level entry.
+                #if subject:
+                #    st.markdown(f"**{subject}**")
+
+                if not indicators:
+                    continue
+
+                first_indicator = indicators[0]
+                subject_safe = str(subject).replace(" ", "_").replace("(", "").replace(")", "")
+                subj_btn_key = f"subject_btn_{theme}_{subject_safe}"
+
+                # If the currently selected indicator belongs to this subject,
+                # disable the button to show it's active.
+                is_active = st.session_state.get("indicator") in indicators
+
+                if is_active:
+                    st.button(subject, key=subj_btn_key, disabled=True, width="stretch")
+                else:
+                    if st.button(subject, key=subj_btn_key, width="stretch"):
+                        st.session_state.indicator = first_indicator
+                        st.session_state.aggregation = None
+                        st.session_state.clicked_area = None
+                        st.rerun()
 
 
 # =========================
@@ -262,45 +239,7 @@ if indicator is not None and selected_variant is not None:
             selected_filters[col] = st.session_state[key]
     # -------- UI HEADER --------
     st.caption(f"{meta["theme"]} > {meta["subject"]}" if meta["subject"] and meta["subject"] != meta["theme"] else meta["theme"])
-    st.header(meta["subtitle"])
 
-    # description (longer text)
-    st.markdown(
-        f"""
-        <div style="font-size:18px; color:#444; line-height:1.5;">
-            {meta["description"]}
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-    # year info and contact person
-    extra_info = []
-    if dataset_meta["gwb_year"] is not None:
-        extra_info.append(f"GWB/COROP/PC jaar: {dataset_meta['gwb_year']}")
-    if dataset_meta["year"] is not None:
-        extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
-    if dataset_meta["contact"] is not None:
-        extra_info.append(f"Contactpersoon: {dataset_meta['contact']}")
-    s_info = " | ".join(extra_info)
-    st.markdown(
-        f"""
-        <div style="font-size:18px; color:#444; line-height:1.5;">
-            {s_info}
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-    # link to publication
-    st.markdown(
-        f"""
-        <div style="margin-top:6px;">
-            <a href="{meta["link"]}" target="_blank">
-                Link naar publicatie &#8599;
-            </a>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
     # -------- AGGREGATION SELECTOR --------
     if len(labels) > 1:
         selected_label = st.segmented_control("", labels, default=labels[0])
@@ -314,144 +253,384 @@ if indicator is not None and selected_variant is not None:
     visualization_type = meta["visualization_type"]
     # -------- MAP --------
     if visualization_type == "map":
-        selected_option = get_selected_option_for_map(dataset_id, dataset_meta, plot_df)
-        # Build figure WITH selected_option
-        fig = get_fig_no_graph(
-            plot_df,
-            indicator,
-            dataset_meta,
-            meta,
-            selected_option=selected_option
-        )
 
-        # Show value of indicator + attributes upon clicking on area
-        col_map, col_attributes = st.columns([4, 1])
-        with col_map:
-            event = st.plotly_chart(
-                fig,
-                width="stretch",
-                on_select="rerun"
+        option_columns = dataset_meta.get("options", [])
+        selected_option = None
+
+        # CASE 1: no options
+        if not option_columns:
+            selected_option = None
+
+        # CASE 2: single column → single select (exclusive)
+        elif len(option_columns) == 1:
+            col = option_columns[0]
+            options = sorted(plot_df[col].dropna().unique())
+
+            state_key = f"option_{dataset_id}_{col}"
+
+            if state_key not in st.session_state:
+                st.session_state[state_key] = options[0]
+
+            selected = st.selectbox(
+                f"Selecteer {col}",
+                options,
+                index=options.index(st.session_state[state_key])
+                if st.session_state[state_key] in options else 0,
+                key=f"{state_key}_widget"
             )
-            if (
-                event is not None
-                and event.selection is not None
-                and event.selection.points
-            ):
-                st.session_state.clicked_area = (
-                    event.selection.points[0]["customdata"][0]
-                )
-        with col_attributes:
-            if st.session_state.clicked_area is None:
-                st.info("Klik op een gebied voor meer informatie.")
-            else:
-                attributes = get_attributes_for_area(
-                    plot_df,
-                    dataset_meta,
-                    ATTRIBUTES_META,
-                    dataset_id,
-                    st.session_state.clicked_area
-                )
 
-                selected_row = plot_df[
-                    plot_df[dataset_meta["key"]].astype(str)
-                    == str(st.session_state.clicked_area)
-                ]
+            st.session_state[state_key] = selected
+            selected_option = {col: selected}
 
-                area_name_field = dataset_meta.get("area_name_field")
-                if not selected_row.empty:
-                    if area_name_field and area_name_field in selected_row.columns:
-                        st.subheader(selected_row[area_name_field].iloc[0])
-                    else:
-                        st.subheader(str(st.session_state.clicked_area))
+        # CASE 3: multiple columns → cascading dropdowns (exclusive per column)
+        else:
+            selected_option = {}
+            filtered_df = plot_df.copy()
 
-                if not selected_row.empty:
-                    selected_row = selected_row.iloc[0]
-                    indicator_value = selected_row[indicator]
-                    if pd.notna(indicator_value):
-                        indicator_text = (
-                            f"{indicator_value:.{meta['precision']}f}"
-                            f" {meta['unit']}"
+            st.markdown("### Selectie")
+
+            cols = st.columns(len(option_columns))
+
+            for i, col in enumerate(option_columns):
+                with cols[i]:
+                    options = sorted(filtered_df[col].dropna().unique())
+
+                    state_key = f"option_{dataset_id}_{col}"
+
+                    if state_key not in st.session_state:
+                        st.session_state[state_key] = options[0]
+
+                    current_value = st.session_state[state_key]
+                    if current_value not in options:
+                        current_value = options[0]
+
+                    selected = st.selectbox(
+                        col,
+                        options,
+                        index=options.index(current_value),
+                        key=f"{state_key}_widget"
+                    )
+
+                    st.session_state[state_key] = selected
+                    selected_option[col] = selected
+
+                # Filter for next dropdown (grouping)
+                filtered_df = filtered_df[filtered_df[col] == selected]
+                         
+        # Render maps: allow selecting multiple map-type indicators (from
+        # `INDICATORS_META`) to show side-by-side. If no multiple selection is
+        # made, show the single indicator as before.
+        # Allow comparing multiple map indicators side-by-side.
+        # Find candidate indicators that are maps for this dataset.
+        candidate_inds = []
+        for ind_name, variants in INDICATORS_META.items():
+            for v in variants:
+                if v.get("dataset") == dataset_id and v.get("visualization_type") == "map":
+                    candidate_inds.append(ind_name)
+                    break
+
+        # Build title->indicator mapping for display
+        title_by_ind = {}
+        titles = []
+        for ind in candidate_inds:
+            # Prefer the variant for this dataset to get its title
+            variant = next((v for v in INDICATORS_META[ind] if v.get("dataset") == dataset_id), INDICATORS_META[ind][0])
+            title = variant.get("title", ind)
+            title_by_ind[title] = ind
+            titles.append(title)
+
+        # Default selection: current indicator's title if present
+        current_title = None
+        if indicator in INDICATORS_META:
+            variant_cur = next((v for v in INDICATORS_META[indicator] if v.get("dataset") == dataset_id), INDICATORS_META[indicator][0])
+            current_title = variant_cur.get("title", indicator)
+
+        # Replace multiselect with toggle-style buttons: show titles as
+        # pressable buttons that toggle selection state. Use session state to
+        # persist the selection across reruns.
+        state_key = f"multi_map_selected_{dataset_id}"
+        if state_key not in st.session_state:
+            st.session_state[state_key] = [current_title] if current_title in titles else [titles[0]] if titles else []
+
+        # Main page title: always show the dataset/indicator subject above the
+        # indicator selection UI so it's visible in both single- and
+        # multi-map modes.
+        st.header(meta.get("subject", ""))
+
+
+        prev_count_key = f"{state_key}_prev_count"
+        prev_count = st.session_state.get(prev_count_key)
+
+        # Only one indicator available → select automatically
+        if len(titles) == 1:
+            selected_titles = titles
+
+        # Multiple indicators available → allow user choice
+        else:
+
+            selected_titles = st.multiselect(
+                "Selecteer indicatoren",
+                options=titles,
+                default=st.session_state[state_key],
+                key=f"{state_key}_multiselect",
+            )
+
+            if not selected_titles:
+                st.info("Selecteer minimaal één indicator.")
+                st.stop()
+
+        selected_inds = [
+            title_by_ind[t]
+            for t in selected_titles
+            if t in title_by_ind
+        ]
+
+
+        # If the number of selected maps changed, clear the clicked area so
+        # the UI returns to the default "Klik op een gebied..." state.
+        if prev_count is None or prev_count != len(selected_inds):
+            st.session_state.clicked_area = None
+        st.session_state[prev_count_key] = len(selected_inds)
+
+        if len(selected_inds) > 1:
+            # Compute shared color range across selected indicators only when
+            # all selected indicators share the same legend text in their
+            # metadata. If legends differ, keep each map's original scale to
+            # avoid distorting values.
+            shared_range = None
+            # collect variant metas for selected indicators (for this dataset)
+            variant_metas_for_selected = [
+                next((v for v in INDICATORS_META[ind_name] if v.get("dataset") == dataset_id), INDICATORS_META[ind_name][0])
+                for ind_name in selected_inds
+            ]
+            legends = {vm.get("legend") for vm in variant_metas_for_selected}
+            if len(legends) == 1:
+                combined = []
+                for ind_name in selected_inds:
+                    if ind_name in plot_df.columns:
+                        combined.append(pd.to_numeric(plot_df[ind_name], errors="coerce"))
+                if combined:
+                    combined_series = pd.concat(combined, ignore_index=True).dropna()
+                    if not combined_series.empty:
+                        shared_range = (combined_series.min(), combined_series.max())
+
+            # Render each selected indicator in its own column; hide duplicate colorbars
+            cols = st.columns(len(selected_inds))
+            for idx, (col, ind_name) in enumerate(zip(cols, selected_inds)):
+                with col:
+                    # pick the variant meta for this dataset (fallback to first)
+                    variant_meta = next((v for v in INDICATORS_META[ind_name] if v.get("dataset") == dataset_id), INDICATORS_META[ind_name][0])
+                    # Render compact per-map header (title + optional description/link)
+                    st.subheader(variant_meta.get("title", ind_name))
+                    st.caption(variant_meta.get("subtitle", ind_name))
+
+                    # description (longer text)
+                    desc = variant_meta.get("description", meta.get("description"))
+                    if desc:
+                        st.markdown(f"<div style='font-size:14px;color:#444'>{desc}</div>", unsafe_allow_html=True)
+
+                    # year info and contact person
+                        extra_info = []
+                        if dataset_meta["gwb_year"] is not None:
+                            extra_info.append(f"GWB/COROP/PC jaar: {dataset_meta['gwb_year']}")
+                        if dataset_meta["year"] is not None:
+                            extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
+                        if dataset_meta["contact"] is not None:
+                            extra_info.append(f"Contactpersoon: {dataset_meta['contact']}")
+                        s_info = " | ".join(extra_info)
+                        st.markdown(
+                            f"""
+                            <div style="font-size:14px; color:#444; line-height:1.5;">
+                                {s_info}
+                            </div>
+                            """,
+                            unsafe_allow_html=True
                         )
-                    else:
-                        indicator_text = "Niet beschikbaar"
-                    st.markdown(
-                        f"""
-                        <div style="
-                            font-size: 2rem;
-                            font-weight: 700;
-                            margin-bottom: 0.5rem;
-                        ">
-                            {indicator_text}
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
-                    st.divider()
-                if attributes:
-                    for attr in attributes:
-                        value = attr["value"]
-                        if pd.isna(value):
-                            value_str = "Niet beschikbaar"
-                        else:
-                            value_str = (
-                                f"{value:.{attr['precision']}f} "
-                                f"{attr['unit']}"
-                            )
-                        c1, c2 = st.columns([2, 1])
-                        with c1:
-                            st.caption(attr["title"])
-                        with c2:
-                            st.markdown(
-                                f"<b>{value_str}</b>",
-                                unsafe_allow_html=True
-                            )
+                    
+                    #link to publications
+                    link = variant_meta.get("link", meta.get("link"))
+                    if link:
+                        st.markdown(
+                            f'<a href="{link}" target="_blank">Link naar publicatie &#8599;</a>',
+                            unsafe_allow_html=True
+                        )
 
-    # -------- SIDE BY SIDE --------
-    elif visualization_type == "side_by_side_maps":
-        import math
-        indicator_meta = meta
-        n_maps = indicator_meta.get("shown_maps", 2)
-        logger.info(f"Number of maps: {n_maps}")
-        map_columns = indicator_meta.get("map_columns")
-        map_cols = [map_column_cfg["column"] if isinstance(map_column_cfg, dict) else map_column_cfg for map_column_cfg in map_columns]
-        # Calculate layout
-        maps_per_row = min(3, selected_number_of_maps)
-        num_rows = math.ceil(selected_number_of_maps / maps_per_row)
-        # Render each row: selectors first, then maps
-        for row_idx in range(num_rows):
-            row_start = row_idx * maps_per_row
-            row_end = min(row_start + maps_per_row, selected_number_of_maps)
-            row_count = row_end - row_start
-            # Show selectors for this row
-            row_selected_columns = []
-            selector_columns = st.columns(row_count)
-            for col_idx in range(row_count):
-                with selector_columns[col_idx]:
-                    selector_idx = row_start + col_idx
-                    default_col = map_cols[selector_idx] if selector_idx < len(map_cols) else map_cols[0]
-                    value = st.selectbox(
-                        f"Kolom voor kaartje {selector_idx + 1}",
-                        map_cols,
-                        index=map_cols.index(default_col),
-                        key=f"option_col_{selector_idx}"
+                    fig_i = get_fig_no_graph(
+                        plot_df,
+                        ind_name,
+                        dataset_meta,
+                        variant_meta,
+                        selected_option=selected_option,
+                        range_color_override=shared_range,
+                        coloraxis_name=("coloraxis" if shared_range is not None else None),
+                        include_colorbar=(shared_range is not None and idx == len(selected_inds) - 1),
                     )
-                row_selected_columns.append(value)
-            # Get maps for this row
-            row_map_figures = get_side_by_side_maps(
-                plot_df,
-                meta,
-                dataset_meta,
-                row_selected_columns
+                    # As a final safety fallback, ensure non-last maps do not
+                    # show a per-trace colorbar.
+                    try:
+                        if shared_range is not None and idx < len(selected_inds) - 1:
+                            fig_i.update_traces(showscale=False)
+                    except Exception:
+                        pass
+
+                    st.plotly_chart(fig_i, use_container_width=True)
+            # when showing multiple, set fig to None to avoid double render
+            fig = None
+        else:
+            selected_ind = selected_inds[0]
+
+            selected_meta = next(
+                (
+                    v for v in INDICATORS_META[selected_ind]
+                    if v.get("dataset") == dataset_id
+                ),
+                INDICATORS_META[selected_ind][0]
             )
-            if not row_map_figures:
-                st.warning("Geen kaarten beschikbaar om te tonen.")
-            else:
-                # Render maps for this row
-                columns = st.columns(len(row_map_figures))
-                for col_idx, (column, (title, figure)) in enumerate(zip(columns, row_map_figures)):
-                    with column:
-                        st.subheader(title)
-                        st.plotly_chart(figure, width="stretch", key=f"map_{row_idx}_{col_idx}")
+
+            fig = get_fig_no_graph(
+                plot_df,
+                selected_ind,
+                dataset_meta,
+                selected_meta,
+                selected_option=selected_option
+            )
+            # Use the same compact per-map header style as multi-map view.
+            st.subheader(selected_meta.get("title", selected_ind))
+            st.caption(selected_meta.get("subtitle", ind_name))
+            # description (longer text)
+            desc = selected_meta.get("description", meta.get("description"))
+            if desc:
+                st.markdown(f"<div style='font-size:14px;color:#444'>{desc}</div>", unsafe_allow_html=True)
+
+            # year info and contact person
+                extra_info = []
+                if dataset_meta["gwb_year"] is not None:
+                    extra_info.append(f"GWB/COROP/PC jaar: {dataset_meta['gwb_year']}")
+                if dataset_meta["year"] is not None:
+                    extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
+                if dataset_meta["contact"] is not None:
+                    extra_info.append(f"Contactpersoon: {dataset_meta['contact']}")
+                s_info = " | ".join(extra_info)
+                st.markdown(
+                    f"""
+                    <div style="font-size:14px; color:#444; line-height:1.5;">
+                        {s_info}
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+            
+            #link to publications
+            link = selected_meta.get("link", meta.get("link"))
+            if link:
+                st.markdown(
+                    f'<a href="{link}" target="_blank">Link naar publicatie &#8599;</a>',
+                    unsafe_allow_html=True
+                )
+
+        # Show value of indicator + attributes upon clicking on area (only for
+        # single-map view). When multiple indicators are shown side-by-side we
+        # skip the click-to-details behaviour.
+        if fig is not None:
+            col_map, col_attributes = st.columns([4, 1])
+
+            with col_map:
+                # Capture selection events from the Plotly chart. `on_select="rerun"`
+                # causes Streamlit to return a Plotly chart event object on rerun
+                # which contains `selection.points` for clicked/selected points.
+                try:
+                    event = st.plotly_chart(fig, use_container_width=True, on_select="rerun", key=f"map_{dataset_id}")
+                except Exception:
+                    event = st.plotly_chart(fig, use_container_width=True, key=f"map_{dataset_id}")
+
+                # If selection occurred, extract the area's key from `customdata`.
+                try:
+                    if event is not None and getattr(event, "selection", None) is not None:
+                        pts = event.selection.points
+                        if pts:
+                            cd = pts[0].get("customdata")
+                            if cd:
+                                st.session_state.clicked_area = cd[0]
+                except Exception:
+                    pass
+
+            with col_attributes:
+                if st.session_state.clicked_area is None:
+                    st.info("Klik op een gebied voor meer informatie.")
+                else:
+                    attributes = get_attributes_for_area(
+                        plot_df,
+                        dataset_meta,
+                        ATTRIBUTES_META,
+                        dataset_id,
+                        st.session_state.clicked_area,
+                    )
+
+                    selected_row = plot_df[
+                        plot_df[dataset_meta["key"]].astype(str)
+                        == str(st.session_state.clicked_area)
+                    ]
+
+                    area_name_field = dataset_meta.get("area_name_field")
+                    if not selected_row.empty:
+                        if area_name_field and area_name_field in selected_row.columns:
+                            st.subheader(selected_row[area_name_field].iloc[0])
+                        else:
+                            st.subheader(str(st.session_state.clicked_area))
+
+                    if not selected_row.empty:
+                        selected_row = selected_row.iloc[0]
+
+                        indicator_value = selected_row[indicator]
+
+                        if pd.notna(indicator_value):
+                            indicator_text = (
+                                f"{indicator_value:.{meta['precision']}f}"
+                                f" {meta['unit']}"
+                            )
+                        else:
+                            indicator_text = "Niet beschikbaar"
+
+                        st.markdown(
+                            f"""
+                            <div style=""
+                                font-size: 2rem;
+                                font-weight: 700;
+                                margin-bottom: 0.5rem;
+                            ">
+                                {indicator_text}
+                            </div>
+                            """,
+                            unsafe_allow_html=True,
+                        )
+
+                        st.divider()
+
+                    if attributes:
+                        for attr in attributes:
+                            value = attr["value"]
+
+                            if pd.isna(value):
+                                value_str = "Niet beschikbaar"
+                            else:
+                                value_str = (
+                                    f"{value:.{attr['precision']}f} "
+                                    f"{attr['unit']}"
+                                )
+
+                            c1, c2 = st.columns([2, 1])
+
+                            with c1:
+                                st.caption(attr["title"])
+
+                            with c2:
+                                st.markdown(
+                                    f"<b>{value_str}</b>",
+                                    unsafe_allow_html=True
+                                )
+        
+    
+
     # -------- BOXPLOT --------
     elif visualization_type == "boxplot":
         if not selected_filters:
