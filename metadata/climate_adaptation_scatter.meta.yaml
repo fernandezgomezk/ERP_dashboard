@@ -18,14 +18,18 @@ options:
 time_column:
 
 # [Version of the CBS gemeente/wijk/buurt layout]
-gwb_version: wijk_gegeneraliseerd_2019
+gwb_version: wijken_2024
 
 # [Name of the layer in the CBS gwb file containing the geometry]
-layer_naam: wijk_gegeneraliseerd_2019
+layer_naam: wijken_2024
 
-key_gwb: statcode
+key_gwb: wk_code
 
-area_name_field: statnaam
+area_name_field: wk_naam
+
+year: 2025
+
+gwb_year: 2024
 
 indicators:
 
