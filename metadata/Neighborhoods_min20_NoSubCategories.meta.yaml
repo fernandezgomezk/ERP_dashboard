@@ -6,12 +6,12 @@ key: wijkcode
 
 options: []
 
-gwb_version: wijk_gegeneraliseerd_2019
+gwb_version: wijken_2025
 
-layer_naam: wijk_gegeneraliseerd_2019
+layer_naam: wijken_2025
 
-key_gwb: statcode
-area_name_field: statnaam
+key_gwb: wk_code
+area_name_field: wk_naam
 
 year: 2023
 gwb_year: 2025
