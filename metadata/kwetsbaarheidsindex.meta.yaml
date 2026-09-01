@@ -130,7 +130,8 @@ indicators:
     visualization_type: map
     
     link: https://doi.org/10.1016/j.eist.2026.101162
-  Gemiddelde Mobility Blootstelling:
+
+  Gemiddelde Transport Blootstelling:
 
     # [Short title of indicator no. 1 (one or two words)]
     title: Blootstelling mobiliteit
@@ -162,6 +163,7 @@ indicators:
     visualization_type: map
     
     link: https://doi.org/10.1016/j.eist.2026.101162
+
   Gemiddelde Energie Blootstelling:
 
     # [Short title of indicator no. 1 (one or two words)]
@@ -194,6 +196,7 @@ indicators:
     visualization_type: map
     
     link: https://doi.org/10.1016/j.eist.2026.101162
+
   Gemiddelde Leefomgeving Blootstelling:
 
     # [Short title of indicator no. 1 (one or two words)]
@@ -226,6 +229,7 @@ indicators:
     visualization_type: map
     
     link: https://doi.org/10.1016/j.eist.2026.101162
+
   Gemiddelde Sensitiviteit:
 
     # [Short title of indicator no. 1 (one or two words)]
@@ -259,6 +263,7 @@ indicators:
     
     link: https://doi.org/10.1016/j.eist.2026.101162
     # [Name of the column of indicator no. 1]:
+
   Gemiddelde Adaptiviteit:
 
     # [Short title of indicator no. 1 (one or two words)]
