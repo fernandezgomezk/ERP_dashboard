@@ -35,7 +35,7 @@ gwb_year: 2020
 indicators:
 
   # [Name of the column of indicator no. 1]:
-  LLHT_PRB_i:
+  LLHT_PRB_i: &map_indicator
 
     # [Short title of indicator no. 1]
     title: Gevestigde huishoudens
@@ -47,7 +47,7 @@ indicators:
     description: Deze indicator laat de Procentuele verandering in gevestigde huishoudens (totaal) zien
 
     # [Title of the legend of indicator no. 1]
-    legend: LLHT
+    legend: fractie
     
     # [High-level topic of indicator no. 1]
     theme: Mobiliteit
@@ -74,4 +74,557 @@ indicators:
       23_A: -2.37E-05
       40_M: 4.6046E-05
       31-32: 7.52097E-05
+
+  LLHT_PRB_i_1:
+    title: Gevestigde huishoudens - opleiding laag
+    subtitle: Procentuele verandering in gevestigde huishoudens (opleiding laag)
+    description: Deze indicator laat de procentuele verandering in gevestigde huishoudens met een laag opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_PRB_i_2:
+    title: Gevestigde huishoudens - opleiding middel
+    subtitle: Procentuele verandering in gevestigde huishoudens (opleiding middel)
+    description: Deze indicator laat de procentuele verandering in gevestigde huishoudens met een middelbaar opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_PRB_i_3:
+    title: Gevestigde huishoudens - opleiding hoog
+    subtitle: Procentuele verandering in gevestigde huishoudens (opleiding hoog)
+    description: Deze indicator laat de procentuele verandering in gevestigde huishoudens met een hoog opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_PRB_j:
+    title: Aantal banen
+    subtitle: Procentuele verandering in aantal banen (totaal)
+    description: Deze indicator laat de procentuele verandering in het totale aantal banen zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_PRB_j_1:
+    title: Aantal banen - opleiding laag
+    subtitle: Procentuele verandering in aantal banen (opleiding laag)
+    description: Deze indicator laat de procentuele verandering in het aantal banen voor mensen met een laag opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_PRB_j_2:
+    title: Aantal banen - opleiding middel
+    subtitle: Procentuele verandering in aantal banen (opleiding middel)
+    description: Deze indicator laat de procentuele verandering in het aantal banen voor mensen met een middelbaar opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_PRB_j_3:
+    title: Aantal banen - opleiding hoog
+    subtitle: Procentuele verandering in aantal banen (opleiding hoog)
+    description: Deze indicator laat de procentuele verandering in het aantal banen voor mensen met een hoog opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_L_S_i:
+    title: Arbeidsuren aangeboden
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren aangeboden (totaal)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal aangeboden arbeidsuren zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_L_S_i_1:
+    title: Arbeidsuren aangeboden - opleiding laag
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren aangeboden (opleiding laag)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal aangeboden arbeidsuren voor mensen met een laag opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_L_S_i_2:
+    title: Arbeidsuren aangeboden - opleiding middel
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren aangeboden (opleiding middel)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal aangeboden arbeidsuren voor mensen met een middelbaar opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_L_S_i_3:
+    title: Arbeidsuren aangeboden - opleiding hoog
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren aangeboden (opleiding hoog)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal aangeboden arbeidsuren voor mensen met een hoog opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_L_S_j:
+    title: Arbeidsuren ingezet
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren ingezet (totaal)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal ingezette arbeidsuren zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_L_S_j_1:
+    title: Arbeidsuren ingezet - opleiding laag
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren ingezet (opleiding laag)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal ingezette arbeidsuren voor mensen met een laag opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_L_S_j_2:
+    title: Arbeidsuren ingezet - opleiding middel
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren ingezet (opleiding middel)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal ingezette arbeidsuren voor mensen met een middelbaar opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_L_S_j_3:
+    title: Arbeidsuren ingezet - opleiding hoog
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren ingezet (opleiding hoog)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal ingezette arbeidsuren voor mensen met een hoog opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_YW:
+    title: Jaarinkomen
+    subtitle: Procentuele verandering in het jaarinkomen (totaal)
+    description: Deze indicator laat de procentuele verandering in het jaarinkomen zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_YW_1:
+    title: Jaarinkomen - opleiding laag
+    subtitle: Procentuele verandering in het jaarinkomen (opleiding laag)
+    description: Deze indicator laat de procentuele verandering in het jaarinkomen voor mensen met een laag opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_YW_2:
+    title: Jaarinkomen - opleiding middel
+    subtitle: Procentuele verandering in het jaarinkomen (opleiding middel)
+    description: Deze indicator laat de procentuele verandering in het jaarinkomen voor mensen met een middelbaar opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_YW_3:
+    title: Jaarinkomen - opleiding hoog
+    subtitle: Procentuele verandering in het jaarinkomen (opleiding hoog)
+    description: Deze indicator laat de procentuele verandering in het jaarinkomen voor mensen met een hoog opleidingsniveau zien.
+    legend: fractie
+    theme: Mobiliteit
+    subject: Brede welvaarteffecten van de Lelylijn
+    unit:
+    precision: 6
+    visualization_type: map
+    link:
+
+  LLHT_EV: &equivalent_variation_total
+    <<: *map_indicator
+    title: Equivalent variation
+    subtitle: Equivalent variation (totaal)
+    description: Deze indicator laat de equivalent variation voor het totaal zien.
+    legend: Equivalent variation
+    test_values: {}
+
+  LLHT_EV_1: &equivalent_variation_low
+    <<: *equivalent_variation_total
+    title: Equivalent variation - opleiding laag
+    subtitle: Equivalent variation (opleiding laag)
+    description: Deze indicator laat de equivalent variation voor mensen met een laag opleidingsniveau zien.
+
+  LLHT_EV_2: &equivalent_variation_middle
+    <<: *equivalent_variation_total
+    title: Equivalent variation - opleiding middel
+    subtitle: Equivalent variation (opleiding middel)
+    description: Deze indicator laat de equivalent variation voor mensen met een middelbaar opleidingsniveau zien.
+
+  LLHT_EV_3: &equivalent_variation_high
+    <<: *equivalent_variation_total
+    title: Equivalent variation - opleiding hoog
+    subtitle: Equivalent variation (opleiding hoog)
+    description: Deze indicator laat de equivalent variation voor mensen met een hoog opleidingsniveau zien.
+
+  LLHT_aY: &alpha_y
+    <<: *map_indicator
+    title: alpha * Y^rho
+    subtitle: Procentuele verandering in alpha * Y^rho
+    description: Deze indicator laat de procentuele verandering in het onderdeel alpha * Y^rho van de utility-functie zien.
+    legend: fractie
+    test_values: {}
+
+  LLHT_bS: &beta_s
+    <<: *map_indicator
+    title: beta * S^rho
+    subtitle: Procentuele verandering in beta * S^rho
+    description: Deze indicator laat de procentuele verandering in het onderdeel beta * S^rho van de utility-functie zien.
+    legend: fractie
+    test_values: {}
+
+  LLHT_gTF: &gamma_tf
+    <<: *map_indicator
+    title: gamma * T_F^rho
+    subtitle: Procentuele verandering in gamma * T_F^rho
+    description: Deze indicator laat de procentuele verandering in het onderdeel gamma * T_F^rho van de utility-functie zien.
+    legend: fractie
+    test_values: {}
+
+  LLHT_D_W: &hours_offered
+    <<: *map_indicator
+    title: Uren aangeboden
+    subtitle: Procentuele verandering in uren aangeboden
+    description: Deze indicator laat de procentuele verandering in aangeboden uren zien.
+    legend: fractie
+    test_values: {}
+
+  LLHT_P_L: &land_prices
+    <<: *map_indicator
+    title: Grondprijzen
+    subtitle: Procentuele verandering in grondprijzen
+    description: Deze indicator laat de procentuele verandering in grondprijzen zien.
+    legend: fractie
+    test_values: {}
+
+  LLLT_PRB_i: &households_total
+    <<: *map_indicator
+    title: Gevestigde huishoudens
+    subtitle: Procentuele verandering in gevestigde huishoudens (totaal)
+    description: Deze indicator laat de procentuele verandering in gevestigde huishoudens (totaal) zien.
+    legend: fractie
+    test_values: {}
+
+  LLLT_PRB_i_1: &households_low
+    <<: *households_total
+    title: Gevestigde huishoudens - opleiding laag
+    subtitle: Procentuele verandering in gevestigde huishoudens (opleiding laag)
+    description: Deze indicator laat de procentuele verandering in gevestigde huishoudens met een laag opleidingsniveau zien.
+
+  LLLT_PRB_i_2: &households_middle
+    <<: *households_total
+    title: Gevestigde huishoudens - opleiding middel
+    subtitle: Procentuele verandering in gevestigde huishoudens (opleiding middel)
+    description: Deze indicator laat de procentuele verandering in gevestigde huishoudens met een middelbaar opleidingsniveau zien.
+
+  LLLT_PRB_i_3: &households_high
+    <<: *households_total
+    title: Gevestigde huishoudens - opleiding hoog
+    subtitle: Procentuele verandering in gevestigde huishoudens (opleiding hoog)
+    description: Deze indicator laat de procentuele verandering in gevestigde huishoudens met een hoog opleidingsniveau zien.
+
+  LLLT_PRB_j: &jobs_total
+    <<: *households_total
+    title: Aantal banen
+    subtitle: Procentuele verandering in aantal banen (totaal)
+    description: Deze indicator laat de procentuele verandering in het totale aantal banen zien.
+
+  LLLT_PRB_j_1: &jobs_low
+    <<: *jobs_total
+    title: Aantal banen - opleiding laag
+    subtitle: Procentuele verandering in aantal banen (opleiding laag)
+    description: Deze indicator laat de procentuele verandering in het aantal banen voor mensen met een laag opleidingsniveau zien.
+
+  LLLT_PRB_j_2: &jobs_middle
+    <<: *jobs_total
+    title: Aantal banen - opleiding middel
+    subtitle: Procentuele verandering in aantal banen (opleiding middel)
+    description: Deze indicator laat de procentuele verandering in het aantal banen voor mensen met een middelbaar opleidingsniveau zien.
+
+  LLLT_PRB_j_3: &jobs_high
+    <<: *jobs_total
+    title: Aantal banen - opleiding hoog
+    subtitle: Procentuele verandering in aantal banen (opleiding hoog)
+    description: Deze indicator laat de procentuele verandering in het aantal banen voor mensen met een hoog opleidingsniveau zien.
+
+  LLLT_L_S_i: &hours_offered_total
+    <<: *households_total
+    title: Arbeidsuren aangeboden
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren aangeboden (totaal)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal aangeboden arbeidsuren zien.
+
+  LLLT_L_S_i_1: &hours_offered_low
+    <<: *hours_offered_total
+    title: Arbeidsuren aangeboden - opleiding laag
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren aangeboden (opleiding laag)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal aangeboden arbeidsuren voor mensen met een laag opleidingsniveau zien.
+
+  LLLT_L_S_i_2: &hours_offered_middle
+    <<: *hours_offered_total
+    title: Arbeidsuren aangeboden - opleiding middel
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren aangeboden (opleiding middel)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal aangeboden arbeidsuren voor mensen met een middelbaar opleidingsniveau zien.
+
+  LLLT_L_S_i_3: &hours_offered_high
+    <<: *hours_offered_total
+    title: Arbeidsuren aangeboden - opleiding hoog
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren aangeboden (opleiding hoog)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal aangeboden arbeidsuren voor mensen met een hoog opleidingsniveau zien.
+
+  LLLT_L_S_j: &hours_used_total
+    <<: *households_total
+    title: Arbeidsuren ingezet
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren ingezet (totaal)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal ingezette arbeidsuren zien.
+
+  LLLT_L_S_j_1: &hours_used_low
+    <<: *hours_used_total
+    title: Arbeidsuren ingezet - opleiding laag
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren ingezet (opleiding laag)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal ingezette arbeidsuren voor mensen met een laag opleidingsniveau zien.
+
+  LLLT_L_S_j_2: &hours_used_middle
+    <<: *hours_used_total
+    title: Arbeidsuren ingezet - opleiding middel
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren ingezet (opleiding middel)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal ingezette arbeidsuren voor mensen met een middelbaar opleidingsniveau zien.
+
+  LLLT_L_S_j_3: &hours_used_high
+    <<: *hours_used_total
+    title: Arbeidsuren ingezet - opleiding hoog
+    subtitle: Procentuele verandering in totaal aantal arbeidsuren ingezet (opleiding hoog)
+    description: Deze indicator laat de procentuele verandering in het totaal aantal ingezette arbeidsuren voor mensen met een hoog opleidingsniveau zien.
+
+  LLLT_YW: &income_total
+    <<: *households_total
+    title: Jaarinkomen
+    subtitle: Procentuele verandering in het jaarinkomen (totaal)
+    description: Deze indicator laat de procentuele verandering in het jaarinkomen zien.
+
+  LLLT_YW_1: &income_low
+    <<: *income_total
+    title: Jaarinkomen - opleiding laag
+    subtitle: Procentuele verandering in het jaarinkomen (opleiding laag)
+    description: Deze indicator laat de procentuele verandering in het jaarinkomen voor mensen met een laag opleidingsniveau zien.
+
+  LLLT_YW_2: &income_middle
+    <<: *income_total
+    title: Jaarinkomen - opleiding middel
+    subtitle: Procentuele verandering in het jaarinkomen (opleiding middel)
+    description: Deze indicator laat de procentuele verandering in het jaarinkomen voor mensen met een middelbaar opleidingsniveau zien.
+
+  LLLT_YW_3: &income_high
+    <<: *income_total
+    title: Jaarinkomen - opleiding hoog
+    subtitle: Procentuele verandering in het jaarinkomen (opleiding hoog)
+    description: Deze indicator laat de procentuele verandering in het jaarinkomen voor mensen met een hoog opleidingsniveau zien.
+
+  LLLT_EV:
+    <<: *equivalent_variation_total
+  LLLT_EV_1:
+    <<: *equivalent_variation_low
+  LLLT_EV_2:
+    <<: *equivalent_variation_middle
+  LLLT_EV_3:
+    <<: *equivalent_variation_high
+  LLLT_aY:
+    <<: *alpha_y
+  LLLT_bS:
+    <<: *beta_s
+  LLLT_gTF:
+    <<: *gamma_tf
+  LLLT_D_W:
+    <<: *hours_offered
+  LLLT_P_L:
+    <<: *land_prices
+
+  LLHT3_PRB_i:
+    <<: *households_total
+  LLHT3_PRB_i_1:
+    <<: *households_low
+  LLHT3_PRB_i_2:
+    <<: *households_middle
+  LLHT3_PRB_i_3:
+    <<: *households_high
+  LLHT3_PRB_j:
+    <<: *jobs_total
+  LLHT3_PRB_j_1:
+    <<: *jobs_low
+  LLHT3_PRB_j_2:
+    <<: *jobs_middle
+  LLHT3_PRB_j_3:
+    <<: *jobs_high
+  LLHT3_L_S_i:
+    <<: *hours_offered_total
+  LLHT3_L_S_i_1:
+    <<: *hours_offered_low
+  LLHT3_L_S_i_2:
+    <<: *hours_offered_middle
+  LLHT3_L_S_i_3:
+    <<: *hours_offered_high
+  LLHT3_L_S_j:
+    <<: *hours_used_total
+  LLHT3_L_S_j_1:
+    <<: *hours_used_low
+  LLHT3_L_S_j_2:
+    <<: *hours_used_middle
+  LLHT3_L_S_j_3:
+    <<: *hours_used_high
+  LLHT3_YW:
+    <<: *income_total
+  LLHT3_YW_1:
+    <<: *income_low
+  LLHT3_YW_2:
+    <<: *income_middle
+  LLHT3_YW_3:
+    <<: *income_high
+  LLHT3_EV:
+    <<: *equivalent_variation_total
+  LLHT3_EV_1:
+    <<: *equivalent_variation_low
+  LLHT3_EV_2:
+    <<: *equivalent_variation_middle
+  LLHT3_EV_3:
+    <<: *equivalent_variation_high
+  LLHT3_aY:
+    <<: *alpha_y
+  LLHT3_bS:
+    <<: *beta_s
+  LLHT3_gTF:
+    <<: *gamma_tf
+  LLHT3_D_W:
+    <<: *hours_offered
+  LLHT3_P_L:
+    <<: *land_prices
+
+  LLLT3_PRB_i:
+    <<: *households_total
+  LLLT3_PRB_i_1:
+    <<: *households_low
+  LLLT3_PRB_i_2:
+    <<: *households_middle
+  LLLT3_PRB_i_3:
+    <<: *households_high
+  LLLT3_PRB_j:
+    <<: *jobs_total
+  LLLT3_PRB_j_1:
+    <<: *jobs_low
+  LLLT3_PRB_j_2:
+    <<: *jobs_middle
+  LLLT3_PRB_j_3:
+    <<: *jobs_high
+  LLLT3_L_S_i:
+    <<: *hours_offered_total
+  LLLT3_L_S_i_1:
+    <<: *hours_offered_low
+  LLLT3_L_S_i_2:
+    <<: *hours_offered_middle
+  LLLT3_L_S_i_3:
+    <<: *hours_offered_high
+  LLLT3_L_S_j:
+    <<: *hours_used_total
+  LLLT3_L_S_j_1:
+    <<: *hours_used_low
+  LLLT3_L_S_j_2:
+    <<: *hours_used_middle
+  LLLT3_L_S_j_3:
+    <<: *hours_used_high
+  LLLT3_YW:
+    <<: *income_total
+  LLLT3_YW_1:
+    <<: *income_low
+  LLLT3_YW_2:
+    <<: *income_middle
+  LLLT3_YW_3:
+    <<: *income_high
+  LLLT3_EV:
+    <<: *equivalent_variation_total
+  LLLT3_EV_1:
+    <<: *equivalent_variation_low
+  LLLT3_EV_2:
+    <<: *equivalent_variation_middle
+  LLLT3_EV_3:
+    <<: *equivalent_variation_high
+  LLLT3_aY:
+    <<: *alpha_y
+  LLLT3_bS:
+    <<: *beta_s
+  LLLT3_gTF:
+    <<: *gamma_tf
+  LLLT3_D_W:
+    <<: *hours_offered
+  LLLT3_P_L:
+    <<: *land_prices
 
