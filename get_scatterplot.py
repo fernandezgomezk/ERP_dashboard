@@ -114,7 +114,7 @@ def get_scatterplot(
 
     x_col, y_col = selected_indicators
     required_columns = [x_col, y_col]
-    id_col = dataset_meta.get("key")
+    id_col = dataset_meta.get("area_name_field")
     if id_col and id_col in plot_df.columns:
         required_columns.append(id_col)
 
@@ -158,8 +158,12 @@ def get_scatterplot(
     }
 
     hover_data = {}
+    custom_data = None
     if id_col and id_col in scatter_df.columns:
-        hover_data[id_col] = True
+        # Use custom_data so we can position the id value at the top of
+        # the hover label via a hovertemplate. Do not include id in
+        # hover_data to avoid duplicate display.
+        custom_data = scatter_df[[id_col]]
 
     fig = px.scatter(
         scatter_df,
@@ -167,8 +171,16 @@ def get_scatterplot(
         y=y_col,
         labels=labels,
         hover_data=hover_data,
+        custom_data=custom_data,
         opacity=0.75,
     )
+
+    # If we have an id column, build a hovertemplate that shows the id
+    # value first, then x and y labels. Use customdata[0] to read the id.
+    if custom_data is not None:
+        # Show only the id value (no column name) at the top of the hoverlabel
+        hovertemplate = f"%{{customdata[0]}}<br>{x_label}: %{{x}}<br>{y_label}: %{{y}}<extra></extra>"
+        fig.update_traces(hovertemplate=hovertemplate)
 
     x_values = scatter_df[x_col].to_numpy()
     y_values = scatter_df[y_col].to_numpy()
