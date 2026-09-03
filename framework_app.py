@@ -532,6 +532,56 @@ if indicator is not None and selected_variant is not None:
         # single-map view). When multiple indicators are shown side-by-side we
         # skip the click-to-details behaviour.
         if fig is not None:
+            # If there are scatterplot-type indicators that reference this
+            # indicator (appear in their `indicators` list), allow the user
+            # to open the scatterplot while viewing the map for this
+            # indicator. Render these above the map.
+            related_scatter = []
+            for ind_name, variants in INDICATORS_META.items():
+                for v in variants:
+                    if v.get("dataset") == dataset_id and v.get("visualization_type") == "scatterplot":
+                        if indicator in v.get("indicators", []):
+                            related_scatter.append((ind_name, v))
+                            break
+
+            for ind_name, scatter_meta in related_scatter:
+                # Use a button to show/hide the scatter instead of a checkbox.
+                show_key = f"show_scatter_{dataset_id}_{ind_name}"
+                reg_key = f"show_scatter_reg_{dataset_id}_{ind_name}"
+                if show_key not in st.session_state:
+                    st.session_state[show_key] = False
+                # Show 'open' button when hidden
+                if not st.session_state[show_key]:
+                    title_label = (scatter_meta.get('title') or ind_name).lower()
+                    if st.button(f"Toon scatter: {title_label}", key=f"{show_key}_btn"):
+                        st.session_state[show_key] = True
+                        # initialize regression toggle
+                        if reg_key not in st.session_state:
+                            st.session_state[reg_key] = False
+                        st.rerun()
+                else:
+                    # When shown, provide a hide button and regression toggle
+                    title_label = (scatter_meta.get('title') or ind_name).lower()
+                    if st.button(f"Verberg scatter: {title_label}", key=f"{show_key}_hide"):
+                        st.session_state[show_key] = False
+                        st.rerun()
+
+                    show_regression_line = st.checkbox("Toon regressielijn", key=reg_key)
+                    sel_inds = scatter_meta.get("indicators", [])
+                    if not sel_inds or len(sel_inds) < 2:
+                        st.warning("Scatterplot vereist minstens twee indicatoren.")
+                    else:
+                        fig_sc = get_scatterplot(
+                            plot_df,
+                            indicator,
+                            dataset_meta,
+                            scatter_meta,
+                            sel_inds,
+                            INDICATORS_META,
+                            show_regression_line,
+                        )
+                        st.plotly_chart(fig_sc, use_container_width=True)
+
             col_map, col_attributes = st.columns([4, 1])
 
             with col_map:
@@ -628,6 +678,7 @@ if indicator is not None and selected_variant is not None:
                                     f"<b>{value_str}</b>",
                                     unsafe_allow_html=True
                                 )
+          
         
     
 

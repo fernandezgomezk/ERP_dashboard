@@ -81,12 +81,13 @@ indicators:
     description: Deze indicator laat verbanden zien tussen indicatoren in de vorm van een scatter plot
     legend:
     theme: Klimaatadaptatie
-    subject: scatter
+    subject: Klimaatadaptatie
     visualization_type: scatterplot
     link: https://papers.tinbergen.nl/25073.pdf
     indicators:
       - costs
       - dist_water_m
+      
 attributes:
 
   dist_water_m:
