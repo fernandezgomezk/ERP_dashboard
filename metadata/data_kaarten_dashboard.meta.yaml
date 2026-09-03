@@ -101,16 +101,3 @@ indicators:
     precision: 1
     visualization_type: map
     link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/ 
-
-  TestIndicatorMeerdereAggregatieniveaus:
-    title: TestIndicatorMeerdereAggregatieniveaus
-    subtitle: Testindicator voor meerdere aggregatieniveaus
-    description: Deze kaart toont de gemiddelde investeringskosten per woning voor het isoleren naar de isolatiestandaard van woningen met huishoudens met een laag inkomen en met een hoge energierekening óf een woning van lage energetische kwaliteit. 
-    legend: euro
-    theme: Woningverduurzaming
-    subject: Isolatie naar de standaard bij energiearmoede
-    unit: " euro"
-    precision: 0
-    visualization_type: map
-    link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
-    test_values:
