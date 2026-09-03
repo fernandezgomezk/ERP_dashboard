@@ -75,6 +75,18 @@ indicators:
       WK099503: 266.54
       WK066406: 123.92
 
+  correlations:
+    title: Kosten vs Afstand tot water
+    subtitle: Verband tussen kosten en afstand tot water
+    description: Deze indicator laat verbanden zien tussen indicatoren in de vorm van een scatter plot
+    legend:
+    theme: Klimaatadaptatie
+    subject: scatter
+    visualization_type: scatterplot
+    link: https://papers.tinbergen.nl/25073.pdf
+    indicators:
+      - costs
+      - dist_water_m
 attributes:
 
   dist_water_m:
