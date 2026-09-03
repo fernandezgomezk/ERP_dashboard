@@ -1,5 +1,5 @@
 contact: Kim Fernandez
-dataset_id: data_kaarten_dashboard_v3
+dataset_id: data_kaarten_dashboard_v4
 key: gemeentenaam
 options:
 gwb_version: gemeente_gegeneraliseerd_2019_simplified_100m
@@ -12,7 +12,7 @@ gwb_year: 2019
 indicators:
   Gemiddelde.verandering.energiequote.(absoluut):
     title: Afname energiequote
-    subtitle: Gemiddelde afname energiequote van huishoudens met energiearmoede
+    subtitle: Gemiddelde afname energiequote door isolatie naar de standaard van huishoudens met energiearmoede
     description: Deze indicator laat zien hoeveel de energiequote van huishoudens in energiearmoede gemiddeld afneemt in een gemodelleerde what-if-situatie waarin de woning wordt geïsoleerd tot de isolatiestandaard. De grootte van de afname verschilt per gemeente, voornamelijk vanwege de verschillen in woninggrootte, woningtype, inkomens en warmtevraag. 
     legend: Afname in procentpunt
     theme: Woningverduurzaming
@@ -77,6 +77,30 @@ indicators:
       Wassenaar: 0.05
       Amersfoort: 0.05
       Oldambt: 0.07
+
+  gemiddelde_energiequote_voor_woningisolatie_procent:
+    title: Energiequote (huidig)
+    subtitle: Gemiddelde energiequote van huishoudens met energiearmoede
+    description: Gemiddelde energiequote van huishoudens met energiearmoede
+    legend: Energiequote
+    theme: Woningverduurzaming
+    subject: Isolatie naar de standaard bij energiearmoede
+    unit: "%"
+    precision: 1
+    visualization_type: map
+    link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/
+  
+  gemiddelde_energiequote_na_woningisolatie_procent:
+    title: Energiequote na isolatie
+    subtitle: Gemiddelde energiequote van huishoudens met energiearmoede na isolatie naar de standaard
+    description: Gemiddelde energiequote van huishoudens met energiearmoede na isolatie naar de standaard
+    legend: Energiequote
+    theme: Woningverduurzaming
+    subject: Isolatie naar de standaard bij energiearmoede
+    unit: "%"
+    precision: 1
+    visualization_type: map
+    link: https://esb.nu/isolatie-slechtst-geisoleerde-woningen-drukt-gasverbruik-en-energiearmoede/ 
 
   TestIndicatorMeerdereAggregatieniveaus:
     title: TestIndicatorMeerdereAggregatieniveaus
