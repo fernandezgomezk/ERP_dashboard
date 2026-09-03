@@ -30,7 +30,10 @@ def _get_indicator_variant(
 
 
 def _build_axis_label(
-    indicators_meta: dict[str, list[dict[str, Any]]], indicator_name: str, dataset_id: str | None
+    indicators_meta: dict[str, list[dict[str, Any]]],
+    indicator_name: str,
+    dataset_id: str | None,
+    attributes_meta: dict[str, list[dict[str, Any]]] | None = None,
 ) -> str:
     """Build a human-readable axis label from indicator metadata.
 
@@ -43,6 +46,18 @@ def _build_axis_label(
         indicator name plus unit, or indicator name.
     """
     meta = _get_indicator_variant(indicators_meta, indicator_name, dataset_id)
+    if not meta and attributes_meta is not None:
+        # try attributes metadata as a fallback
+        variants = attributes_meta.get(indicator_name, [])
+        if variants:
+            # prefer matching dataset
+            for v in variants:
+                if v.get("dataset") == dataset_id:
+                    meta = v
+                    break
+            if meta is None:
+                meta = variants[0]
+
     if not meta:
         return indicator_name
 
@@ -66,6 +81,7 @@ def get_scatterplot(
     indicator_meta: dict[str, Any],
     selected_indicators: list[str],
     indicators_meta: dict[str, list[dict[str, Any]]],
+    attributes_meta: dict[str, list[dict[str, Any]]] | None = None,
     show_regression_line: bool = True,
 ) -> go.Figure:
     """Create a scatterplot for a pair of indicators.
@@ -133,8 +149,8 @@ def get_scatterplot(
         return fig
 
     dataset_id = indicator_meta.get("dataset")
-    x_label = _build_axis_label(indicators_meta, x_col, dataset_id)
-    y_label = _build_axis_label(indicators_meta, y_col, dataset_id)
+    x_label = _build_axis_label(indicators_meta, x_col, dataset_id, attributes_meta)
+    y_label = _build_axis_label(indicators_meta, y_col, dataset_id, attributes_meta)
 
     labels = {
         x_col: x_label,

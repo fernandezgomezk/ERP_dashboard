@@ -578,6 +578,7 @@ if indicator is not None and selected_variant is not None:
                             scatter_meta,
                             sel_inds,
                             INDICATORS_META,
+                            ATTRIBUTES_META,
                             show_regression_line,
                         )
                         st.plotly_chart(fig_sc, use_container_width=True)
@@ -714,7 +715,8 @@ if indicator is not None and selected_variant is not None:
                 meta,
                 selected_indicators,
                 INDICATORS_META,
-                show_regression_line
+                ATTRIBUTES_META,
+                show_regression_line,
             )
             st.plotly_chart(fig, width="stretch")
 
