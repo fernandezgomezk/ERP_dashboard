@@ -72,6 +72,45 @@ def load_dataset(dataset_id, datasets_meta):
     return plot_df
 
 
+@st.cache_data(show_spinner=False)
+def load_region_options(gpkg_path, layer):
+    """Load unique province and municipality names from a single geopackage."""
+    try:
+        gdf = gpd.read_file(gpkg_path, layer=layer)
+        pv_options = sorted(gdf["pv_naam"].dropna().unique().tolist()) if "pv_naam" in gdf.columns else []
+        gm_by_pv = {}
+        if "pv_naam" in gdf.columns and "gm_naam" in gdf.columns:
+            for pv in pv_options:
+                gm_options = sorted(gdf[gdf["pv_naam"] == pv]["gm_naam"].dropna().unique().tolist())
+                gm_by_pv[pv] = gm_options
+        return pv_options, gm_by_pv
+    except Exception as e:
+        logger.warning(f"Could not load region options: {e}")
+        return [], {}
+
+
+def apply_region_filters(plot_df):
+    """Apply region filters (province and municipality) to the dataframe."""
+    logger.info(f"apply_region_filters: available columns = {list(plot_df.columns)}")
+    logger.info(f"apply_region_filters: selected_pv={st.session_state.selected_pv}, selected_gm={st.session_state.selected_gm}")
+    
+    if st.session_state.selected_pv:
+        if "pv_naam" in plot_df.columns:
+            plot_df = plot_df[plot_df["pv_naam"] == st.session_state.selected_pv]
+            logger.info(f"after filtering by province {st.session_state.selected_pv}. ({len(plot_df)=})")
+        else:
+            logger.warning(f"Column 'pv_naam' not found in dataframe for province filtering")
+    
+    if st.session_state.selected_gm:
+        if "gm_naam" in plot_df.columns:
+            plot_df = plot_df[plot_df["gm_naam"] == st.session_state.selected_gm]
+            logger.info(f"after filtering by municipality {st.session_state.selected_gm}. ({len(plot_df)=})")
+        else:
+            logger.warning(f"Column 'gm_naam' not found in dataframe for municipality filtering")
+    
+    return plot_df
+
+
 def get_selected_option_for_map(dataset_id, dataset_meta, plot_df):
     """Build map option selectors and return the selected option mapping.
 
@@ -169,6 +208,12 @@ if "aggregation" not in st.session_state:
 if "clicked_area" not in st.session_state:
     st.session_state.clicked_area = None
 
+if "selected_pv" not in st.session_state:
+    st.session_state.selected_pv = None
+
+if "selected_gm" not in st.session_state:
+    st.session_state.selected_gm = None
+
 
 indicator = st.session_state.indicator
 selected_variant = None
@@ -200,6 +245,79 @@ if indicator is not None:
 # SIDEBAR
 # =========================
 with st.sidebar:
+    # Region filters (province and municipality cascading)
+    st.subheader("Regio")
+    
+    # Load region options from all geopackages across all GWB versions
+    all_pv_options = set()
+    all_gm_by_pv = {}
+    
+    for dataset_id, dataset_meta in DATASETS_META.items():
+        if dataset_meta.get("gpkg_path"):
+            pv_opts, gm_dict = load_region_options(
+                dataset_meta["gpkg_path"], 
+                dataset_meta.get("layer")
+            )
+            all_pv_options.update(pv_opts)
+            # Merge municipalities for each province
+            for pv, gm_list in gm_dict.items():
+                if pv not in all_gm_by_pv:
+                    all_gm_by_pv[pv] = set()
+                all_gm_by_pv[pv].update(gm_list)
+    
+    # Convert sets to sorted lists
+    pv_options = sorted(list(all_pv_options))
+    gm_by_pv = {pv: sorted(list(gm_set)) for pv, gm_set in all_gm_by_pv.items()}
+    
+    # Province selector
+    if pv_options:
+        pv_index = 0
+        if st.session_state.selected_pv:
+            try:
+                pv_index = (["Alle"] + pv_options).index(st.session_state.selected_pv)
+            except ValueError:
+                pv_index = 0
+        
+        selected_pv = st.selectbox(
+            "Selecteer provincie",
+            ["Alle"] + pv_options,
+            index=pv_index,
+            key="pv_select"
+        )
+        
+        new_pv = None if selected_pv == "Alle" else selected_pv
+        if new_pv != st.session_state.selected_pv:
+            st.session_state.selected_pv = new_pv
+            st.session_state.selected_gm = None  # Reset municipality when province changes
+            st.session_state.clicked_area = None  # Reset clicked area
+            st.rerun()
+        
+        # Municipality selector (cascading based on province)
+        gm_options = ["Alle"]
+        if st.session_state.selected_pv and st.session_state.selected_pv in gm_by_pv:
+            gm_options.extend(gm_by_pv[st.session_state.selected_pv])
+        
+        gm_index = 0
+        if st.session_state.selected_gm:
+            try:
+                gm_index = gm_options.index(st.session_state.selected_gm)
+            except ValueError:
+                gm_index = 0
+        
+        selected_gm = st.selectbox(
+            "Selecteer gemeente",
+            gm_options,
+            index=gm_index,
+            key="gm_select"
+        )
+        
+        new_gm = None if selected_gm == "Alle" else selected_gm
+        if new_gm != st.session_state.selected_gm:
+            st.session_state.selected_gm = new_gm
+            st.session_state.clicked_area = None  # Reset clicked area
+            st.rerun()
+    
+    st.divider()
     st.subheader("Onderwerpen")
     for theme, subjects in sorted(indicators_by_theme_subject.items()):
         with st.expander(theme, expanded=False):
@@ -239,6 +357,10 @@ if indicator is not None and selected_variant is not None:
     dataset_id = meta["dataset"]
     dataset_meta = DATASETS_META[dataset_id]
     plot_df = load_dataset(dataset_id, DATASETS_META)
+    
+    # Apply region filters (not cached, so they respond to selector changes)
+    plot_df = apply_region_filters(plot_df)
+    
     # -------- CATEGORY FILTER COLLECTION --------
     selected_filters = {}
     for col in dataset_meta.get("categories", []):
