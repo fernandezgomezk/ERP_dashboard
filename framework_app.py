@@ -918,6 +918,6 @@ if indicator is not None and selected_variant is not None:
 
 
 else:
-    st.info("Selecteer een indicator.")
+    st.info("Kies een gebied of een onderwerp.")
 
 logger.info("App script finished")
