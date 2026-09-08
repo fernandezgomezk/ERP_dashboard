@@ -89,24 +89,81 @@ def load_region_options(gpkg_path, layer):
         return [], {}
 
 
-def apply_region_filters(plot_df):
-    """Apply region filters (province and municipality) to the dataframe."""
+def apply_region_filters(plot_df, datasets_meta=None):
+    """Apply region filters (province and municipality) to the dataframe.
+    
+    Supports two filtering modes:
+    1. Attribute-based: filters by pv_naam/gm_naam columns
+    2. Spatial-based: for data without admin columns but with geometry, uses spatial overlap
+    """
     logger.info(f"apply_region_filters: available columns = {list(plot_df.columns)}")
     logger.info(f"apply_region_filters: selected_pv={st.session_state.selected_pv}, selected_gm={st.session_state.selected_gm}")
     
-    if st.session_state.selected_pv:
-        if "pv_naam" in plot_df.columns:
-            plot_df = plot_df[plot_df["pv_naam"] == st.session_state.selected_pv]
-            logger.info(f"after filtering by province {st.session_state.selected_pv}. ({len(plot_df)=})")
-        else:
-            logger.warning(f"Column 'pv_naam' not found in dataframe for province filtering")
+    # Try attribute-based filtering first
+    if "pv_naam" in plot_df.columns or "gm_naam" in plot_df.columns:
+        if st.session_state.selected_pv:
+            if "pv_naam" in plot_df.columns:
+                plot_df = plot_df[plot_df["pv_naam"] == st.session_state.selected_pv]
+                logger.info(f"after filtering by province {st.session_state.selected_pv}. ({len(plot_df)=})")
+            else:
+                logger.warning(f"Column 'pv_naam' not found in dataframe for province filtering")
+        
+        if st.session_state.selected_gm:
+            if "gm_naam" in plot_df.columns:
+                plot_df = plot_df[plot_df["gm_naam"] == st.session_state.selected_gm]
+                logger.info(f"after filtering by municipality {st.session_state.selected_gm}. ({len(plot_df)=})")
+            else:
+                logger.warning(f"Column 'gm_naam' not found in dataframe for municipality filtering")
     
-    if st.session_state.selected_gm:
-        if "gm_naam" in plot_df.columns:
-            plot_df = plot_df[plot_df["gm_naam"] == st.session_state.selected_gm]
-            logger.info(f"after filtering by municipality {st.session_state.selected_gm}. ({len(plot_df)=})")
-        else:
-            logger.warning(f"Column 'gm_naam' not found in dataframe for municipality filtering")
+    # If no admin columns but has geometry, use spatial filtering
+    elif "geometry" in plot_df.columns and (st.session_state.selected_pv or st.session_state.selected_gm):
+        logger.info("Using spatial filtering for data without admin columns")
+        
+        # Load reference geometry from one of the standard GWB files
+        if datasets_meta is None:
+            logger.warning("datasets_meta not provided for spatial filtering")
+            return plot_df
+        
+        try:
+            # Find a dataset with admin columns to use as reference
+            ref_gdf = None
+            for dataset_id, meta in datasets_meta.items():
+                if meta.get("gpkg_path"):
+                    ref_gdf = gpd.read_file(meta["gpkg_path"], layer=meta["layer"])
+                    if "pv_naam" in ref_gdf.columns:
+                        break
+            
+            if ref_gdf is None or "pv_naam" not in ref_gdf.columns:
+                logger.warning("Could not find reference geometry with pv_naam")
+                return plot_df
+            
+            # Ensure CRS match
+            ref_gdf = ref_gdf.to_crs(plot_df.crs)
+            
+            # Get selected region geometry
+            region_gdf = ref_gdf.copy()
+            if st.session_state.selected_pv:
+                region_gdf = region_gdf[region_gdf["pv_naam"] == st.session_state.selected_pv]
+                logger.info(f"Selected province geometry: {len(region_gdf)} features")
+            
+            if st.session_state.selected_gm:
+                region_gdf = region_gdf[region_gdf["gm_naam"] == st.session_state.selected_gm]
+                logger.info(f"Selected municipality geometry: {len(region_gdf)} features")
+            
+            if region_gdf.empty:
+                logger.warning("No reference geometry found for selected region")
+                return plot_df
+            
+            # Union selected region geometry
+            region_union = region_gdf.geometry.unary_union
+            
+            # Spatial filter: keep features that intersect with selected region
+            plot_df = plot_df[plot_df.geometry.intersects(region_union)].copy()
+            logger.info(f"after spatial filtering. ({len(plot_df)=})")
+            
+        except Exception as e:
+            logger.error(f"Spatial filtering failed: {e}")
+            return plot_df
     
     return plot_df
 
@@ -359,7 +416,7 @@ if indicator is not None and selected_variant is not None:
     plot_df = load_dataset(dataset_id, DATASETS_META)
     
     # Apply region filters (not cached, so they respond to selector changes)
-    plot_df = apply_region_filters(plot_df)
+    plot_df = apply_region_filters(plot_df, DATASETS_META)
     
     # -------- CATEGORY FILTER COLLECTION --------
     selected_filters = {}
