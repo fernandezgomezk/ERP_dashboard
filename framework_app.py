@@ -335,19 +335,20 @@ with st.sidebar:
             except ValueError:
                 pv_index = 0
         
-        selected_pv = st.selectbox(
+        def on_pv_change():
+            new_pv = None if st.session_state.pv_select_value == "Alle" else st.session_state.pv_select_value
+            if new_pv != st.session_state.selected_pv:
+                st.session_state.selected_pv = new_pv
+                st.session_state.selected_gm = None  # Reset municipality when province changes
+                st.session_state.clicked_area = None  # Reset clicked area
+        
+        st.selectbox(
             "Selecteer provincie",
             ["Alle"] + pv_options,
             index=pv_index,
-            key="pv_select"
+            key="pv_select_value",
+            on_change=on_pv_change
         )
-        
-        new_pv = None if selected_pv == "Alle" else selected_pv
-        if new_pv != st.session_state.selected_pv:
-            st.session_state.selected_pv = new_pv
-            st.session_state.selected_gm = None  # Reset municipality when province changes
-            st.session_state.clicked_area = None  # Reset clicked area
-            st.rerun()
         
         # Municipality selector (cascading based on province)
         gm_options = ["Alle"]
@@ -361,18 +362,19 @@ with st.sidebar:
             except ValueError:
                 gm_index = 0
         
-        selected_gm = st.selectbox(
+        def on_gm_change():
+            new_gm = None if st.session_state.gm_select_value == "Alle" else st.session_state.gm_select_value
+            if new_gm != st.session_state.selected_gm:
+                st.session_state.selected_gm = new_gm
+                st.session_state.clicked_area = None  # Reset clicked area
+        
+        st.selectbox(
             "Selecteer gemeente",
             gm_options,
             index=gm_index,
-            key="gm_select"
+            key="gm_select_value",
+            on_change=on_gm_change
         )
-        
-        new_gm = None if selected_gm == "Alle" else selected_gm
-        if new_gm != st.session_state.selected_gm:
-            st.session_state.selected_gm = new_gm
-            st.session_state.clicked_area = None  # Reset clicked area
-            st.rerun()
     
     st.divider()
     st.subheader("Onderwerpen")
@@ -396,14 +398,19 @@ with st.sidebar:
                 # disable the button to show it's active.
                 is_active = st.session_state.get("indicator") in indicators
 
-                if is_active:
-                    st.button(subject, key=subj_btn_key, disabled=True, width="stretch")
-                else:
-                    if st.button(subject, key=subj_btn_key, width="stretch"):
-                        st.session_state.indicator = first_indicator
-                        st.session_state.aggregation = None
-                        st.session_state.clicked_area = None
-                        st.rerun()
+                def on_subject_click(ind=first_indicator):
+                    st.session_state.indicator = ind
+                    st.session_state.aggregation = None
+                    st.session_state.clicked_area = None
+
+                # Always create button in same location, vary only state/callback
+                st.button(
+                    subject, 
+                    key=subj_btn_key, 
+                    disabled=is_active, 
+                    width="stretch",
+                    on_click=on_subject_click if not is_active else None
+                )
 
 
 # =========================
@@ -559,7 +566,7 @@ if indicator is not None and selected_variant is not None:
                 "Selecteer indicatoren",
                 options=titles,
                 default=st.session_state[state_key],
-                key=f"{state_key}_multiselect",
+                key=state_key,
             )
 
             if not selected_titles:
