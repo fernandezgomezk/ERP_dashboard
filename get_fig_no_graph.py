@@ -1,12 +1,56 @@
 import pandas as pd
 import plotly.express as px
+import math
 
 from streamlit.logger import get_logger
 
 logger = get_logger("app.log")
 
 
-def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area_name_field=None, range_color_override=None, coloraxis_name=None, include_colorbar=False):
+def _calculate_map_center_and_zoom(gdf):
+    """Calculate map center and zoom level based on GeoDataFrame bounds."""
+    try:
+        bounds = gdf.total_bounds  # (minx, miny, maxx, maxy)
+        if len(bounds) == 0 or bounds is None:
+            # Fallback to Netherlands center
+            return {"lat": 52.15, "lon": 5.15}, 6.5
+        
+        minx, miny, maxx, maxy = bounds
+        center_lat = (miny + maxy) / 2
+        center_lon = (minx + maxx) / 2
+        
+        # Calculate zoom level based on bounds (in degrees WGS84)
+        width = maxx - minx
+        height = maxy - miny
+        max_span = max(width, height)
+        
+        # Granular mapping for Dutch regions (in degrees)
+        # Full Netherlands ~2.8°, Province ~0.8-1.5°, Municipality ~0.1-0.3°
+        if max_span > 3:      # Very large (full country or larger)
+            zoom = 6.5
+        elif max_span > 2:    # Large (multiple provinces)
+            zoom = 7
+        elif max_span > 1.2:  # Large province
+            zoom = 8
+        elif max_span > 0.8:  # Medium province
+            zoom = 8.5
+        elif max_span > 0.4:  # Small province / large municipality
+            zoom = 9
+        elif max_span > 0.2:  # Municipality
+            zoom = 10
+        elif max_span > 0.1:  # Small municipality
+            zoom = 10.5
+        else:                 # Very small (neighborhood)
+            zoom = 11
+        
+        return {"lat": center_lat, "lon": center_lon}, zoom
+    except Exception as e:
+        logger.warning(f"Could not calculate map bounds: {e}")
+        # Fallback to Netherlands center
+        return {"lat": 52.15, "lon": 5.15}, 6.5
+
+
+def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area_name_field=None, range_color_override=None, coloraxis_name=None, include_colorbar=False, center=None, zoom=None):
     plot_gdf["_color_value"] = plot_gdf[color_column].astype(float).fillna(-999)
     plot_gdf["_hover_label"] = plot_gdf[color_column].apply(
         lambda x: f"{x:.{precision}f}{unit}" if pd.notna(x) else "data niet beschikbaar"
@@ -29,6 +73,10 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area
         include_area_name = True
     custom_data.append("_hover_label")
 
+    # Use provided center/zoom or calculate from bounds, with fallback to Netherlands
+    if center is None or zoom is None:
+        center, zoom = _calculate_map_center_and_zoom(plot_gdf)
+    
     fig = px.choropleth_map(
         plot_gdf,
         geojson=plot_gdf.geometry.__geo_interface__,
@@ -38,8 +86,8 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area
         labels={"_color_value": legend},
         custom_data=custom_data,
         range_color=range_color,
-        center={"lat": 52.15, "lon": 5.15},
-        zoom=6.5,
+        center=center,
+        zoom=zoom,
         map_style = "white-bg"
     )
 
@@ -109,6 +157,9 @@ def get_fig_no_graph(plot_gdf, indicator, dataset_meta, indicator_meta, selected
     precision = indicator_meta["precision"]
     unit = indicator_meta["unit"]
 
+    # Calculate map center and zoom based on filtered data bounds
+    center, zoom = _calculate_map_center_and_zoom(plot_gdf)
+
     fig = _build_choropleth(
         plot_gdf,
         color_column=indicator,
@@ -120,6 +171,8 @@ def get_fig_no_graph(plot_gdf, indicator, dataset_meta, indicator_meta, selected
         range_color_override=range_color_override,
         coloraxis_name=coloraxis_name,
         include_colorbar=include_colorbar,
+        center=center,
+        zoom=zoom,
     )
     logger.info("After generating choropleth")
 
@@ -180,6 +233,9 @@ def get_side_by_side_maps(plot_gdf, indicator_meta, dataset_meta, selected_colum
         if not combined_series.empty:
             shared_range_color = (combined_series.min(), combined_series.max())
 
+    # Calculate map center and zoom based on data bounds (same for all maps)
+    center, zoom = _calculate_map_center_and_zoom(plot_gdf)
+
     figures = []
     for idx, spec in enumerate(map_specs):
         fig = _build_choropleth(
@@ -193,6 +249,8 @@ def get_side_by_side_maps(plot_gdf, indicator_meta, dataset_meta, selected_colum
             area_name_field=dataset_meta.get("area_name_field"),
             coloraxis_name=("coloraxis" if shared_range_color is not None else None),
             include_colorbar=(shared_range_color is not None and idx == len(map_specs) - 1),
+            center=center,
+            zoom=zoom,
         )
 
 
