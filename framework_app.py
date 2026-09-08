@@ -49,7 +49,15 @@ def load_dataset(dataset_id, datasets_meta):
 
     # Naam gebied behouden ook al is het niet de key
     area_name_field = dataset_meta.get("area_name_field")
+    
+    # Columns of higher aggregation levels from geopackage (include only if they exist)
+    admin_cols = ["wk_code", "wk_naam", "gm_code", "gm_naam", "pv_code", "pv_naam"]
     cols = [key_gwb, "geometry"]
+    
+    # Add admin columns that exist in the geopackage (avoid duplicates with area_name_field)
+    for admin_col in admin_cols:
+        if admin_col in gdf.columns and admin_col != key_gwb and admin_col != area_name_field:
+            cols.append(admin_col)
 
     if area_name_field and area_name_field in gdf.columns and area_name_field != key_gwb:
         cols.append(area_name_field)
