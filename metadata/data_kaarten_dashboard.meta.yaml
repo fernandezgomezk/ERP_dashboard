@@ -2,10 +2,10 @@ contact: Kim Fernandez
 dataset_id: data_kaarten_dashboard_v4
 key: gemeentenaam
 options:
-gwb_version: gemeente_gegeneraliseerd_2019_simplified_100m
-layer_naam: gemeente_gegeneraliseerd_2019_simplified_100m
-key_gwb: statnaam
-area_name_field: statnaam
+gwb_version: gemeenten_2019
+layer_naam: gemeenten_2019
+key_gwb: gm_naam
+area_name_field: gm_naam
 year: 2022
 gwb_year: 2019
 

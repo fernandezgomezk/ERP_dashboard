@@ -49,7 +49,15 @@ def load_dataset(dataset_id, datasets_meta):
 
     # Naam gebied behouden ook al is het niet de key
     area_name_field = dataset_meta.get("area_name_field")
+    
+    # Columns of higher aggregation levels from geopackage (include only if they exist)
+    admin_cols = ["wk_code", "wk_naam", "gm_code", "gm_naam", "pv_code", "pv_naam"]
     cols = [key_gwb, "geometry"]
+    
+    # Add admin columns that exist in the geopackage (avoid duplicates with area_name_field)
+    for admin_col in admin_cols:
+        if admin_col in gdf.columns and admin_col != key_gwb and admin_col != area_name_field:
+            cols.append(admin_col)
 
     if area_name_field and area_name_field in gdf.columns and area_name_field != key_gwb:
         cols.append(area_name_field)
@@ -61,6 +69,102 @@ def load_dataset(dataset_id, datasets_meta):
     plot_df = gdf.merge(df, left_on=key_gwb, right_on=dataset_meta["key"], how="left")
     logger.info(f"after merge. ({len(plot_df)=})")
 
+    return plot_df
+
+
+@st.cache_data(show_spinner=False)
+def load_region_options(gpkg_path, layer):
+    """Load unique province and municipality names from a single geopackage."""
+    try:
+        gdf = gpd.read_file(gpkg_path, layer=layer)
+        pv_options = sorted(gdf["pv_naam"].dropna().unique().tolist()) if "pv_naam" in gdf.columns else []
+        gm_by_pv = {}
+        if "pv_naam" in gdf.columns and "gm_naam" in gdf.columns:
+            for pv in pv_options:
+                gm_options = sorted(gdf[gdf["pv_naam"] == pv]["gm_naam"].dropna().unique().tolist())
+                gm_by_pv[pv] = gm_options
+        return pv_options, gm_by_pv
+    except Exception as e:
+        logger.warning(f"Could not load region options: {e}")
+        return [], {}
+
+
+def apply_region_filters(plot_df, datasets_meta=None):
+    """Apply region filters (province and municipality) to the dataframe.
+    
+    Supports two filtering modes:
+    1. Attribute-based: filters by pv_naam/gm_naam columns
+    2. Spatial-based: for data without admin columns but with geometry, uses spatial overlap
+    """
+    logger.info(f"apply_region_filters: available columns = {list(plot_df.columns)}")
+    logger.info(f"apply_region_filters: selected_pv={st.session_state.selected_pv}, selected_gm={st.session_state.selected_gm}")
+    
+    # Try attribute-based filtering first
+    if "pv_naam" in plot_df.columns or "gm_naam" in plot_df.columns:
+        if st.session_state.selected_pv:
+            if "pv_naam" in plot_df.columns:
+                plot_df = plot_df[plot_df["pv_naam"] == st.session_state.selected_pv]
+                logger.info(f"after filtering by province {st.session_state.selected_pv}. ({len(plot_df)=})")
+            else:
+                logger.warning(f"Column 'pv_naam' not found in dataframe for province filtering")
+        
+        if st.session_state.selected_gm:
+            if "gm_naam" in plot_df.columns:
+                plot_df = plot_df[plot_df["gm_naam"] == st.session_state.selected_gm]
+                logger.info(f"after filtering by municipality {st.session_state.selected_gm}. ({len(plot_df)=})")
+            else:
+                logger.warning(f"Column 'gm_naam' not found in dataframe for municipality filtering")
+    
+    # If no admin columns but has geometry, use spatial filtering
+    elif "geometry" in plot_df.columns and (st.session_state.selected_pv or st.session_state.selected_gm):
+        logger.info("Using spatial filtering for data without admin columns")
+        
+        # Load reference geometry from one of the standard GWB files
+        if datasets_meta is None:
+            logger.warning("datasets_meta not provided for spatial filtering")
+            return plot_df
+        
+        try:
+            # Find a dataset with admin columns to use as reference
+            ref_gdf = None
+            for dataset_id, meta in datasets_meta.items():
+                if meta.get("gpkg_path"):
+                    ref_gdf = gpd.read_file(meta["gpkg_path"], layer=meta["layer"])
+                    if "pv_naam" in ref_gdf.columns:
+                        break
+            
+            if ref_gdf is None or "pv_naam" not in ref_gdf.columns:
+                logger.warning("Could not find reference geometry with pv_naam")
+                return plot_df
+            
+            # Ensure CRS match
+            ref_gdf = ref_gdf.to_crs(plot_df.crs)
+            
+            # Get selected region geometry
+            region_gdf = ref_gdf.copy()
+            if st.session_state.selected_pv:
+                region_gdf = region_gdf[region_gdf["pv_naam"] == st.session_state.selected_pv]
+                logger.info(f"Selected province geometry: {len(region_gdf)} features")
+            
+            if st.session_state.selected_gm:
+                region_gdf = region_gdf[region_gdf["gm_naam"] == st.session_state.selected_gm]
+                logger.info(f"Selected municipality geometry: {len(region_gdf)} features")
+            
+            if region_gdf.empty:
+                logger.warning("No reference geometry found for selected region")
+                return plot_df
+            
+            # Union selected region geometry
+            region_union = region_gdf.geometry.unary_union
+            
+            # Spatial filter: keep features that intersect with selected region
+            plot_df = plot_df[plot_df.geometry.intersects(region_union)].copy()
+            logger.info(f"after spatial filtering. ({len(plot_df)=})")
+            
+        except Exception as e:
+            logger.error(f"Spatial filtering failed: {e}")
+            return plot_df
+    
     return plot_df
 
 
@@ -161,6 +265,12 @@ if "aggregation" not in st.session_state:
 if "clicked_area" not in st.session_state:
     st.session_state.clicked_area = None
 
+if "selected_pv" not in st.session_state:
+    st.session_state.selected_pv = None
+
+if "selected_gm" not in st.session_state:
+    st.session_state.selected_gm = None
+
 
 indicator = st.session_state.indicator
 selected_variant = None
@@ -192,6 +302,81 @@ if indicator is not None:
 # SIDEBAR
 # =========================
 with st.sidebar:
+    # Region filters (province and municipality cascading)
+    st.subheader("Regio")
+    
+    # Load region options from all geopackages across all GWB versions
+    all_pv_options = set()
+    all_gm_by_pv = {}
+    
+    for dataset_id, dataset_meta in DATASETS_META.items():
+        if dataset_meta.get("gpkg_path"):
+            pv_opts, gm_dict = load_region_options(
+                dataset_meta["gpkg_path"], 
+                dataset_meta.get("layer")
+            )
+            all_pv_options.update(pv_opts)
+            # Merge municipalities for each province
+            for pv, gm_list in gm_dict.items():
+                if pv not in all_gm_by_pv:
+                    all_gm_by_pv[pv] = set()
+                all_gm_by_pv[pv].update(gm_list)
+    
+    # Convert sets to sorted lists
+    pv_options = sorted(list(all_pv_options))
+    gm_by_pv = {pv: sorted(list(gm_set)) for pv, gm_set in all_gm_by_pv.items()}
+    
+    # Province selector
+    if pv_options:
+        pv_index = 0
+        if st.session_state.selected_pv:
+            try:
+                pv_index = (["Alle"] + pv_options).index(st.session_state.selected_pv)
+            except ValueError:
+                pv_index = 0
+        
+        def on_pv_change():
+            new_pv = None if st.session_state.pv_select_value == "Alle" else st.session_state.pv_select_value
+            if new_pv != st.session_state.selected_pv:
+                st.session_state.selected_pv = new_pv
+                st.session_state.selected_gm = None  # Reset municipality when province changes
+                st.session_state.clicked_area = None  # Reset clicked area
+        
+        st.selectbox(
+            "Selecteer provincie",
+            ["Alle"] + pv_options,
+            index=pv_index,
+            key="pv_select_value",
+            on_change=on_pv_change
+        )
+        
+        # Municipality selector (cascading based on province)
+        gm_options = ["Alle"]
+        if st.session_state.selected_pv and st.session_state.selected_pv in gm_by_pv:
+            gm_options.extend(gm_by_pv[st.session_state.selected_pv])
+        
+        gm_index = 0
+        if st.session_state.selected_gm:
+            try:
+                gm_index = gm_options.index(st.session_state.selected_gm)
+            except ValueError:
+                gm_index = 0
+        
+        def on_gm_change():
+            new_gm = None if st.session_state.gm_select_value == "Alle" else st.session_state.gm_select_value
+            if new_gm != st.session_state.selected_gm:
+                st.session_state.selected_gm = new_gm
+                st.session_state.clicked_area = None  # Reset clicked area
+        
+        st.selectbox(
+            "Selecteer gemeente",
+            gm_options,
+            index=gm_index,
+            key="gm_select_value",
+            on_change=on_gm_change
+        )
+    
+    st.divider()
     st.subheader("Onderwerpen")
     for theme, subjects in sorted(indicators_by_theme_subject.items()):
         with st.expander(theme, expanded=False):
@@ -213,14 +398,19 @@ with st.sidebar:
                 # disable the button to show it's active.
                 is_active = st.session_state.get("indicator") in indicators
 
-                if is_active:
-                    st.button(subject, key=subj_btn_key, disabled=True, width="stretch")
-                else:
-                    if st.button(subject, key=subj_btn_key, width="stretch"):
-                        st.session_state.indicator = first_indicator
-                        st.session_state.aggregation = None
-                        st.session_state.clicked_area = None
-                        st.rerun()
+                def on_subject_click(ind=first_indicator):
+                    st.session_state.indicator = ind
+                    st.session_state.aggregation = None
+                    st.session_state.clicked_area = None
+
+                # Always create button in same location, vary only state/callback
+                st.button(
+                    subject, 
+                    key=subj_btn_key, 
+                    disabled=is_active, 
+                    width="stretch",
+                    on_click=on_subject_click if not is_active else None
+                )
 
 
 # =========================
@@ -231,6 +421,10 @@ if indicator is not None and selected_variant is not None:
     dataset_id = meta["dataset"]
     dataset_meta = DATASETS_META[dataset_id]
     plot_df = load_dataset(dataset_id, DATASETS_META)
+    
+    # Apply region filters (not cached, so they respond to selector changes)
+    plot_df = apply_region_filters(plot_df, DATASETS_META)
+    
     # -------- CATEGORY FILTER COLLECTION --------
     selected_filters = {}
     for col in dataset_meta.get("categories", []):
@@ -372,7 +566,7 @@ if indicator is not None and selected_variant is not None:
                 "Selecteer indicatoren",
                 options=titles,
                 default=st.session_state[state_key],
-                key=f"{state_key}_multiselect",
+                key=state_key,
             )
 
             if not selected_titles:
@@ -724,6 +918,6 @@ if indicator is not None and selected_variant is not None:
 
 
 else:
-    st.info("Selecteer een indicator.")
+    st.info("Kies een gebied of een onderwerp.")
 
 logger.info("App script finished")
