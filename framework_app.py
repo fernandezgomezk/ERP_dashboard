@@ -2,6 +2,7 @@ import pandas as pd
 import geopandas as gpd
 import csv
 import sys
+from html import escape
 
 from collections import defaultdict
 
@@ -16,6 +17,24 @@ from get_attributes_for_area import get_attributes_for_area
 
 logger = get_logger("app.log")
 logger.info("App script started")
+
+
+def format_contact_html(dataset_meta):
+    contact = dataset_meta.get("contact")
+    if not contact:
+        return None
+
+    contact_html = escape(str(contact))
+    contact_email = dataset_meta.get("contact_email")
+    if contact_email:
+        email_html = escape(str(contact_email), quote=True)
+        contact_html = (
+            f'{contact_html} '
+            f'<a href="mailto:{email_html}" title="{email_html}" '
+            f'style="text-decoration:none; margin-left:4px; display:inline-block;">✉</a>'
+        )
+
+    return f"Contactpersoon: {contact_html}"
 
 # =========================
 # DATA INLADEN
@@ -624,14 +643,16 @@ if indicator is not None and selected_variant is not None:
                         st.markdown(f"<div style='font-size:14px;color:#444'>{desc}</div>", unsafe_allow_html=True)
 
                     # year info and contact person
-                        extra_info = []
-                        if dataset_meta["gwb_year"] is not None:
-                            extra_info.append(f"GWB/COROP/PC jaar: {dataset_meta['gwb_year']}")
-                        if dataset_meta["year"] is not None:
-                            extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
-                        if dataset_meta["contact"] is not None:
-                            extra_info.append(f"Contactpersoon: {dataset_meta['contact']}")
-                        s_info = " | ".join(extra_info)
+                    extra_info = []
+                    if dataset_meta["gwb_year"] is not None:
+                        extra_info.append(f"GWB/COROP/PC jaar: {dataset_meta['gwb_year']}")
+                    if dataset_meta["year"] is not None:
+                        extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
+                    contact_html = format_contact_html(dataset_meta)
+                    if contact_html is not None:
+                        extra_info.append(contact_html)
+                    s_info = " | ".join(extra_info)
+                    if s_info:
                         st.markdown(
                             f"""
                             <div style="font-size:14px; color:#444; line-height:1.5;">
@@ -697,14 +718,16 @@ if indicator is not None and selected_variant is not None:
                 st.markdown(f"<div style='font-size:14px;color:#444'>{desc}</div>", unsafe_allow_html=True)
 
             # year info and contact person
-                extra_info = []
-                if dataset_meta["gwb_year"] is not None:
-                    extra_info.append(f"GWB/COROP/PC jaar: {dataset_meta['gwb_year']}")
-                if dataset_meta["year"] is not None:
-                    extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
-                if dataset_meta["contact"] is not None:
-                    extra_info.append(f"Contactpersoon: {dataset_meta['contact']}")
-                s_info = " | ".join(extra_info)
+            extra_info = []
+            if dataset_meta["gwb_year"] is not None:
+                extra_info.append(f"GWB/COROP/PC jaar: {dataset_meta['gwb_year']}")
+            if dataset_meta["year"] is not None:
+                extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
+            contact_html = format_contact_html(dataset_meta)
+            if contact_html is not None:
+                extra_info.append(contact_html)
+            s_info = " | ".join(extra_info)
+            if s_info:
                 st.markdown(
                     f"""
                     <div style="font-size:14px; color:#444; line-height:1.5;">

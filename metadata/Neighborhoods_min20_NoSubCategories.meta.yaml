@@ -1,4 +1,5 @@
 contact: Chris ten Dam
+contact_email: chris_tdam@hotmail.com
 
 dataset_id: Neighborhoods_min20_NoSubCategories
 
@@ -81,14 +82,14 @@ attributes:
 
   Budget:
     title: Gemiddeld budget
-    description: Gemiddeld beschikbaar budget
+    description: Gemiddeld beschikbaar budget. Dit is het huishoudelijk inkomen (plus kilometervergoedingen, energietoeslagen en heffingskortingen).
     unit: euro
     precision: 0
     test_values:
 
   Building_age_since1973:
-    title: Gebouwleeftijd sinds 1973
-    description: Gemiddelde leeftijd van bebouwing sinds 1973
+    title: Gemiddelde gebouwleeftijd vanaf 1973
+    description: Gemiddelde leeftijd van de bebouwing vanaf 1973
     unit: jaar
     precision: 1
     test_values:
@@ -136,15 +137,15 @@ attributes:
     test_values:
 
   km_4Randstadcenters:
-    title: Afstand tot Randstadcentra
-    description: Afstand tot de vier belangrijkste Randstadcentra
+    title: Afstand tot Randstadcentrum
+    description: Afstand tot het dichtstbijzijnde centrum van Amsterdam, Rotterdam, Den Haag of Utrecht.
     unit: km
     precision: 1
     test_values:
 
   km_25majorcenters:
-    title: Afstand tot grote centra
-    description: Afstand tot de 25 grootste stedelijke centra
+    title: Afstand tot belangrijk centrum
+    description: Afstand tot de dichtstbijzijnde stad met een bepaald aantal lokale bestemmingen (waaronder winkels, cafés, restaurants, kinderopvanglocaties, huisartsenposten en basisscholen--bevolkingsomvang is geen criterium).
     unit: km
     precision: 1
     test_values:
