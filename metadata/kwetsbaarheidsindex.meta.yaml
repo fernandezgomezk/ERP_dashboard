@@ -42,7 +42,7 @@ indicators:
     subtitle: Gemiddelde kwetsbaarheidsindex per gemeente 
     
     # [Description / explanation of indicator no. 1]
-    description: Deze indicator geeft de gemiddelde kwetsbaarheidsindex per gemeente weer. De kwetsbaarheidsindex word berekent door de blootstelling (exposure) te verminderen met de weerbaarheid (resilience) van een huishouden. Weerbaarheid is de sensitiviteit van een huishouden verminderd met de adaptiviteit van het huishouden. 
+    description: Deze indicator geeft de gemiddelde kwetsbaarheidsindex per gemeente weer. De kwetsbaarheidsindex wordt berekend door de blootstelling (exposure) te verminderen met de weerbaarheid (resilience) van een huishouden. Weerbaarheid is de sensitiviteit van een huishouden verminderd met de adaptiviteit van het huishouden.
 
     # [Title of the legend of indicator no. 1]
     legend: Kwetsbaarheidsindex
