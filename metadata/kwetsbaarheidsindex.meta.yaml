@@ -5,6 +5,7 @@
 
 # [Contact person(s) for the data file]
 contact: Berend Hopman
+contact_email: berend.hopman@tno.nl
 
 # [Name of the data file without extension]
 dataset_id: Kwetsbaarheidsindex_data 

@@ -5,6 +5,7 @@
 
 # [Contact person(s) for the data file]
 contact: Yashvant Premchand
+contact_email: yashvant.premchand@tno.nl
 
 # [Name of the data file without extension]
 dataset_id: data_climate_adaptation 

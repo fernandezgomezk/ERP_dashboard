@@ -5,6 +5,7 @@
 
 # [Contact person(s) for the data file]
 contact: Kim Fernandez
+contact_email: example@tno.nl
 
 # [Name of the data file without extension]
 dataset_id: data_kaarten_dashboard 
