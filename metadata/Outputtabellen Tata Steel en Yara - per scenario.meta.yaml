@@ -1,0 +1,65 @@
+contact: Roy Peijen
+contact_email: roy.peijen@tno.nl
+dataset_id: Outputtabellen Tata Steel en Yara - per scenario
+key: Provincie
+options:
+  - Bedrijf
+  - Vertrekkend beroep (ESCO)
+  - Minimale vaardigheidsoverlap (%)
+
+gwb_version: gemeenten_2025
+layer_naam: gemeenten_2025
+key_gwb: pv_naam
+area_name_field: pv_naam
+year: 2025
+gwb_year: 
+
+indicators:
+  
+  Aantal werknemers Vertrekkend beroep:
+    title: Aantal werknemers in vertrekkend beroep
+    subtitle: Het geschatte aantal werknemers dat dit verdwijnende beroep uitoefende in het bedrijf
+    description: Dit getal toont hoeveel werknemers werken in het beroep dat aan het verdwijnen is.
+    legend: Aantal werknemers
+    theme: Arbeidsmarkt
+    subject: Herplaatsing werknemers energie-intensieve industrie
+    unit: ""
+    precision: 0
+    visualization_type: table
+    link: https://esb.nu/herplaatsing-werknemers-energie-intensieve-industrie-is-niet-evident/
+  
+  ESCO Beroep Toegewezen beroep:
+    title: Toegewezen beroep (ESCO)
+    subtitle: Een openstaand beroep elders in de regio waar de werknemer de meeste vaardigheden voor kan hergebruiken
+    description: Deze indicator identificeert welk openstaand beroep elders in de regio het beste aansluit bij de vaardigheden van werknemers uit het verdwijnende beroep.
+    legend: Beroepsaanduiding
+    theme: Arbeidsmarkt
+    subject: Herplaatsing werknemers energie-intensieve industrie
+    unit: "ESCO"
+    precision: 0
+    visualization_type: table
+    link: https://esb.nu/herplaatsing-werknemers-energie-intensieve-industrie-is-niet-evident/
+
+  Aantal vacatures per beroep in de regio:
+    title: Aantal vacatures per beroep in de regio
+    subtitle: Hoeveel openstaande banen er per beroep beschikbaar zijn in de regio binnen een straal van 35 km
+    description: Deze kaart toont het aantal beschikbare vacatures voor elk beroep in de regio, wat inzicht geeft in arbeidsmarktkansen.
+    legend: Aantal vacatures
+    theme: Arbeidsmarkt
+    subject: Herplaatsing werknemers energie-intensieve industrie
+    unit: ""
+    precision: 0
+    visualization_type: table
+    link: https://esb.nu/herplaatsing-werknemers-energie-intensieve-industrie-is-niet-evident/
+
+  Vaardighedendekking:
+    title: Vaardighedendekking
+    subtitle: Hoeveel procent van de vaardigheden uit het oude beroep gebruikt kunnen worden in het nieuwe beroep
+    description: Dit cijfer laat zien hoeveel vaardigheden uit het oude beroep gebruikt kunnen worden in het nieuwe beroep, waarbij 0 betekent dat geen vaardigheden kunnen worden hergebruikt en 1 dat alle vaardigheden kunnen worden hergebruikt.
+    legend: Vaardighedendekking
+    theme: Arbeidsmarkt
+    subject: Herplaatsing werknemers energie-intensieve industrie
+    unit: ""
+    precision: 2
+    visualization_type: table
+    link: https://esb.nu/herplaatsing-werknemers-energie-intensieve-industrie-is-niet-evident/

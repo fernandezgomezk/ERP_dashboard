@@ -11,6 +11,7 @@ from streamlit.logger import get_logger
 
 from load_metadata import load_metadata
 from get_fig_no_graph import get_fig_no_graph
+from get_table import get_table_fig
 from get_boxplot import get_boxplot
 from get_scatterplot import get_scatterplot
 from get_attributes_for_area import get_attributes_for_area
@@ -228,7 +229,6 @@ def get_selected_option_for_map(dataset_id, dataset_meta, plot_df):
     # CASE 3: multiple columns -> cascading dropdowns (exclusive per column)
     selected_option = {}
     filtered_df = plot_df.copy()
-    st.markdown("### Selectie")
     cols = st.columns(len(option_columns))
     for i, col in enumerate(option_columns):
         with cols[i]:
@@ -450,6 +450,16 @@ if indicator is not None and selected_variant is not None:
         key = f"filter_{dataset_id}_{col}"
         if key in st.session_state:
             selected_filters[col] = st.session_state[key]
+    
+    # Apply category filters to plot_df
+    for col, value in selected_filters.items():
+        if col in plot_df.columns and value is not None:
+            plot_df = plot_df[plot_df[col] == value]
+    
+    if len(plot_df) == 0:
+        st.warning("Geen data beschikbaar voor deze selectie.")
+        st.stop()
+    
     # -------- UI HEADER --------
     st.caption(f"{meta["theme"]} > {meta["subject"]}" if meta["subject"] and meta["subject"] != meta["theme"] else meta["theme"])
 
@@ -464,8 +474,128 @@ if indicator is not None and selected_variant is not None:
     # VISUALIZATION
     # =========================
     visualization_type = meta["visualization_type"]
+    
+    if visualization_type == "table":
+        # Build and display table visualization
+        st.header(meta.get("subject", ""))
+        
+        # Get selected options if any
+        option_columns = dataset_meta.get("options", [])
+        selected_option = None
+        
+        if option_columns:
+            selected_option = {}
+            filtered_df = plot_df.copy()
+            cols = st.columns(len(option_columns))
+            
+            for i, col in enumerate(option_columns):
+                with cols[i]:
+                    options = sorted(filtered_df[col].dropna().unique())
+                    
+                    if not options:
+                        st.warning(f"Geen data beschikbaar voor deze selectie.")
+                        st.stop()
+                    
+                    state_key = f"option_{dataset_id}_{col}"
+                    
+                    if state_key not in st.session_state:
+                        st.session_state[state_key] = options[0]
+                    
+                    current_value = st.session_state[state_key]
+                    if current_value not in options:
+                        current_value = options[0]
+                    
+                    selected = st.selectbox(
+                        col,
+                        options,
+                        index=options.index(current_value),
+                        key=f"{state_key}_widget"
+                    )
+                    
+                    st.session_state[state_key] = selected
+                    selected_option[col] = selected
+                
+                # Filter for next dropdown
+                filtered_df = filtered_df[filtered_df[col] == selected]
+        
+        table_result = get_table_fig(
+            plot_df,
+            dataset_meta,
+            dataset_id,
+            INDICATORS_META,
+            selected_option=selected_option
+        )
+        
+        if table_result is not None:
+            table_df, column_subtitles = table_result
+            table_link = meta.get("link")
+            if not table_link:
+                for variants in INDICATORS_META.values():
+                    table_variant = next(
+                        (
+                            v for v in variants
+                            if v.get("dataset") == dataset_id
+                            and v.get("visualization_type") == "table"
+                            and v.get("link")
+                        ),
+                        None
+                    )
+                    if table_variant is not None:
+                        table_link = table_variant.get("link", meta.get("link"))
+                        break
+            
+            # year info and contact person
+            extra_info = []
+            if dataset_meta["gwb_year"] is not None:
+                extra_info.append(f"Gebiedsindeling jaar: {dataset_meta['gwb_year']}")
+            if dataset_meta["year"] is not None:
+                extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
+            contact_html = format_contact_html(dataset_meta)
+            if contact_html is not None:
+                extra_info.append(contact_html)
+            s_info = " | ".join(extra_info)
+            if s_info:
+                st.markdown(
+                    f"""
+                    <div style="font-size:14px; color:#444; line-height:1.5;">
+                        {s_info}
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+            if table_link:
+                st.markdown(
+                    f'<a href="{table_link}" target="_blank">Link naar publicatie &#8599;</a>',
+                    unsafe_allow_html=True
+                )
+
+            column_config = {
+                column_name: st.column_config.TextColumn(
+                    column_name,
+                    help=column_subtitles.get(column_name) or None,
+                )
+                for column_name in table_df.columns
+            }
+
+            row_height = 35
+            header_height = 38
+            table_height = min(900, header_height + max(1, len(table_df)) * row_height)
+
+            st.dataframe(
+                table_df,
+                column_config=column_config,
+                hide_index=True,
+                use_container_width=True,
+                height=table_height,
+            )
+        else:
+            st.warning("Geen data beschikbaar voor deze selectie.")
+        
+        st.stop()
+    
     # -------- MAP --------
-    if visualization_type == "map":
+    elif visualization_type == "map":
 
         option_columns = dataset_meta.get("options", [])
         selected_option = None
@@ -500,7 +630,6 @@ if indicator is not None and selected_variant is not None:
             selected_option = {}
             filtered_df = plot_df.copy()
 
-            st.markdown("### Selectie")
 
             cols = st.columns(len(option_columns))
 
@@ -645,7 +774,7 @@ if indicator is not None and selected_variant is not None:
                     # year info and contact person
                     extra_info = []
                     if dataset_meta["gwb_year"] is not None:
-                        extra_info.append(f"GWB/COROP/PC jaar: {dataset_meta['gwb_year']}")
+                        extra_info.append(f"Gebiedsindeling jaar: {dataset_meta['gwb_year']}")
                     if dataset_meta["year"] is not None:
                         extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
                     contact_html = format_contact_html(dataset_meta)
@@ -720,7 +849,7 @@ if indicator is not None and selected_variant is not None:
             # year info and contact person
             extra_info = []
             if dataset_meta["gwb_year"] is not None:
-                extra_info.append(f"GWB/COROP/PC jaar: {dataset_meta['gwb_year']}")
+                extra_info.append(f"Gebiedsindeling jaar: {dataset_meta['gwb_year']}")
             if dataset_meta["year"] is not None:
                 extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
             contact_html = format_contact_html(dataset_meta)
