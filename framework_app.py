@@ -547,7 +547,7 @@ if indicator is not None and selected_variant is not None:
             # year info and contact person
             extra_info = []
             if dataset_meta["gwb_year"] is not None:
-                extra_info.append(f"GWB/COROP/PC jaar: {dataset_meta['gwb_year']}")
+                extra_info.append(f"Gebiedsindeling jaar: {dataset_meta['gwb_year']}")
             if dataset_meta["year"] is not None:
                 extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
             contact_html = format_contact_html(dataset_meta)
@@ -774,7 +774,7 @@ if indicator is not None and selected_variant is not None:
                     # year info and contact person
                     extra_info = []
                     if dataset_meta["gwb_year"] is not None:
-                        extra_info.append(f"GWB/COROP/PC jaar: {dataset_meta['gwb_year']}")
+                        extra_info.append(f"Gebiedsindeling jaar: {dataset_meta['gwb_year']}")
                     if dataset_meta["year"] is not None:
                         extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
                     contact_html = format_contact_html(dataset_meta)
@@ -849,7 +849,7 @@ if indicator is not None and selected_variant is not None:
             # year info and contact person
             extra_info = []
             if dataset_meta["gwb_year"] is not None:
-                extra_info.append(f"GWB/COROP/PC jaar: {dataset_meta['gwb_year']}")
+                extra_info.append(f"Gebiedsindeling jaar: {dataset_meta['gwb_year']}")
             if dataset_meta["year"] is not None:
                 extra_info.append(f"Indicator zichtjaar: {dataset_meta['year']}")
             contact_html = format_contact_html(dataset_meta)

@@ -12,7 +12,7 @@ layer_naam: gemeenten_2025
 key_gwb: pv_naam
 area_name_field: pv_naam
 year: 2025
-gwb_year: 2025
+gwb_year: 
 
 indicators:
   
