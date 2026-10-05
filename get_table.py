@@ -95,13 +95,13 @@ def _build_multi_indicator_table(plot_df, indicators_list, indicators_meta_dict,
             values=list(result_df.columns),
             fill_color='#123eb7',
             align='left',
-            font=dict(color='white', size=12)
+            font=dict(color='white', size=14)
         ),
         cells=dict(
             values=[result_df[col] for col in result_df.columns],
             fill_color='lavender',
             align='left',
-            font=dict(size=11),
+            font=dict(size=13),
             height=25
         )
     )])
