@@ -229,7 +229,6 @@ def get_selected_option_for_map(dataset_id, dataset_meta, plot_df):
     # CASE 3: multiple columns -> cascading dropdowns (exclusive per column)
     selected_option = {}
     filtered_df = plot_df.copy()
-    st.markdown("### Selectie")
     cols = st.columns(len(option_columns))
     for i, col in enumerate(option_columns):
         with cols[i]:
@@ -485,7 +484,6 @@ if indicator is not None and selected_variant is not None:
         selected_option = None
         
         if option_columns:
-            st.markdown("### Selectie")
             selected_option = {}
             filtered_df = plot_df.copy()
             cols = st.columns(len(option_columns))
@@ -613,7 +611,6 @@ if indicator is not None and selected_variant is not None:
             selected_option = {}
             filtered_df = plot_df.copy()
 
-            st.markdown("### Selectie")
 
             cols = st.columns(len(option_columns))
 
