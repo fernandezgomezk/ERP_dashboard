@@ -518,7 +518,7 @@ if indicator is not None and selected_variant is not None:
                 # Filter for next dropdown
                 filtered_df = filtered_df[filtered_df[col] == selected]
         
-        fig = get_table_fig(
+        table_result = get_table_fig(
             plot_df,
             dataset_meta,
             dataset_id,
@@ -526,7 +526,8 @@ if indicator is not None and selected_variant is not None:
             selected_option=selected_option
         )
         
-        if fig is not None:
+        if table_result is not None:
+            table_df, column_subtitles = table_result
             table_link = meta.get("link")
             if not table_link:
                 for variants in INDICATORS_META.values():
@@ -568,8 +569,26 @@ if indicator is not None and selected_variant is not None:
                     f'<a href="{table_link}" target="_blank">Link naar publicatie &#8599;</a>',
                     unsafe_allow_html=True
                 )
-            
-            st.plotly_chart(fig, use_container_width=True)
+
+            column_config = {
+                column_name: st.column_config.TextColumn(
+                    column_name,
+                    help=column_subtitles.get(column_name) or None,
+                )
+                for column_name in table_df.columns
+            }
+
+            row_height = 35
+            header_height = 38
+            table_height = min(900, header_height + max(1, len(table_df)) * row_height)
+
+            st.dataframe(
+                table_df,
+                column_config=column_config,
+                hide_index=True,
+                use_container_width=True,
+                height=table_height,
+            )
         else:
             st.warning("Geen data beschikbaar voor deze selectie.")
         

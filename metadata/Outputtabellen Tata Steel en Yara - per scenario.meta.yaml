@@ -18,7 +18,7 @@ indicators:
   
   Aantal werknemers Vertrekkend beroep:
     title: Aantal werknemers in vertrekkend beroep
-    subtitle: Het aantal werknemers dat in het verdwijnende beroep werkzaam is
+    subtitle: Het geschatte aantal werknemers dat dit verdwijnende beroep uitoefende in het bedrijf
     description: Dit getal toont hoeveel werknemers werken in het beroep dat aan het verdwijnen is.
     legend: Aantal werknemers
     theme: Arbeidsmarkt
@@ -30,7 +30,7 @@ indicators:
   
   ESCO Beroep Toegewezen beroep:
     title: Toegewezen beroep (ESCO)
-    subtitle: Een openstaande beroep elders in de regio waar de werknemer de meeste vaardigheden voor kan hergebruiken
+    subtitle: Een openstaand beroep elders in de regio waar de werknemer de meeste vaardigheden voor kan hergebruiken
     description: Deze indicator identificeert welk openstaand beroep elders in de regio het beste aansluit bij de vaardigheden van werknemers uit het verdwijnende beroep.
     legend: Beroepsaanduiding
     theme: Arbeidsmarkt
@@ -42,7 +42,7 @@ indicators:
 
   Aantal vacatures per beroep in de regio:
     title: Aantal vacatures per beroep in de regio
-    subtitle: Hoeveel openstaande baningen er per beroep beschikbaar zijn in de regio binnen een straal van 35 km
+    subtitle: Hoeveel openstaande banen er per beroep beschikbaar zijn in de regio binnen een straal van 35 km
     description: Deze kaart toont het aantal beschikbare vacatures voor elk beroep in de regio, wat inzicht geeft in arbeidsmarktkansen.
     legend: Aantal vacatures
     theme: Arbeidsmarkt
@@ -54,7 +54,7 @@ indicators:
 
   Vaardighedendekking:
     title: Vaardighedendekking
-    subtitle: Hoeveel vaardigheden uit het oude beroep gebruikt kunnen worden in het nieuwe beroep
+    subtitle: Hoeveel procent van de vaardigheden uit het oude beroep gebruikt kunnen worden in het nieuwe beroep
     description: Dit cijfer laat zien hoeveel vaardigheden uit het oude beroep gebruikt kunnen worden in het nieuwe beroep, waarbij 0 betekent dat geen vaardigheden kunnen worden hergebruikt en 1 dat alle vaardigheden kunnen worden hergebruikt.
     legend: Vaardighedendekking
     theme: Arbeidsmarkt

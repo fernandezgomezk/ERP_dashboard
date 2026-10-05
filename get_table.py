@@ -4,7 +4,6 @@ Used when visualization_type is set to "table" in metadata.
 """
 
 import pandas as pd
-import plotly.graph_objects as go
 from streamlit.logger import get_logger
 
 logger = get_logger("app.log")
@@ -23,19 +22,20 @@ def format_value(x, precision, unit):
         return str(x)
 
 
-def _build_multi_indicator_table(plot_df, indicators_list, indicators_meta_dict, key, dataset_id):
-    """Build a table showing formatted indicator columns without the key column."""
+def _build_multi_indicator_table(plot_df, indicators_list, indicators_meta_dict, dataset_id):
+    """Build a table dataframe and subtitle metadata without the key column."""
     logger.info(f"Building multi-indicator table with indicators: {indicators_list}")
     logger.info(f"Input dataframe has {len(plot_df)} rows")
     logger.info(f"Available columns in input df: {list(plot_df.columns)}")
     
-    # Create a clean dataframe with just the key column and formatted indicator columns
+    # Create a clean dataframe with formatted indicator columns only.
     display_df = plot_df.copy()
     
     if 'geometry' in display_df.columns:
         display_df = display_df.drop(columns=['geometry'])
     
     result_df = pd.DataFrame(index=display_df.index).reset_index(drop=True)
+    column_subtitles = {}
     logger.info(f"Result df initialized without key column: {len(result_df)} rows")
     
     # Add each indicator as a formatted column
@@ -53,12 +53,14 @@ def _build_multi_indicator_table(plot_df, indicators_list, indicators_meta_dict,
         precision = variant_meta.get("precision", 1)
         unit = variant_meta.get("unit", "")
         title = variant_meta.get("title", ind_name)
+        subtitle = variant_meta.get("subtitle", "")
         
         # Format the indicator column - handle both numeric and string values
         formatted_col = display_df[ind_name].apply(lambda x: format_value(x, precision, unit))
         # Reset index to match result_df's index to avoid NaN alignment issues
         formatted_col = formatted_col.reset_index(drop=True)
         result_df[title] = formatted_col
+        column_subtitles[title] = subtitle
         non_empty_count = (formatted_col != "").sum()
         logger.info(f"Added indicator '{ind_name}' as '{title}' - non-empty values: {non_empty_count}/{len(formatted_col)}")
     
@@ -86,32 +88,10 @@ def _build_multi_indicator_table(plot_df, indicators_list, indicators_meta_dict,
     logger.info(f"Rows with data (True in mask): {mask.sum()}")
     logger.info(f"First 10 mask values: {mask.head(10).tolist()}")
     
-    result_df = result_df[mask]
+    result_df = result_df[mask].reset_index(drop=True)
     logger.info(f"Result df after row filtering: {len(result_df)} rows")
-    
-    # Create the Plotly table
-    fig = go.Figure(data=[go.Table(
-        header=dict(
-            values=list(result_df.columns),
-            fill_color='#123eb7',
-            align='left',
-            font=dict(color='white', size=14)
-        ),
-        cells=dict(
-            values=[result_df[col] for col in result_df.columns],
-            fill_color='lavender',
-            align='left',
-            font=dict(size=13),
-            height=25
-        )
-    )])
-    
-    fig.update_layout(
-        height=750,
-        margin=dict(t=8, b=8, l=0, r=0)
-    )
-    
-    return fig
+
+    return result_df, column_subtitles
 
 
 def get_table_fig(
@@ -138,7 +118,7 @@ def get_table_fig(
         selected_option: Dict or string of selected filter options
     
     Returns:
-        Plotly figure object (table)
+        Tuple of dataframe and per-column subtitle metadata
     """
     
     # Apply selected_option filters to plot_gdf before building the table
@@ -190,13 +170,12 @@ def get_table_fig(
                 logger.info(f"After deduplication: {len(filtered_plot_gdf)} rows")
     
     if all_indicators:
-        fig = _build_multi_indicator_table(
+        table_df, column_subtitles = _build_multi_indicator_table(
             filtered_plot_gdf,
             all_indicators,
             indicators_meta_dict,
-            dataset_meta["key"],
             dataset_id
         )
-        return fig
+        return table_df, column_subtitles
     else:
         return None
