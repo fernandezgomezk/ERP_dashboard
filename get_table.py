@@ -24,7 +24,7 @@ def format_value(x, precision, unit):
 
 
 def _build_multi_indicator_table(plot_df, indicators_list, indicators_meta_dict, key, dataset_id):
-    """Build a table showing all indicators for each key, without indicator selection dropdown."""
+    """Build a table showing formatted indicator columns without the key column."""
     logger.info(f"Building multi-indicator table with indicators: {indicators_list}")
     logger.info(f"Input dataframe has {len(plot_df)} rows")
     logger.info(f"Available columns in input df: {list(plot_df.columns)}")
@@ -35,10 +35,8 @@ def _build_multi_indicator_table(plot_df, indicators_list, indicators_meta_dict,
     if 'geometry' in display_df.columns:
         display_df = display_df.drop(columns=['geometry'])
     
-    # Start with the key column
-    result_df = display_df[[key]].copy()
-    result_df = result_df.reset_index(drop=True)
-    logger.info(f"Result df after adding key column: {len(result_df)} rows")
+    result_df = pd.DataFrame(index=display_df.index).reset_index(drop=True)
+    logger.info(f"Result df initialized without key column: {len(result_df)} rows")
     
     # Add each indicator as a formatted column
     for ind_name in indicators_list:
@@ -67,7 +65,7 @@ def _build_multi_indicator_table(plot_df, indicators_list, indicators_meta_dict,
     logger.info(f"Result df before row filtering: {len(result_df)} rows, columns: {list(result_df.columns)}")
     
     # Filter out rows where all indicator columns are empty
-    indicator_columns = [col for col in result_df.columns if col != key]
+    indicator_columns = list(result_df.columns)
     logger.info(f"Checking {len(indicator_columns)} indicator columns for data: {indicator_columns}")
     
     # Debug: show first few rows before filtering
