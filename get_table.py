@@ -108,7 +108,10 @@ def _build_multi_indicator_table(plot_df, indicators_list, indicators_meta_dict,
         )
     )])
     
-    fig.update_layout(height=750)
+    fig.update_layout(
+        height=750,
+        margin=dict(t=8, b=8, l=0, r=0)
+    )
     
     return fig
 

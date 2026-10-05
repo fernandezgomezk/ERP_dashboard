@@ -529,6 +529,21 @@ if indicator is not None and selected_variant is not None:
         )
         
         if fig is not None:
+            table_link = meta.get("link")
+            if not table_link:
+                for variants in INDICATORS_META.values():
+                    table_variant = next(
+                        (
+                            v for v in variants
+                            if v.get("dataset") == dataset_id
+                            and v.get("visualization_type") == "table"
+                            and v.get("link")
+                        ),
+                        None
+                    )
+                    if table_variant is not None:
+                        table_link = table_variant.get("link", meta.get("link"))
+                        break
             
             # year info and contact person
             extra_info = []
@@ -547,6 +562,12 @@ if indicator is not None and selected_variant is not None:
                         {s_info}
                     </div>
                     """,
+                    unsafe_allow_html=True
+                )
+
+            if table_link:
+                st.markdown(
+                    f'<a href="{table_link}" target="_blank">Link naar publicatie &#8599;</a>',
                     unsafe_allow_html=True
                 )
             
