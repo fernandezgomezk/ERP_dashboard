@@ -3,9 +3,10 @@ contact_email: roy.peijen@tno.nl
 dataset_id: Outputtabellen Tata Steel en Yara - per scenario
 key: Provincie
 options:
-  - Scenario
   - Bedrijf
-  - ESCO Beroep Vertrekkend beroep
+  - Vertrekkend beroep (ESCO)
+  - Minimale vaardigheidsoverlap (%)
+
 gwb_version: gemeenten_2025
 layer_naam: gemeenten_2025
 key_gwb: pv_naam
@@ -16,19 +17,19 @@ gwb_year: 2025
 indicators:
   
   Aantal werknemers Vertrekkend beroep:
-    title: Aantal werknemers Vertrekkend beroep
+    title: Aantal werknemers in vertrekkend beroep
     subtitle: Het aantal werknemers dat in het verdwijnende beroep werkzaam is
     description: Dit getal toont hoeveel werknemers werken in het beroep dat aan het verdwijnen is.
     legend: Aantal werknemers
     theme: Arbeidsmarkt
     subject: Herplaatsing werknemers energie-intensieve industrie
-    unit: "N"
+    unit: ""
     precision: 0
     visualization_type: table
-    link: ""
+    link: https://esb.nu/herplaatsing-werknemers-energie-intensieve-industrie-is-niet-evident/
   
   ESCO Beroep Toegewezen beroep:
-    title: ESCO Beroep Toegewezen beroep
+    title: Toegewezen beroep (ESCO)
     subtitle: Een openstaande beroep elders in de regio waar de werknemer de meeste vaardigheden voor kan hergebruiken
     description: Deze indicator identificeert welk openstaand beroep elders in de regio het beste aansluit bij de vaardigheden van werknemers uit het verdwijnende beroep.
     legend: Beroepsaanduiding
@@ -41,12 +42,12 @@ indicators:
 
   Aantal vacatures per beroep in de regio:
     title: Aantal vacatures per beroep in de regio
-    subtitle: Hoeveel openstaande baningen er per beroep beschikbaar zijn in de regio
+    subtitle: Hoeveel openstaande baningen er per beroep beschikbaar zijn in de regio binnen een straal van 35 km
     description: Deze kaart toont het aantal beschikbare vacatures voor elk beroep in de regio, wat inzicht geeft in arbeidsmarktkansen.
     legend: Aantal vacatures
     theme: Arbeidsmarkt
     subject: Herplaatsing werknemers energie-intensieve industrie
-    unit: "N"
+    unit: ""
     precision: 0
     visualization_type: table
     link: https://esb.nu/herplaatsing-werknemers-energie-intensieve-industrie-is-niet-evident/
@@ -58,7 +59,7 @@ indicators:
     legend: Vaardighedendekking
     theme: Arbeidsmarkt
     subject: Herplaatsing werknemers energie-intensieve industrie
-    unit: "ratio"
+    unit: ""
     precision: 2
     visualization_type: table
     link: https://esb.nu/herplaatsing-werknemers-energie-intensieve-industrie-is-niet-evident/
