@@ -700,8 +700,8 @@ if indicator is not None and selected_variant is not None:
         st.header(meta.get("subject", ""))
 
 
-        prev_count_key = f"{state_key}_prev_count"
-        prev_count = st.session_state.get(prev_count_key)
+        prev_selection_key = f"{state_key}_prev_selection"
+        previous_selection = st.session_state.get(prev_selection_key)
 
         # Only one indicator available → select automatically
         if len(titles) == 1:
@@ -728,11 +728,12 @@ if indicator is not None and selected_variant is not None:
         ]
 
 
-        # If the number of selected maps changed, clear the clicked area so
-        # the UI returns to the default "Klik op een gebied..." state.
-        if prev_count is None or prev_count != len(selected_inds):
+        # If the selected maps changed, clear the clicked area so the UI
+        # returns to the default "Klik op een gebied..." state.
+        current_selection = tuple(selected_inds)
+        if previous_selection is None or previous_selection != current_selection:
             st.session_state.clicked_area = None
-        st.session_state[prev_count_key] = len(selected_inds)
+        st.session_state[prev_selection_key] = current_selection
 
         if len(selected_inds) > 1:
             # Compute shared color range across selected indicators only when
@@ -878,6 +879,9 @@ if indicator is not None and selected_variant is not None:
         # single-map view). When multiple indicators are shown side-by-side we
         # skip the click-to-details behaviour.
         if fig is not None:
+            detail_indicator = selected_ind
+            detail_meta = selected_meta
+
             # If there are scatterplot-type indicators that reference this
             # indicator (appear in their `indicators` list), allow the user
             # to open the scatterplot while viewing the map for this
@@ -886,7 +890,7 @@ if indicator is not None and selected_variant is not None:
             for ind_name, variants in INDICATORS_META.items():
                 for v in variants:
                     if v.get("dataset") == dataset_id and v.get("visualization_type") == "scatterplot":
-                        if indicator in v.get("indicators", []):
+                        if detail_indicator in v.get("indicators", []):
                             related_scatter.append((ind_name, v))
                             break
 
@@ -919,7 +923,7 @@ if indicator is not None and selected_variant is not None:
                     else:
                         fig_sc = get_scatterplot(
                             plot_df,
-                            indicator,
+                            detail_indicator,
                             dataset_meta,
                             scatter_meta,
                             sel_inds,
@@ -978,12 +982,12 @@ if indicator is not None and selected_variant is not None:
                     if not selected_row.empty:
                         selected_row = selected_row.iloc[0]
 
-                        indicator_value = selected_row[indicator]
+                        indicator_value = selected_row[detail_indicator]
 
                         if pd.notna(indicator_value):
                             indicator_text = (
-                                f"{indicator_value:.{meta['precision']}f}"
-                                f" {meta['unit']}"
+                                f"{indicator_value:.{detail_meta['precision']}f}"
+                                f" {detail_meta['unit']}"
                             )
                         else:
                             indicator_text = "Niet beschikbaar"
