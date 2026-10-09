@@ -1,5 +1,5 @@
 contact: Chris ten Dam
-contact_email: email@example.com
+contact_email: chris.tendam@rvo.nl
 
 dataset_id: Neighborhoods_min20_NoSubCategories
 
@@ -29,7 +29,7 @@ indicators:
     unit: " euro"
     precision: 0
     visualization_type: map
-    link: ""
+    link: "https://doi.org/10.1016/j.enpol.2026.115471"
     test_values: {}
 
   CarCosts:
@@ -42,7 +42,7 @@ indicators:
     unit: " euro"
     precision: 0
     visualization_type: map
-    link: ""
+    link: "https://doi.org/10.1016/j.enpol.2026.115471"
     test_values: {}
 
   HousingCosts:
@@ -55,7 +55,7 @@ indicators:
     unit: " euro"
     precision: 0
     visualization_type: map
-    link: ""
+    link: "https://doi.org/10.1016/j.enpol.2026.115471"
     test_values: {}
 
   OtherCosts:
@@ -68,7 +68,7 @@ indicators:
     unit: " euro"
     precision: 0
     visualization_type: map
-    link: ""
+    link: "https://doi.org/10.1016/j.enpol.2026.115471"
     test_values: {}
 
 attributes:
