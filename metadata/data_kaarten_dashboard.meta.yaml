@@ -1,4 +1,4 @@
-contact: Kim Fernandez
+contact: Kim Fernández Gómez
 contact_email: kim.fernandezgomez@tno.nl
 dataset_id: data_kaarten_dashboard_v4
 key: gemeentenaam
@@ -82,7 +82,7 @@ indicators:
   gemiddelde_energiequote_voor_woningisolatie_procent:
     title: Energiequote (huidig)
     subtitle: Gemiddelde energiequote van huishoudens met energiearmoede
-    description: Gemiddelde energiequote van huishoudens met energiearmoede
+    description: Deze kaart toont de gemiddelde energiequote van huishoudens met energiearmoede.
     legend: Energiequote
     theme: Woningverduurzaming
     subject: Isolatie naar de standaard bij energiearmoede
@@ -94,7 +94,7 @@ indicators:
   gemiddelde_energiequote_na_woningisolatie_procent:
     title: Energiequote na isolatie
     subtitle: Gemiddelde energiequote van huishoudens met energiearmoede na isolatie naar de standaard
-    description: Gemiddelde energiequote van huishoudens met energiearmoede na isolatie naar de standaard
+    description: Deze kaart toont de gemiddelde energiequote van huishoudens met energiearmoede in een gemodelleerde what-if-situatie waarin de woning wordt geïsoleerd tot de isolatiestandaard.
     legend: Energiequote
     theme: Woningverduurzaming
     subject: Isolatie naar de standaard bij energiearmoede
