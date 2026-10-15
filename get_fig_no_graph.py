@@ -1,10 +1,13 @@
 import pandas as pd
 import plotly.express as px
-import math
+import plotly.graph_objects as go
 
 from streamlit.logger import get_logger
 
 logger = get_logger("app.log")
+
+NO_VALUES_COLOR_SCALE = [[0.0, "#d7191c"], [0.5, "#f7f7f7"], [1.0, "#1a9641"]]
+DEFAULT_COLOR_SCALE = [[0.0, "#f0f3fa"], [1.0, "#123eb7"]]
 
 
 def build_indicator_display_series(values, precision, unit, show_values=True):
@@ -20,23 +23,30 @@ def build_indicator_display_series(values, precision, unit, show_values=True):
         return pd.Series(["Niet beschikbaar"] * len(numeric_values), index=numeric_values.index)
 
     if valid_values.nunique() == 1:
+        only_value = valid_values.iloc[0]
+        label = "0" if only_value == 0 else ("--" if only_value < 0 else "++")
         return pd.Series(
-            ["0" if pd.notna(value) else "Niet beschikbaar" for value in numeric_values],
+            [label if pd.notna(value) else "Niet beschikbaar" for value in numeric_values],
             index=numeric_values.index,
         )
 
-    symbol_bins = pd.cut(
-        valid_values,
-        bins=4,
-        labels=["-", "0", "+", "++"],
-        include_lowest=True,
-    )
+    max_abs = valid_values.abs().max()
+    midpoint = max_abs / 2
 
-    display_values = pd.Series("Niet beschikbaar", index=numeric_values.index, dtype="object")
-    display_values.loc[symbol_bins.index] = symbol_bins.astype(str)
-    display_values.loc[numeric_values.isna()] = "Niet beschikbaar"
+    def to_symbol(value):
+        if pd.isna(value):
+            return "Niet beschikbaar"
+        if value == 0:
+            return "0"
+        if value <= -midpoint:
+            return "--"
+        if value < 0:
+            return "-"
+        if value < midpoint:
+            return "+"
+        return "++"
 
-    return display_values
+    return numeric_values.apply(to_symbol)
 
 
 def _build_symbolic_colorbar(range_color, legend):
@@ -49,12 +59,22 @@ def _build_symbolic_colorbar(range_color, legend):
             "ticktext": ["0"],
         }
 
-    span = cmax - cmin
+    if cmin < 0 < cmax:
+        return {
+            "title": {"text": legend},
+            "tickmode": "array",
+            "tickvals": [cmin, cmin / 2, 0, cmax / 2, cmax],
+            "ticktext": ["--", "-", "0", "+", "++"],
+        }
+
+    first_mid = cmin + ((cmax - cmin) / 4)
+    center_mid = cmin + ((cmax - cmin) / 2)
+    second_mid = cmin + ((3 * (cmax - cmin)) / 4)
     return {
         "title": {"text": legend},
         "tickmode": "array",
-        "tickvals": [cmin, cmin + span / 3, cmin + (2 * span / 3), cmax],
-        "ticktext": ["-", "0", "+", "++"],
+        "tickvals": [cmin, first_mid, center_mid, second_mid, cmax],
+        "ticktext": ["--", "-", "0", "+", "++"],
     }
 
 
@@ -102,7 +122,7 @@ def _calculate_map_center_and_zoom(gdf):
 
 
 def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area_name_field=None, range_color_override=None, coloraxis_name=None, include_colorbar=False, center=None, zoom=None, show_values=True):
-    plot_gdf["_color_value"] = plot_gdf[color_column].astype(float).fillna(-999)
+    plot_gdf["_color_value"] = pd.to_numeric(plot_gdf[color_column], errors="coerce")
     plot_gdf["_hover_display"] = build_indicator_display_series(
         plot_gdf[color_column],
         precision,
@@ -118,6 +138,15 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area
         if not range_series.empty:
             range_color = (range_series.min(), range_series.max())
 
+    color_continuous_scale = DEFAULT_COLOR_SCALE
+    if not show_values:
+        color_continuous_scale = NO_VALUES_COLOR_SCALE
+        if range_color is not None:
+            max_abs = max(abs(range_color[0]), abs(range_color[1]))
+            if max_abs == 0:
+                max_abs = 1e-12
+            range_color = (-max_abs, max_abs)
+
     # Build custom_data dynamically: always include key;
     # include area_name_field only when provided and present on the dataframe.
     custom_data = [key]
@@ -127,16 +156,20 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area
         include_area_name = True
     custom_data.append("_hover_display")
 
+    missing_mask = plot_gdf["_color_value"].isna()
+    missing_gdf = plot_gdf[missing_mask].copy()
+    colored_gdf = plot_gdf[~missing_mask].copy()
+
     # Use provided center/zoom or calculate from bounds, with fallback to Netherlands
     if center is None or zoom is None:
         center, zoom = _calculate_map_center_and_zoom(plot_gdf)
     
     fig = px.choropleth_map(
-        plot_gdf,
+        colored_gdf,
         geojson=plot_gdf.geometry.__geo_interface__,
-        locations=plot_gdf.index,
+        locations=colored_gdf.index,
         color="_color_value",
-        color_continuous_scale=[[0.0, "#f0f3fa"], [1.0, "#123eb7"]],
+        color_continuous_scale=color_continuous_scale,
         labels={"_color_value": legend},
         custom_data=custom_data,
         range_color=range_color,
@@ -169,11 +202,42 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area
         if coloraxis_name is not None:
             try:
                 for tr in fig.data:
-                    tr.update(coloraxis=coloraxis_name)
+                    tr.update(coloraxis=coloraxis_name, showscale=False)
                     if getattr(tr, "colorbar", None) is not None:
                         tr.colorbar = None
             except Exception:
                 pass
+
+    if not missing_gdf.empty:
+        missing_locations = missing_gdf.index.tolist()
+        missing_geojson = missing_gdf.geometry.__geo_interface__
+
+        if area_name_field and area_name_field in missing_gdf.columns:
+            missing_custom_data = missing_gdf[[key, area_name_field]].astype(str).values.tolist()
+            missing_hovertemplate = "<b>%{customdata[1]}</b><br>data niet beschikbaar<extra></extra>"
+        else:
+            missing_custom_data = missing_gdf[[key]].astype(str).values.tolist()
+            missing_hovertemplate = "<b>%{customdata[0]}</b><br>data niet beschikbaar<extra></extra>"
+
+        missing_trace = go.Choroplethmap(
+            geojson=missing_geojson,
+            locations=missing_locations,
+            z=[0.5] * len(missing_locations),
+            colorscale=[[0.0, "#d9d9d9"], [1.0, "#d9d9d9"]],
+            coloraxis=None,
+            showscale=False,
+            customdata=missing_custom_data,
+            hovertemplate=missing_hovertemplate,
+            marker_opacity=1,
+        )
+        try:
+            missing_trace.update(coloraxis=None)
+            missing_trace.coloraxis = None
+            fig.add_trace(missing_trace)
+            if len(fig.data) > 1:
+                fig.data = (fig.data[-1],) + fig.data[:-1]
+        except Exception:
+            pass
 
     return fig
 
