@@ -10,7 +10,7 @@ import streamlit as st
 from streamlit.logger import get_logger
 
 from load_metadata import load_metadata
-from get_fig_no_graph import get_fig_no_graph
+from get_fig_no_graph import get_fig_no_graph, build_indicator_display_series
 from get_table import get_table_fig
 from get_boxplot import get_boxplot
 from get_scatterplot import get_scatterplot
@@ -809,6 +809,7 @@ if indicator is not None and selected_variant is not None:
                         range_color_override=shared_range,
                         coloraxis_name=("coloraxis" if shared_range is not None else None),
                         include_colorbar=(shared_range is not None and idx == len(selected_inds) - 1),
+                        show_values=variant_meta.get("show_values", True),
                     )
                     # As a final safety fallback, ensure non-last maps do not
                     # show a per-trace colorbar.
@@ -837,7 +838,8 @@ if indicator is not None and selected_variant is not None:
                 selected_ind,
                 dataset_meta,
                 selected_meta,
-                selected_option=selected_option
+                selected_option=selected_option,
+                show_values=selected_meta.get("show_values", True),
             )
             # Use the same compact per-map header style as multi-map view.
             st.subheader(selected_meta.get("title", selected_ind))
@@ -982,15 +984,12 @@ if indicator is not None and selected_variant is not None:
                     if not selected_row.empty:
                         selected_row = selected_row.iloc[0]
 
-                        indicator_value = selected_row[detail_indicator]
-
-                        if pd.notna(indicator_value):
-                            indicator_text = (
-                                f"{indicator_value:.{detail_meta['precision']}f}"
-                                f" {detail_meta['unit']}"
-                            )
-                        else:
-                            indicator_text = "Niet beschikbaar"
+                        indicator_text = build_indicator_display_series(
+                            plot_df[detail_indicator],
+                            detail_meta["precision"],
+                            detail_meta["unit"],
+                            show_values=detail_meta.get("show_values", True),
+                        ).loc[selected_row.name]
 
                         st.markdown(
                             f"""
