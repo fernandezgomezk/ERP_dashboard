@@ -42,13 +42,13 @@ indicators:
     title: Gevestigde huishoudens
 
     # [Longer title of indicator no. 1]
-    subtitle: Procentuele verandering in gevestigde huishoudens
+    subtitle: Procentuele verandering in gevestigde huishoudens in 2040 zonder Lelylijn t.o.v. 2040 met Lelylijn
     
     # [Description / explanation of indicator no. 1]
-    description: Deze indicator laat de Procentuele verandering in gevestigde huishoudens (totaal) zien
+    description: Deze indicator laat de procentuele verandering in gevestigde huishoudens in 2040 zonder Lelylijn ten opzichte van 2040 met Lelylijn zien. Volgens de afspraken binnen het project worden geen absolute waarden getoond.
 
     # [Title of the legend of indicator no. 1]
-    legend: fractie
+    legend: aantrekkelijkheid van de regio als woonlocatie
     show_values: false
     
     # [High-level topic of indicator no. 1]
@@ -79,9 +79,9 @@ indicators:
 
   LLLT_PRB_i_1:
     title: Gevestigde huishoudens - opleiding laag
-    subtitle: Procentuele verandering in gevestigde huishoudens (opleiding laag)
-    description: Deze indicator laat de procentuele verandering in gevestigde huishoudens met een laag opleidingsniveau zien.
-    legend: fractie
+    subtitle: Procentuele verandering in gevestigde huishoudens (opleiding laag) in 2040 zonder Lelylijn t.o.v. 2040 met Lelylijn
+    description: Deze indicator laat de procentuele verandering in gevestigde huishoudens met een laag opleidingsniveau in 2040 zonder Lelylijn ten opzichte van 2040 met Lelylijn zien. Volgens de afspraken binnen het project worden geen absolute waarden getoond.
+    legend: aantrekkelijkheid van de regio als woonlocatie
     show_values: false
     theme: Mobiliteit
     subject: Brede welvaarteffecten van de Lelylijn
@@ -92,9 +92,9 @@ indicators:
 
   LLLT_PRB_i_2:
     title: Gevestigde huishoudens - opleiding middel
-    subtitle: Procentuele verandering in gevestigde huishoudens (opleiding middel)
-    description: Deze indicator laat de procentuele verandering in gevestigde huishoudens met een middelbaar opleidingsniveau zien.
-    legend: fractie
+    subtitle: Procentuele verandering in gevestigde huishoudens (opleiding middel) in 2040 zonder Lelylijn t.o.v. 2040 met Lelylijn
+    description: Deze indicator laat de procentuele verandering in gevestigde huishoudens met een middelbaar opleidingsniveau in 2040 zonder Lelylijn ten opzichte van 2040 met Lelylijn zien. Volgens de afspraken binnen het project worden geen absolute waarden getoond.
+    legend: aantrekkelijkheid van de regio als woonlocatie
     show_values: false
     theme: Mobiliteit
     subject: Brede welvaarteffecten van de Lelylijn
@@ -105,9 +105,9 @@ indicators:
 
   LLLT_PRB_i_3:
     title: Gevestigde huishoudens - opleiding hoog
-    subtitle: Procentuele verandering in gevestigde huishoudens (opleiding hoog)
-    description: Deze indicator laat de procentuele verandering in gevestigde huishoudens met een hoog opleidingsniveau zien.
-    legend: fractie
+    subtitle: Procentuele verandering in gevestigde huishoudens (opleiding hoog) in 2040 zonder Lelylijn t.o.v. 2040 met Lelylijn
+    description: Deze indicator laat de procentuele verandering in gevestigde huishoudens met een hoog opleidingsniveau in 2040 zonder Lelylijn ten opzichte van 2040 met Lelylijn zien. Volgens de afspraken binnen het project worden geen absolute waarden getoond.
+    legend: aantrekkelijkheid van de regio als woonlocatie
     show_values: false
     theme: Mobiliteit
     subject: Brede welvaarteffecten van de Lelylijn
@@ -118,9 +118,9 @@ indicators:
 
   LLLT_PRB_j:
     title: Aantal banen
-    subtitle: Procentuele verandering in aantal banen (totaal)
-    description: Deze indicator laat de procentuele verandering in het totale aantal banen zien.
-    legend: fractie
+    subtitle: Procentuele verandering in aantal banen (totaal) in 2040 zonder Lelylijn t.o.v. 2040 met Lelylijn
+    description: Deze indicator laat de procentuele verandering in het totale aantal banen in 2040 zonder Lelylijn ten opzichte van 2040 met Lelylijn zien. Volgens de afspraken binnen het project worden geen absolute waarden getoond.
+    legend: Verandering
     show_values: false
     theme: Mobiliteit
     subject: Brede welvaarteffecten van de Lelylijn
@@ -131,9 +131,9 @@ indicators:
 
   LLLT_PRB_j_1:
     title: Aantal banen - opleiding laag
-    subtitle: Procentuele verandering in aantal banen (opleiding laag)
-    description: Deze indicator laat de procentuele verandering in het aantal banen voor mensen met een laag opleidingsniveau zien.
-    legend: fractie
+    subtitle: Procentuele verandering in aantal banen (opleiding laag) in 2040 zonder Lelylijn t.o.v. 2040 met Lelylijn
+    description: Deze indicator laat de procentuele verandering in het aantal banen voor mensen met een laag opleidingsniveau in 2040 zonder Lelylijn ten opzichte van 2040 met Lelylijn zien. Volgens de afspraken binnen het project worden geen absolute waarden getoond.
+    legend: Verandering
     show_values: false
     theme: Mobiliteit
     subject: Brede welvaarteffecten van de Lelylijn
@@ -144,9 +144,9 @@ indicators:
 
   LLLT_PRB_j_2:
     title: Aantal banen - opleiding middel
-    subtitle: Procentuele verandering in aantal banen (opleiding middel)
-    description: Deze indicator laat de procentuele verandering in het aantal banen voor mensen met een middelbaar opleidingsniveau zien.
-    legend: fractie
+    subtitle: Procentuele verandering in aantal banen (opleiding middel) in 2040 zonder Lelylijn t.o.v. 2040 met Lelylijn
+    description: Deze indicator laat de procentuele verandering in het aantal banen voor mensen met een middelbaar opleidingsniveau in 2040 zonder Lelylijn ten opzichte van 2040 met Lelylijn zien. Volgens de afspraken binnen het project worden geen absolute waarden getoond.
+    legend: Verandering
     show_values: false
     theme: Mobiliteit
     subject: Brede welvaarteffecten van de Lelylijn
@@ -157,9 +157,9 @@ indicators:
 
   LLLT_PRB_j_3:
     title: Aantal banen - opleiding hoog
-    subtitle: Procentuele verandering in aantal banen (opleiding hoog)
-    description: Deze indicator laat de procentuele verandering in het aantal banen voor mensen met een hoog opleidingsniveau zien.
-    legend: fractie
+    subtitle: Procentuele verandering in aantal banen (opleiding hoog) in 2040 zonder Lelylijn t.o.v. 2040 met Lelylijn
+    description: Deze indicator laat de procentuele verandering in het aantal banen voor mensen met een hoog opleidingsniveau in 2040 zonder Lelylijn ten opzichte van 2040 met Lelylijn zien. Volgens de afspraken binnen het project worden geen absolute waarden getoond.
+    legend: Verandering
     show_values: false
     theme: Mobiliteit
     subject: Brede welvaarteffecten van de Lelylijn
@@ -170,9 +170,9 @@ indicators:
 
   LLLT_YW:
     title: Jaarinkomen
-    subtitle: Procentuele verandering in het jaarinkomen (totaal)
-    description: Deze indicator laat de procentuele verandering in het jaarinkomen zien.
-    legend: fractie
+    subtitle: Procentuele verandering in het jaarinkomen (totaal) in 2040 zonder Lelylijn t.o.v. 2040 met Lelylijn
+    description: Deze indicator laat de procentuele verandering in het jaarinkomen in 2040 zonder Lelylijn ten opzichte van 2040 met Lelylijn zien. Volgens de afspraken binnen het project worden geen absolute waarden getoond.
+    legend: Verandering
     show_values: false
     theme: Mobiliteit
     subject: Brede welvaarteffecten van de Lelylijn
@@ -183,40 +183,37 @@ indicators:
 
   LLLT_EV: &equivalent_variation_total
     <<: *map_indicator
-    title: Equivalent variation
-    subtitle: Equivalent variation (totaal)
-    description: Deze indicator laat de equivalent variation voor het totaal zien.
-    legend: Equivalent variation
+    title: Welvaartseffecten
+    subtitle: Welvaartseffecten van de Lelylijn
+    description: "Welvaartseffecten van de Lelylijn, uitgedrukt in 'equivalent variation': het bedrag dat een consument vooraf zou moeten ontvangen of betalen om dezelfde welvaartsverandering te ervaren als door de Lelylijn. Volgens de afspraken binnen het project worden geen absolute waarden getoond. Het kleurverloop geeft aan waar de effecten het grootst en het kleinst zijn."
+    legend: Welvaartseffecten
     show_values: false
     test_values: {}
 
   LLLT_EV_1: &equivalent_variation_low
     <<: *equivalent_variation_total
-    title: Equivalent variation - opleiding laag
-    subtitle: Equivalent variation (opleiding laag)
-    description: Deze indicator laat de equivalent variation voor mensen met een laag opleidingsniveau zien.
+    title: Welvaartseffecten - opleiding laag
+    subtitle: Welvaartseffecten van de Lelylijn (opleiding laag)
     show_values: false
 
   LLLT_EV_2: &equivalent_variation_middle
     <<: *equivalent_variation_total
-    title: Equivalent variation - opleiding middel
-    subtitle: Equivalent variation (opleiding middel)
-    description: Deze indicator laat de equivalent variation voor mensen met een middelbaar opleidingsniveau zien.
+    title: Welvaartseffecten - opleiding middel
+    subtitle: Welvaartseffecten van de Lelylijn (opleiding middel)
     show_values: false
 
   LLLT_EV_3: &equivalent_variation_high
     <<: *equivalent_variation_total
-    title: Equivalent variation - opleiding hoog
-    subtitle: Equivalent variation (opleiding hoog)
-    description: Deze indicator laat de equivalent variation voor mensen met een hoog opleidingsniveau zien.
+    title: Welvaartseffecten - opleiding hoog
+    subtitle: Welvaartseffecten van de Lelylijn (opleiding hoog)
     show_values: false
 
   LLLT_P_L: &land_prices
     <<: *map_indicator
     title: Grondprijzen
-    subtitle: Procentuele verandering in grondprijzen
-    description: Deze indicator laat de procentuele verandering in grondprijzen zien.
-    legend: fractie
+    subtitle: Procentuele verandering in grondprijzen in 2040 zonder Lelylijn t.o.v. 2040 met Lelylijn
+    description: Deze indicator laat de procentuele verandering in grondprijzen in 2040 zonder Lelylijn ten opzichte van 2040 met Lelylijn zien. Volgens de afspraken binnen het project worden geen absolute waarden getoond.
+    legend: Verandering
     show_values: false
     test_values: {}
 
