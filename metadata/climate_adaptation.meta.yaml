@@ -105,7 +105,7 @@ attributes:
   land_value:
     title: Grondwaarde
     description: Grondwaarde
-    unit: euro  
+    unit: €/m²  
     precision: 0     
     test_values:
       WK019320: 118.43
@@ -116,7 +116,7 @@ attributes:
   density:
     title: Dichtheid
     description: Bevolkingsdichtheid
-    unit:
+    unit: personen per km²
     precision: 0
     test_values:
       WK019320: 164
@@ -138,7 +138,7 @@ attributes:
   corrected_lv:
     title: Gecorrigeerde grondwaarde
     description: Gecorrigeerde grondwaarde gebruikt in het model
-    unit: euro
+    unit: €/m²
     precision: 2
     test_values:
       WK019320: -123.38

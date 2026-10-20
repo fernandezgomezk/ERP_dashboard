@@ -1,10 +1,81 @@
 import pandas as pd
 import plotly.express as px
-import math
+import plotly.graph_objects as go
 
 from streamlit.logger import get_logger
 
 logger = get_logger("app.log")
+
+NO_VALUES_COLOR_SCALE = [[0.0, "#d7191c"], [0.5, "#f7f7f7"], [1.0, "#1a9641"]]
+DEFAULT_COLOR_SCALE = [[0.0, "#f0f3fa"], [1.0, "#123eb7"]]
+
+
+def build_indicator_display_series(values, precision, unit, show_values=True):
+    numeric_values = pd.to_numeric(values, errors="coerce")
+
+    if show_values:
+        return numeric_values.apply(
+            lambda value: f"{value:.{precision}f}{unit}" if pd.notna(value) else "Niet beschikbaar"
+        )
+
+    valid_values = numeric_values.dropna()
+    if valid_values.empty:
+        return pd.Series(["Niet beschikbaar"] * len(numeric_values), index=numeric_values.index)
+
+    if valid_values.nunique() == 1:
+        only_value = valid_values.iloc[0]
+        label = "0" if only_value == 0 else ("--" if only_value < 0 else "++")
+        return pd.Series(
+            [label if pd.notna(value) else "Niet beschikbaar" for value in numeric_values],
+            index=numeric_values.index,
+        )
+
+    max_abs = valid_values.abs().max()
+    midpoint = max_abs / 2
+
+    def to_symbol(value):
+        if pd.isna(value):
+            return "Niet beschikbaar"
+        if value == 0:
+            return "0"
+        if value <= -midpoint:
+            return "--"
+        if value < 0:
+            return "-"
+        if value < midpoint:
+            return "+"
+        return "++"
+
+    return numeric_values.apply(to_symbol)
+
+
+def _build_symbolic_colorbar(range_color, legend):
+    cmin, cmax = range_color
+    if cmin == cmax:
+        return {
+            "title": {"text": legend},
+            "tickmode": "array",
+            "tickvals": [cmin],
+            "ticktext": ["0"],
+        }
+
+    if cmin < 0 < cmax:
+        return {
+            "title": {"text": legend},
+            "tickmode": "array",
+            "tickvals": [cmin, cmin / 2, 0, cmax / 2, cmax],
+            "ticktext": ["--", "-", "0", "+", "++"],
+        }
+
+    first_mid = cmin + ((cmax - cmin) / 4)
+    center_mid = cmin + ((cmax - cmin) / 2)
+    second_mid = cmin + ((3 * (cmax - cmin)) / 4)
+    return {
+        "title": {"text": legend},
+        "tickmode": "array",
+        "tickvals": [cmin, first_mid, center_mid, second_mid, cmax],
+        "ticktext": ["--", "-", "0", "+", "++"],
+    }
 
 
 def _calculate_map_center_and_zoom(gdf):
@@ -50,10 +121,13 @@ def _calculate_map_center_and_zoom(gdf):
         return {"lat": 52.15, "lon": 5.15}, 6.5
 
 
-def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area_name_field=None, range_color_override=None, coloraxis_name=None, include_colorbar=False, center=None, zoom=None):
-    plot_gdf["_color_value"] = plot_gdf[color_column].astype(float).fillna(-999)
-    plot_gdf["_hover_label"] = plot_gdf[color_column].apply(
-        lambda x: f"{x:.{precision}f}{unit}" if pd.notna(x) else "data niet beschikbaar"
+def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area_name_field=None, range_color_override=None, coloraxis_name=None, include_colorbar=False, center=None, zoom=None, show_values=True):
+    plot_gdf["_color_value"] = pd.to_numeric(plot_gdf[color_column], errors="coerce")
+    plot_gdf["_hover_display"] = build_indicator_display_series(
+        plot_gdf[color_column],
+        precision,
+        unit,
+        show_values=show_values,
     )
 
     if range_color_override is not None:
@@ -64,25 +138,38 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area
         if not range_series.empty:
             range_color = (range_series.min(), range_series.max())
 
-    # Build custom_data dynamically: always include key and hover label;
+    color_continuous_scale = DEFAULT_COLOR_SCALE
+    if not show_values:
+        color_continuous_scale = NO_VALUES_COLOR_SCALE
+        if range_color is not None:
+            max_abs = max(abs(range_color[0]), abs(range_color[1]))
+            if max_abs == 0:
+                max_abs = 1e-12
+            range_color = (-max_abs, max_abs)
+
+    # Build custom_data dynamically: always include key;
     # include area_name_field only when provided and present on the dataframe.
     custom_data = [key]
     include_area_name = False
     if area_name_field and area_name_field in plot_gdf.columns:
         custom_data.append(area_name_field)
         include_area_name = True
-    custom_data.append("_hover_label")
+    custom_data.append("_hover_display")
+
+    missing_mask = plot_gdf["_color_value"].isna()
+    missing_gdf = plot_gdf[missing_mask].copy()
+    colored_gdf = plot_gdf[~missing_mask].copy()
 
     # Use provided center/zoom or calculate from bounds, with fallback to Netherlands
     if center is None or zoom is None:
         center, zoom = _calculate_map_center_and_zoom(plot_gdf)
     
     fig = px.choropleth_map(
-        plot_gdf,
+        colored_gdf,
         geojson=plot_gdf.geometry.__geo_interface__,
-        locations=plot_gdf.index,
+        locations=colored_gdf.index,
         color="_color_value",
-        color_continuous_scale=[[0.0, "#f0f3fa"], [1.0, "#123eb7"]],
+        color_continuous_scale=color_continuous_scale,
         labels={"_color_value": legend},
         custom_data=custom_data,
         range_color=range_color,
@@ -94,43 +181,71 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area
     fig.update_layout(height=750)
     # Choose hovertemplate indices depending on whether area name was added
     if include_area_name:
-        hovertemplate = "%{customdata[1]}: %{customdata[2]}<extra></extra>"
+        hovertemplate = "<b>%{customdata[1]}</b><br>%{customdata[2]}<extra></extra>"
     else:
-        hovertemplate = "%{customdata[0]}: %{customdata[1]}<extra></extra>"
+        hovertemplate = "<b>%{customdata[0]}</b><br>%{customdata[1]}<extra></extra>"
     fig.update_traces(hovertemplate=hovertemplate)
 
-    # If a shared coloraxis is requested, assign the trace(s) to that coloraxis
-    # and set a layout-level coloraxis with the shared cmin/cmax. Only include
-    # the visible colorbar when `include_colorbar` is True.
-    if coloraxis_name is not None and range_color is not None:
+    if range_color is not None and not show_values:
+        symbolic_colorbar = _build_symbolic_colorbar(range_color, legend)
+        layout_coloraxis = {
+            "cmin": range_color[0],
+            "cmax": range_color[1],
+            "showscale": bool(coloraxis_name is None or include_colorbar),
+        }
+
+        if coloraxis_name is None or include_colorbar:
+            layout_coloraxis["colorbar"] = symbolic_colorbar
+
+        coloraxis_target = coloraxis_name or "coloraxis"
         try:
-            for tr in fig.data:
-                try:
-                    tr.update(coloraxis=coloraxis_name)
-                except Exception:
-                    pass
-                try:
-                    # remove per-trace colorbar to rely on layout coloraxis
+            fig.update_layout(**{coloraxis_target: layout_coloraxis})
+        except Exception:
+            pass
+
+        if coloraxis_name is not None:
+            try:
+                for tr in fig.data:
+                    tr.update(coloraxis=coloraxis_name, showscale=False)
                     if getattr(tr, "colorbar", None) is not None:
                         tr.colorbar = None
-                except Exception:
-                    pass
-
-            layout_coloraxis = {"cmin": range_color[0], "cmax": range_color[1]}
-            if include_colorbar:
-                layout_coloraxis["colorbar"] = {"title": legend}
-
-            try:
-                # assign to layout under the provided name (e.g. 'coloraxis')
-                fig.update_layout(**{coloraxis_name: layout_coloraxis})
             except Exception:
                 pass
+
+    if not missing_gdf.empty:
+        missing_locations = missing_gdf.index.tolist()
+        missing_geojson = missing_gdf.geometry.__geo_interface__
+
+        if area_name_field and area_name_field in missing_gdf.columns:
+            missing_custom_data = missing_gdf[[key, area_name_field]].astype(str).values.tolist()
+            missing_hovertemplate = "<b>%{customdata[1]}</b><br>data niet beschikbaar<extra></extra>"
+        else:
+            missing_custom_data = missing_gdf[[key]].astype(str).values.tolist()
+            missing_hovertemplate = "<b>%{customdata[0]}</b><br>data niet beschikbaar<extra></extra>"
+
+        missing_trace = go.Choroplethmap(
+            geojson=missing_geojson,
+            locations=missing_locations,
+            z=[0.5] * len(missing_locations),
+            colorscale=[[0.0, "#d9d9d9"], [1.0, "#d9d9d9"]],
+            coloraxis=None,
+            showscale=False,
+            customdata=missing_custom_data,
+            hovertemplate=missing_hovertemplate,
+            marker_opacity=1,
+        )
+        try:
+            missing_trace.update(coloraxis=None)
+            missing_trace.coloraxis = None
+            fig.add_trace(missing_trace)
+            if len(fig.data) > 1:
+                fig.data = (fig.data[-1],) + fig.data[:-1]
         except Exception:
             pass
 
     return fig
 
-def get_fig_no_graph(plot_gdf, indicator, dataset_meta, indicator_meta, selected_option=None, range_color_override=None, coloraxis_name=None, include_colorbar=False):
+def get_fig_no_graph(plot_gdf, indicator, dataset_meta, indicator_meta, selected_option=None, range_color_override=None, coloraxis_name=None, include_colorbar=False, show_values=True):
     logger.info(f"Generating figure for indicator: {indicator}")
 
     key = dataset_meta["key"]
@@ -173,6 +288,7 @@ def get_fig_no_graph(plot_gdf, indicator, dataset_meta, indicator_meta, selected
         include_colorbar=include_colorbar,
         center=center,
         zoom=zoom,
+        show_values=show_values,
     )
     logger.info("After generating choropleth")
 
@@ -251,6 +367,7 @@ def get_side_by_side_maps(plot_gdf, indicator_meta, dataset_meta, selected_colum
             include_colorbar=(shared_range_color is not None and idx == len(map_specs) - 1),
             center=center,
             zoom=zoom,
+            show_values=indicator_meta.get("show_values", True),
         )
 
 

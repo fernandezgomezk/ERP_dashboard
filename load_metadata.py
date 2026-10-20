@@ -69,6 +69,7 @@ def load_metadata():
                 "subtitle": indicator_meta["subtitle"],
                 "description": indicator_meta["description"],
                 "legend": indicator_meta["legend"],
+                "show_values": indicator_meta.get("show_values", True),
                 "theme": indicator_meta["theme"],
                 "subject": indicator_meta["subject"] or indicator_meta["theme"],
                 "precision": indicator_meta.get("precision", 1),

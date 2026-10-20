@@ -54,7 +54,7 @@ indicators:
 
   Vaardighedendekking:
     title: Vaardighedendekking
-    subtitle: Hoeveel procent van de vaardigheden uit het oude beroep gebruikt kunnen worden in het nieuwe beroep
+    subtitle: Fractie van de vaardigheden uit het oude beroep die gebruikt kunnen worden in het nieuwe beroep
     description: Dit cijfer laat zien hoeveel vaardigheden uit het oude beroep gebruikt kunnen worden in het nieuwe beroep, waarbij 0 betekent dat geen vaardigheden kunnen worden hergebruikt en 1 dat alle vaardigheden kunnen worden hergebruikt.
     legend: Vaardighedendekking
     theme: Arbeidsmarkt
