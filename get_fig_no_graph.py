@@ -188,7 +188,11 @@ def _build_choropleth(plot_gdf, color_column, legend, precision, unit, key, area
 
     if range_color is not None and not show_values:
         symbolic_colorbar = _build_symbolic_colorbar(range_color, legend)
-        layout_coloraxis = {"cmin": range_color[0], "cmax": range_color[1]}
+        layout_coloraxis = {
+            "cmin": range_color[0],
+            "cmax": range_color[1],
+            "showscale": bool(coloraxis_name is None or include_colorbar),
+        }
 
         if coloraxis_name is None or include_colorbar:
             layout_coloraxis["colorbar"] = symbolic_colorbar

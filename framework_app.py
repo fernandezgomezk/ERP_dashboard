@@ -726,6 +726,7 @@ if indicator is not None and selected_variant is not None:
             for t in selected_titles
             if t in title_by_ind
         ]
+        selected_signature = "__".join(selected_inds)
 
 
         # If the selected maps changed, clear the clicked area so the UI
@@ -819,7 +820,11 @@ if indicator is not None and selected_variant is not None:
                     except Exception:
                         pass
 
-                    st.plotly_chart(fig_i, use_container_width=True)
+                    st.plotly_chart(
+                        fig_i,
+                        use_container_width=True,
+                        key=f"multi_map_{dataset_id}_{idx}_{ind_name}_{len(selected_inds)}_{selected_signature}",
+                    )
             # when showing multiple, set fig to None to avoid double render
             fig = None
         else:
